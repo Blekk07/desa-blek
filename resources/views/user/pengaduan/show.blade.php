@@ -7,7 +7,7 @@
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Detail Pengaduan</h5>
-                <a href="{{ route('user.pengaduan') }}" class="btn btn-secondary btn-sm float-end">
+                <a href="{{ route('pengaduan.index') }}" class="btn btn-secondary btn-sm float-end">
                     <i class="fas fa-arrow-left"></i> Kembali
                 </a>
             </div>

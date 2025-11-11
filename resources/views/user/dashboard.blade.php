@@ -11,25 +11,46 @@
 
 <!-- Menu Layanan Utama -->
 <div class="row g-4 mb-4">
-    @php
-        $menus = [
-            ['name' => 'Profil Saya', 'icon' => 'bi-person-circle', 'url' => '#'],
-            ['name' => 'Pengaduan Warga', 'icon' => 'bi-chat-dots', 'url' => '#'],
-            ['name' => 'Informasi Desa', 'icon' => 'bi-info-circle', 'url' => '#'],
-            ['name' => 'Pengajuan Surat', 'icon' => 'bi-file-earmark-text', 'url' => '#'],
-        ];
-    @endphp
+<div class="row text-center mt-4">
 
-    @foreach ($menus as $menu)
-    <div class="col-md-3">
-        <a href="{{ $menu['url'] }}" class="menu-link">
-            <div class="card menu-card text-center p-4">
-                <i class="{{ $menu['icon'] }} fs-1 mb-2 text-primary"></i>
-                <h6 class="fw-bold">{{ $menu['name'] }}</h6>
+    <!-- Profil Saya -->
+    <div class="col">
+        <a href="{{ route('myprofile') }}" class="text-decoration-none text-dark">
+            <div class="p-3 shadow-sm rounded-3 hover-shadow">
+                Profil Saya
             </div>
         </a>
     </div>
-    @endforeach
+
+    <!-- Pengaduan Warga -->
+    <div class="col">
+        <a href="{{ route('user.profile-desa') }}" class="text-decoration-none text-dark">
+            <div class="p-3 shadow-sm rounded-3 hover-shadow">
+                Informasi Desa
+            </div>
+        </a>
+    </div>
+
+    <!-- Informasi Desa -->
+    <div class="col">
+        <a href="{{ route('user.pengajuan-surat') }}" class="text-decoration-none text-dark">
+            <div class="p-3 shadow-sm rounded-3 hover-shadow">
+                Pengajuan Surat
+            </div>
+        </a>
+    </div>
+
+    <!-- Pengajuan Surat -->
+    <div class="col">
+        <a href="{{ route('pengaduan.index') }}" class="text-decoration-none text-dark">
+            <div class="p-3 shadow-sm rounded-3 hover-shadow">
+                Laporan Warga
+            </div>
+        </a>
+    </div>
+
+</div>
+
 </div>
 
 <!-- Informasi Desa & Riwayat Pengaduan -->

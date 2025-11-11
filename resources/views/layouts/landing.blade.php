@@ -72,14 +72,14 @@
                         <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="/">Beranda</a>
                     </li>
                     <li class="nav-item pe-1">
-                        <a class="nav-link {{ request()->is('profil') ? 'active' : '' }}" href="/profil">Profil Desa</a>
+                        <a class="nav-link {{ request()->is('profile-desa') ? 'active' : '' }}" href="/profile-desa">Profil Desa</a>
                     </li>
                     <li class="nav-item pe-1">
-                        <a class="nav-link {{ request()->is('layanan') ? 'active' : '' }}" href="/layanan">Layanan</a>
+                        <a class="nav-link {{ request()->is('help') ? 'active' : '' }}" href="/help">Help</a>
                     </li>
                     <li class="nav-item pe-1">
                         <a class="nav-link {{ request()->is('pengaduan') ? 'active' : '' }}"
-                            href="/pengaduan">Pengaduan</a>
+                            href="/pengaduan">Laporan</a>
                     </li>
 
                     @if (auth()->check())
@@ -117,8 +117,8 @@
                                 <h5 class="text-white mb-4">Navigasi</h5>
                                 <ul class="list-unstyled footer-link">
                                     <li><a href="/">Beranda</a></li>
-                                    <li><a href="/profil">Profil Desa</a></li>
-                                    <li><a href="/layanan">Layanan Publik</a></li>
+                                    <li><a href="/profile-desa">Profil Desa</a></li>
+                                    <li><a href="/help">Help</a></li>
                                     <li><a href="/pengaduan">Pengaduan Masyarakat</a></li>
                                 </ul>
                             </div>

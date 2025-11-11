@@ -7,18 +7,18 @@ use Illuminate\Http\Request;
 
 class PengaduanController extends Controller
 {
-    public function indexUser()
+    public function index()
     {
         $pengaduan = Pengaduan::where('user_id', auth()->id())
                             ->orderBy('created_at', 'desc')
                             ->get();
         
-        return view('user.pengaduan', compact('pengaduan'));
+        return view('user.pengaduan.index', compact('pengaduan'));
     }
 
     public function create()
     {
-        return view('user.pengaduan_create');
+        return view('user.pengaduan.create');
     }
 
     public function store(Request $request)
@@ -28,16 +28,15 @@ class PengaduanController extends Controller
             'deskripsi' => 'required|string',
         ]);
 
-        // ISI KEDUA KOLOM dengan nilai yang sama
         Pengaduan::create([
             'user_id' => auth()->id(),
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi,
-            'isi' => $request->deskripsi, // Isi kolom isi juga
+            'isi' => $request->deskripsi, 
             'status' => 'pending'
         ]);
 
-        return redirect()->route('user.pengaduan')
+        return redirect()->route('pengaduan.index')
                         ->with('success', 'Pengaduan berhasil dikirim!');
     }
 
@@ -47,6 +46,6 @@ class PengaduanController extends Controller
                             ->where('id', $id)
                             ->firstOrFail();
         
-        return view('user.pengaduan_show', compact('pengaduan'));
+        return view('user.pengaduan.show', compact('pengaduan'));
     }
 }

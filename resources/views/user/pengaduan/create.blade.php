@@ -32,7 +32,7 @@
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Kirim Pengaduan</button>
-                        <a href="{{ route('user.pengaduan') }}" class="btn btn-secondary">Kembali</a>
+                        <a href="{{ route('pengaduan.index') }}" class="btn btn-secondary">Kembali</a>
                     </div>
                 </form>
             </div>

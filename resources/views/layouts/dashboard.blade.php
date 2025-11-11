@@ -1,349 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!-- [Head] start -->
-
     <head>
         <title>@yield('title')</title>
-        <!-- [Meta] -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="description"
-            content="Mantis is made using Bootstrap 5 design framework. Download the free admin template & use it for your project.">
-        <meta name="keywords"
-            content="Mantis, Dashboard UI Kit, Bootstrap 5, Admin Template, Admin Dashboard, CRM, CMS, Bootstrap Admin Template">
-        <meta name="author" content="CodedThemes">
-
-        <!-- [Favicon] icon -->
 
         <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
-        <!-- [Google Font] Family -->
         <link rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
-            id="main-font-link">
-        <!-- [Tabler Icons] https://tablericons.com -->
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
+
         <link rel="stylesheet" href="{{ asset('assets/fonts/tabler-icons.min.css') }}">
-        <!-- [Feather Icons] https://feathericons.com -->
         <link rel="stylesheet" href="{{ asset('assets/fonts/feather.css') }}">
-        <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
         <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome.css') }}">
-        <!-- [Material Icons] https://fonts.google.com/icons -->
         <link rel="stylesheet" href="{{ asset('assets/fonts/material.css') }}">
-        <!-- [Template CSS Files] -->
-        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link">
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
 
-    </head>
-    <!-- [Head] end -->
-    <!-- [Body] Start -->
-
-    <body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
-        <!-- [ Pre-loader ] start -->
-        <div class="loader-bg">
-            <div class="loader-track">
-                <div class="loader-fill"></div>
-            </div>
-        </div>
-        <!-- [ Pre-loader ] End -->
-        <!-- [ Sidebar Menu ] start -->
-        <nav class="pc-sidebar">
-            <div class="navbar-wrapper">
-                <div class="m-header justify-content-center">
-                    <a href="/" class="b-brand text-dark text-capitalize fw-bold">
-                        <!-- ========   Change your logo from here   ============ -->
-                        <span class="fs-4">{{ auth()->user()->role }} Dashboard</span>
-                    </a>
-                </div>
-                <div class="navbar-content">
-                    <ul class="pc-navbar">
-                        <li class="pc-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                            <a href="/dashboard" class="pc-link">
-                                <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
-                                <span class="pc-mtext">Dashboard</span>
-                            </a>
-                        </li>
-                        @if (auth()->user()->role === 'admin')
-                            @include('admin.sidebar')
-                        @else
-                            @include('user.sidebar')
-                        @endif
-
-
-
-
-                </div>
-            </div>
-        </nav>
-        <!-- [ Sidebar Menu ] end --> <!-- [ Header Topbar ] start -->
-        <header class="pc-header">
-            <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
-                <div class="me-auto pc-mob-drp">
-                    <ul class="list-unstyled">
-                        <!-- ======= Menu collapse Icon ===== -->
-                        <li class="pc-h-item pc-sidebar-collapse">
-                            <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
-                                <i class="ti ti-menu-2"></i>
-                            </a>
-                        </li>
-                        <li class="pc-h-item pc-sidebar-popup">
-                            <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
-                                <i class="ti ti-menu-2"></i>
-                            </a>
-                        </li>
-                        <li class="dropdown pc-h-item d-inline-flex d-md-none">
-                            <a class="pc-head-link dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown"
-                                href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                <i class="ti ti-search"></i>
-                            </a>
-                            <div class="dropdown-menu pc-h-dropdown drp-search">
-                                <form class="px-3">
-                                    <div class="form-group mb-0 d-flex align-items-center">
-                                        <i data-feather="search"></i>
-                                        <input type="search" class="form-control border-0 shadow-none"
-                                            placeholder="Search here. . .">
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-                        <li class="pc-h-item d-none d-md-inline-flex">
-                            <form class="header-search">
-                                <i data-feather="search" class="icon-search"></i>
-                                <input type="search" class="form-control" placeholder="Search here. . .">
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-                <!-- [Mobile Media Block end] -->
-                <div class="ms-auto">
-                    <ul class="list-unstyled">
-                        <li class="dropdown pc-h-item">
-                            <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
-                                href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                <i class="ti ti-mail"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
-                                <div class="dropdown-header d-flex align-items-center justify-content-between">
-                                    <h5 class="m-0">Message</h5>
-                                    <a href="#!" class="pc-head-link bg-transparent"><i
-                                            class="ti ti-x text-danger"></i></a>
-                                </div>
-                                <div class="dropdown-divider"></div>
-                                <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative"
-                                    style="max-height: calc(100vh - 215px)">
-                                    <div class="list-group list-group-flush w-100">
-                                        <a class="list-group-item list-group-item-action">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <img src="../assets/images/user/avatar-2.jpg" alt="user-image"
-                                                        class="user-avtar">
-                                                </div>
-                                                <div class="flex-grow-1 ms-1">
-                                                    <span class="float-end text-muted">3:00 AM</span>
-                                                    <p class="text-body mb-1">It's <b>Cristina danny's</b> birthday
-                                                        today.</p>
-                                                    <span class="text-muted">2 min ago</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a class="list-group-item list-group-item-action">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <img src="../assets/images/user/avatar-1.jpg" alt="user-image"
-                                                        class="user-avtar">
-                                                </div>
-                                                <div class="flex-grow-1 ms-1">
-                                                    <span class="float-end text-muted">6:00 PM</span>
-                                                    <p class="text-body mb-1"><b>Aida Burg</b> commented your post.</p>
-                                                    <span class="text-muted">5 August</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a class="list-group-item list-group-item-action">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <img src="../assets/images/user/avatar-3.jpg" alt="user-image"
-                                                        class="user-avtar">
-                                                </div>
-                                                <div class="flex-grow-1 ms-1">
-                                                    <span class="float-end text-muted">2:45 PM</span>
-                                                    <p class="text-body mb-1"><b>There was a failure to your setup.</b>
-                                                    </p>
-                                                    <span class="text-muted">7 hours ago</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a class="list-group-item list-group-item-action">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <img src="../assets/images/user/avatar-4.jpg" alt="user-image"
-                                                        class="user-avtar">
-                                                </div>
-                                                <div class="flex-grow-1 ms-1">
-                                                    <span class="float-end text-muted">9:10 PM</span>
-                                                    <p class="text-body mb-1"><b>Cristina Danny </b> invited to join
-                                                        <b> Meeting.</b>
-                                                    </p>
-                                                    <span class="text-muted">Daily scrum meeting time</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="dropdown-divider"></div>
-                                <div class="text-center py-2">
-                                    <a href="#!" class="link-primary">View all</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="dropdown pc-h-item header-user-profile">
-                            <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
-                                href="#" role="button" aria-haspopup="false" data-bs-auto-close="outside"
-                                aria-expanded="false">
-                                <img src="{{ $avatar }}" alt="user-image" class="user-avtar">
-                                <span>{{ $name }}</span>
-                            </a>
-                            <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
-                                <div class="dropdown-header">
-                                    <div class="d-flex mb-1 align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <img src="{{ $avatar }}" alt="user-image"
-                                                class="user-avtar wid-35">
-                                        </div>
-                                        <div class="flex-grow-1 ms-3">
-                                            <h6 class="mb-1">{{ $name }}</h6>
-                                            <span>{{ $role }}</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <ul class="nav drp-tabs nav-fill nav-tabs" id="mydrpTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="drp-t1" data-bs-toggle="tab"
-                                            data-bs-target="#drp-tab-1" type="button" role="tab"
-                                            aria-controls="drp-tab-1" aria-selected="true"><i class="ti ti-user"></i>
-                                            Profile</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="drp-t2" data-bs-toggle="tab"
-                                            data-bs-target="#drp-tab-2" type="button" role="tab"
-                                            aria-controls="drp-tab-2" aria-selected="false"><i
-                                                class="ti ti-settings"></i> Setting</button>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="mysrpTabContent">
-                                    <div class="tab-pane fade show active" id="drp-tab-1" role="tabpanel"
-                                        aria-labelledby="drp-t1" tabindex="0">
-
-                                        <a href="/myprofile" class="dropdown-item">
-                                            <i class="ti ti-user"></i>
-                                            <span>My Profile</span>
-                                        </a>
-
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item">
-                                                <i class="ti ti-power"></i>
-                                                <span>Logout</span>
-                                            </button>
-                                        </form>
-
-
-                                    </div>
-                                    <div class="tab-pane fade" id="drp-tab-2" role="tabpanel"
-                                        aria-labelledby="drp-t2" tabindex="0">
-                                        <a href="/contact-us" class="dropdown-item">
-                                            <i class="ti ti-help"></i>
-                                            <span>Support</span>
-                                        </a>
-                                        <a href="#!" class="dropdown-item">
-                                            <i class="ti ti-user"></i>
-                                            <span>Account Settings</span>
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </header>
-        <!-- [ Header ] end -->
-
-
-
-        <!-- [ Main Content ] start -->
-        <div class="pc-container">
-            @yield('content')
-        </div>
-        <!-- [ Main Content ] end -->
-        <footer class="pc-footer">
-            <div class="footer-wrapper container-fluid">
-                <div class="row">
-                    <div class="col-sm my-1">
-                        <p class="m-0">Mantis &#9829; crafted by Team <a
-                                href="https://themeforest.net/user/codedthemes" target="_blank">Codedthemes</a>
-                            Distributed by <a href="https://themewagon.com/">ThemeWagon</a>.</p>
-                    </div>
-                    <div class="col-auto my-1">
-                        <ul class="list-inline footer-link mb-0">
-                            <li class="list-inline-item"><a href="../index.html">Home</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <!-- [Page Specific JS] start -->
-        <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
-        <script src="{{ asset('assets/js/pages/dashboard-default.js') }}"></script>
-        <!-- [Page Specific JS] end -->
-        <!-- Required Js -->
-        <script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>
-        <script src="{{ asset('assets/js/plugins/simplebar.min.js') }}"></script>
-        <script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('assets/js/fonts/custom-font.js') }}"></script>
-        <script src="{{ asset('assets/js/pcoded.js') }}"></script>
-        <script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
-
-
-
-
-
-        <script>
-            layout_change('light');
-        </script>
-
-
-
-
-        <script>
-            change_box_container('false');
-        </script>
-
-
-
-        <script>
-            layout_rtl_change('false');
-        </script>
-
-
-        <script>
-            preset_change("preset-1");
-        </script>
-
-
-        <script>
-            font_change("Public-Sans");
-        </script>
-
-
-        <script>
-            if (window.location.hash === '#_=_') {
-                history.replaceState(null, null, window.location.pathname);
+        <!-- Tambahan CSS untuk toggle/sidebar behavior -->
+        <style>
+            /* adaptasi non-invansif ke template pc-sidebar / pc-container */
+            .pc-sidebar {
+                width: 250px;
+                transition: margin-left .28s ease, width .28s ease;
+                z-index: 1050;
             }
-        </script>
-    </body>
-    <!-- [Body] end -->
+            .pc-sidebar.hidden {
+                margin-left: -260px; /* sembunyikan */
+            }
 
+            .pc-container {
+                transition: margin-left .28s ease;
+                margin-left: 250px; /* default ada sidebar */
+            }
+            .pc-container.full {
+                margin-left: 0; /* saat sidebar disembunyikan */
+            }
+
+            /* responsive: ketika layar kecil, pastikan sidebar overlay */
+            @media (max-width: 991px) {
+                .pc-sidebar {
+                    margin-left: -260px;
+                    position: fixed;
+                    height: 100%;
+                }
+                .pc-sidebar.show-mobile {
+                    margin-left: 0;
+                }
+                .pc-container {
+                    margin-left: 0 !important;
+                }
+            }
+
+            /* kecilkan efek tombol toggle agar rapi di header */
+            #toggleSidebar {
+                border: 0;
+                background: transparent;
+                font-size: 18px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+<body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
+
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+
+<nav class="pc-sidebar" id="sidebar">
+    <div class="navbar-wrapper">
+        <div class="m-header justify-content-center">
+            <a href="/" class="b-brand text-dark text-capitalize fw-bold">
+                <span class="fs-4">{{ auth()->user()->role }} Dashboard</span>
+            </a>
+        </div>
+        <div class="navbar-content">
+            <ul class="pc-navbar">
+                <li class="pc-item {{ request()->is('dashboard') ? 'active' : '' }}">
+                    <a href="/dashboard" class="pc-link">
+                        <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
+                        <span class="pc-mtext">Dashboard</span>
+                    </a>
+                </li>
+                @if (auth()->user()->role === 'admin')
+                    @include('admin.sidebar')
+                @else
+                    @include('user.sidebar')
+                @endif
+        </div>
+    </div>
+</nav>
+
+<header class="pc-header">
+    <div class="header-wrapper">
+        <div class="me-auto pc-mob-drp">
+            <!-- optional: jika kamu mau menaruh tombol toggle di header global,
+                 kamu bisa pakai ini (atau biarkan tombol toggle di setiap halaman seperti dashboard): -->
+            <button id="toggleSidebar" title="Sembunyikan/Tampilkan Sidebar" aria-label="Toggle sidebar">
+                <i class="ti ti-menu-2"></i>
+            </button>
+        </div>
+
+        <div class="ms-auto">
+            <ul class="list-unstyled">
+                <li class="dropdown pc-h-item header-user-profile">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#">
+                        <img src="{{ $avatar }}" class="user-avtar">
+                        <span>{{ $name }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
+                        <a href="/myprofile" class="dropdown-item"><i class="ti ti-user"></i> My Profile</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item"><i class="ti ti-power"></i> Logout</button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="pc-container" id="content">
+    @yield('content')
+</div>
+
+<footer class="pc-footer">
+    <div class="footer-wrapper container-fluid">
+        <p class="m-0">Sistem Informasi Desa © 2025</p>
+    </div>
+</footer>
+
+<script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
+<script src="{{ asset('assets/js/pages/dashboard-default.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/simplebar.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/fonts/custom-font.js') }}"></script>
+<script src="{{ asset('assets/js/pcoded.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
+
+<!-- ✅ Popup SweetAlert Modern -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // hanya tampil sekali setiap login
+    if(!sessionStorage.getItem("welcome_shown")) {
+        sessionStorage.setItem("welcome_shown", "1");
+
+        Swal.fire({
+            title: "Selamat Datang, {{ $name }}! 👋",
+            html: `
+                <p>Anda masuk sebagai <b>{{ $role }}</b></p>
+                <p>Semoga harimu menyenangkan 😊</p>
+            `,
+            icon: "success",
+            confirmButtonText: "Mulai",
+            timer: 4500,
+            timerProgressBar: true,
+            showClass: { popup: "animate__animated animate__fadeInDown" },
+            hideClass: { popup: "animate__animated animate__fadeOutUp" }
+        });
+    }
+});
+</script>
+
+<!-- ✅ Tambahkan animasi CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<!-- ===== Sidebar Toggle Script ===== -->
+<script>
+(function () {
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const toggle = document.getElementById('toggleSidebar');
+
+    // restore state (jika ada)
+    if (localStorage.getItem('sidebarHidden') === '1') {
+        sidebar.classList.add('hidden');
+        content.classList.add('full');
+    }
+
+    function toggleSidebar() {
+        // untuk mobile: jika layar kecil, toggling memperlihatkan/menyembunyikan overlay
+        if (window.innerWidth <= 991) {
+            sidebar.classList.toggle('show-mobile');
+        } else {
+            sidebar.classList.toggle('hidden');
+            content.classList.toggle('full');
+            // simpan state
+            const hidden = sidebar.classList.contains('hidden') ? '1' : '0';
+            localStorage.setItem('sidebarHidden', hidden);
+        }
+    }
+
+    if (toggle) {
+        toggle.addEventListener('click', toggleSidebar);
+    }
+
+    // optional: klik area luar untuk menutup sidebar mobile
+    document.addEventListener('click', function (e) {
+        if (window.innerWidth <= 991) {
+            if (!sidebar.contains(e.target) && !toggle.contains(e.target) && sidebar.classList.contains('show-mobile')) {
+                sidebar.classList.remove('show-mobile');
+            }
+        }
+    });
+
+    // handle ESC untuk menutup mobile sidebar
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && sidebar.classList.contains('show-mobile')) {
+            sidebar.classList.remove('show-mobile');
+        }
+    });
+})();
+</script>
+
+</body>
 </html>
