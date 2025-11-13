@@ -3,8 +3,8 @@
 @section('title', 'Registrasi Akun')
 
 @section('content')
-<div class="container mx-auto max-w-md p-6 bg-white shadow-md rounded-md mt-10">
-    <h2 class="text-2xl font-semibold text-center mb-6">Registrasi Akun</h2>
+<div class="max-w-5xl mx-auto bg-white p-8 rounded shadow">
+    <h2 class="text-2xl font-bold mb-6 text-center">Registrasi Akun</h2>
 
     @if ($errors->any())
         <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
@@ -16,87 +16,107 @@
         </div>
     @endif
 
-    <form action="{{ route('register') }}" method="POST">
+    <form action="{{ route('register.post') }}" method="POST">
         @csrf
 
-        <label for="nik" class="block mt-2">NIK *</label>
-        <input type="text" name="nik" value="{{ old('nik') }}" class="w-full border p-2 rounded" required>
+        <div class="grid grid-cols-2 gap-4">
 
-        <label for="no_kk" class="block mt-2">No. KK</label>
-        <input type="text" name="no_kk" value="{{ old('no_kk') }}" class="w-full border p-2 rounded">
+            <!-- Kiri -->
+            <div>
+                <label>NIK *</label>
+                <input type="text" name="nik" class="w-full border p-2 rounded" required>
 
-        <label for="nama_lengkap" class="block mt-2">Nama Lengkap *</label>
-        <input type="text" name="nama_lengkap" value="{{ old('nama_lengkap') }}" class="w-full border p-2 rounded" required>
+                <label>No. KK</label>
+                <input type="text" name="no_kk" class="w-full border p-2 rounded">
 
-        <label for="tempat_lahir" class="block mt-2">Tempat Lahir *</label>
-        <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" class="w-full border p-2 rounded" required>
+                <label>Nama Lengkap *</label>
+                <input type="text" name="nama_lengkap" class="w-full border p-2 rounded" required>
 
-        <label for="tanggal_lahir" class="block mt-2">Tanggal Lahir *</label>
-        <input type="date" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" class="w-full border p-2 rounded" required>
+                <label>Tempat Lahir *</label>
+                <input type="text" name="tempat_lahir" class="w-full border p-2 rounded" required>
 
-        <label for="jenis_kelamin" class="block mt-2">Jenis Kelamin *</label>
-        <select name="jenis_kelamin" class="w-full border p-2 rounded" required>
-            <option value="">-- Pilih Jenis Kelamin --</option>
-            <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-laki</option>
-            <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
-        </select>
+                <label>Tanggal Lahir *</label>
+                <input type="date" name="tanggal_lahir" class="w-full border p-2 rounded" required>
 
-        <label for="agama" class="block mt-2">Agama *</label>
-        <input type="text" name="agama" value="{{ old('agama') }}" class="w-full border p-2 rounded" required>
+                <label>Jenis Kelamin *</label>
+                <select name="jenis_kelamin" class="w-full border p-2 rounded" required>
+                    <option value="">-- Pilih --</option>
+                    <option value="L">Laki-laki</option>
+                    <option value="P">Perempuan</option>
+                </select>
 
-        <label for="alamat_lengkap" class="block mt-2">Alamat *</label>
-        <textarea name="alamat_lengkap" class="w-full border p-2 rounded" required>{{ old('alamat_lengkap') }}</textarea>
+                <label>Agama *</label>
+                <select name="agama" class="w-full border p-2 rounded" required>
+                    <option value="">-- Pilih --</option>
+                    <option>Islam</option>
+                    <option>Kristen</option>
+                    <option>Katolik</option>
+                    <option>Hindu</option>
+                    <option>Buddha</option>
+                    <option>Konghucu</option>
+                </select>
+            </div>
 
-        <label for="rt" class="block mt-2">RT *</label>
-        <input type="text" name="rt" value="{{ old('rt') }}" class="w-full border p-2 rounded" required>
+            <!-- Kanan -->
+            <div>
+                <label>Alamat *</label>
+                <input type="text" name="alamat_lengkap" class="w-full border p-2 rounded" required>
 
-        <label for="rw" class="block mt-2">RW *</label>
-        <input type="text" name="rw" value="{{ old('rw') }}" class="w-full border p-2 rounded" required>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label>RT *</label>
+                        <input type="number" name="rt" class="w-full border p-2 rounded" required>
+                    </div>
+                    <div>
+                        <label>RW *</label>
+                        <input type="number" name="rw" class="w-full border p-2 rounded" required>
+                    </div>
+                </div>
 
-        <label for="status_perkawinan" class="block mt-2">Status Perkawinan *</label>
-        <select name="status_perkawinan" class="w-full border p-2 rounded" required>
-            <option value="">-- Pilih Status --</option>
-            <option value="Belum Kawin">Belum Kawin</option>
-            <option value="Kawin">Kawin</option>
-            <option value="Cerai Hidup">Cerai Hidup</option>
-            <option value="Cerai Mati">Cerai Mati</option>
-        </select>
+                <label>Status Perkawinan *</label>
+                <select name="status_perkawinan" class="w-full border p-2 rounded" required>
+                    <option value="">-- Pilih --</option>
+                    <option>Belum Kawin</option>
+                    <option>Kawin</option>
+                    <option>Cerai Hidup</option>
+                    <option>Cerai Mati</option>
+                </select>
 
-        <label for="pendidikan_terakhir" class="block mt-2">Pendidikan Terakhir</label>
-        <input type="text" name="pendidikan_terakhir" value="{{ old('pendidikan_terakhir') }}" class="w-full border p-2 rounded">
+                <label>Pendidikan Terakhir</label>
+                <input type="text" name="pendidikan_terakhir" class="w-full border p-2 rounded">
 
-        <label for="pekerjaan" class="block mt-2">Pekerjaan *</label>
-        <input type="text" name="pekerjaan" value="{{ old('pekerjaan') }}" class="w-full border p-2 rounded" required>
+                <label>Pekerjaan</label>
+                <input type="text" name="pekerjaan" class="w-full border p-2 rounded">
 
-        <label for="status_kependudukan" class="block mt-2">Status Kependudukan *</label>
-        <select name="status_kependudukan" class="w-full border p-2 rounded" required>
-            <option value="">-- Pilih Status --</option>
-            <option value="Tetap" selected>Tetap</option>
-            <option value="Pendatang">Pendatang</option>
-            <option value="Pindah">Pindah</option>
-        </select>
+                <label>Status Kependudukan *</label>
+                <select name="status_kependudukan" class="w-full border p-2 rounded" required>
+                    <option value="">-- Pilih --</option>
+                    <option>Tetap</option>
+                    <option>Tidak Tetap</option>
+                </select>
 
-        <label for="nama_ayah" class="block mt-2">Nama Ayah</label>
-        <input type="text" name="nama_ayah" value="{{ old('nama_ayah') }}" class="w-full border p-2 rounded">
+                <label>No. Telepon</label>
+                <input type="text" name="no_telepon" class="w-full border p-2 rounded">
+            </div>
 
-        <label for="nama_ibu" class="block mt-2">Nama Ibu</label>
-        <input type="text" name="nama_ibu" value="{{ old('nama_ibu') }}" class="w-full border p-2 rounded">
+        </div>
 
-        <label for="no_telepon" class="block mt-2">No. Telepon</label>
-        <input type="text" name="no_telepon" value="{{ old('no_telepon') }}" class="w-full border p-2 rounded">
+        <hr class="my-4">
 
-        <label for="email" class="block mt-2">Email *</label>
-        <input type="email" name="email" value="{{ old('email') }}" class="w-full border p-2 rounded" required>
+        <label>Email *</label>
+        <input type="email" name="email" class="w-full border p-2 rounded mb-2" required>
 
-        <label for="password" class="block mt-2">Password *</label>
-        <input type="password" name="password" class="w-full border p-2 rounded" required>
+        <label>Password *</label>
+        <input type="password" name="password" class="w-full border p-2 rounded mb-2" required>
 
-        <label for="password_confirmation" class="block mt-2">Konfirmasi Password *</label>
-        <input type="password" name="password_confirmation" class="w-full border p-2 rounded" required>
+        <label>Konfirmasi Password *</label>
+        <input type="password" name="password_confirmation" class="w-full border p-2 rounded mb-4" required>
 
-        <button type="submit" class="w-full mt-4 bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Daftar</button>
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">
+            Daftar
+        </button>
 
-        <p class="mt-4 text-center text-sm">
+        <p class="mt-4 text-center">
             Sudah punya akun? <a href="{{ route('login') }}" class="text-blue-600">Login di sini</a>
         </p>
     </form>

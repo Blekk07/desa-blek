@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\PendudukController;
-use App\Http\Controllers\HelpController; // <-- Tambahkan ini
+use App\Http\Controllers\HelpController;
+use App\Http\Controllers\PengajuanSuratController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -62,6 +63,12 @@ Route::middleware(['auth'])->group(function () {
             'update' => 'admin.penduduk.update',
             'destroy' => 'admin.penduduk.destroy',
         ]);
+
+        // Admin Pengajuan Surat
+        Route::get('/admin/pengajuan-surat', [PengajuanSuratController::class, 'adminIndex'])->name('admin.pengajuan-surat.index');
+        Route::get('/admin/pengajuan-surat/{id}', [PengajuanSuratController::class, 'adminShow'])->name('admin.pengajuan-surat.show');
+        Route::post('/admin/pengajuan-surat/{id}/update-status', [PengajuanSuratController::class, 'updateStatus'])->name('admin.pengajuan-surat.update-status');
+        Route::delete('/admin/pengajuan-surat/{id}', [PengajuanSuratController::class, 'destroy'])->name('admin.pengajuan-surat.destroy');
     });
 
     // ========== USER ==========
@@ -81,10 +88,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/profile-desa', fn() => view('user.profile-desa'))->name('user.profile-desa');
 
         /** PENGAJUAN SURAT */
-        Route::get('/pengajuan-surat', fn() => view('user.pengajuan-surat'))->name('user.pengajuan-surat');
-        Route::post('/pengajuan-surat/submit', function () {
-            // proses submit surat disini
-        })->name('user.pengajuan-surat.submit');
+        Route::get('/pengajuan-surat', [PengajuanSuratController::class, 'index'])->name('user.pengajuan-surat.index');
+        Route::get('/pengajuan-surat/create', [PengajuanSuratController::class, 'create'])->name('user.pengajuan-surat.create');
+        Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store'])->name('user.pengajuan-surat.store');
+        Route::get('/pengajuan-surat/{id}', [PengajuanSuratController::class, 'show'])->name('user.pengajuan-surat.show');
 
         /** HELP PAGE */
         Route::get('/help', [HelpController::class, 'help'])->name('help');

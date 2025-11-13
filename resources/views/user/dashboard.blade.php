@@ -33,7 +33,7 @@
 
     <!-- Informasi Desa -->
     <div class="col">
-        <a href="{{ route('user.pengajuan-surat') }}" class="text-decoration-none text-dark">
+        <a href="{{ route('user.pengajuan-surat.index') }}" class="text-decoration-none text-dark">
             <div class="p-3 shadow-sm rounded-3 hover-shadow">
                 Pengajuan Surat
             </div>

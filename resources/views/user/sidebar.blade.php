@@ -13,7 +13,7 @@
 </li>
 
 <li class="pc-item">
-    <a href="{{ route('user.pengajuan-surat') }}" class="pc-link">
+    <a href="{{ route('user.pengajuan-surat.index') }}" class="pc-link">
         <span class="pc-micon"><i class="ti ti-info-circle"></i></span>
         <span class="pc-mtext">Pengajuan Surat</span>
     </a>
