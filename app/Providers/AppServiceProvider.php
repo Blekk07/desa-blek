@@ -5,8 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\URL;
+use SocialiteProviders\Manager\SocialiteWasCalled;
+use SocialiteProviders\Discord\Provider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +17,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // register bindings here if needed
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        // Share authenticated user data with all views
         View::composer('*', function ($view) {
             if (Auth::check()) {
                 $user = Auth::user();
@@ -27,15 +38,16 @@ class AppServiceProvider extends ServiceProvider
                 $view->with(compact('user', 'name', 'role', 'avatar'));
             }
         });
-    }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        Event::listen(function (\SocialiteProviders\Manager\SocialiteWasCalled $event) {
-            $event->extendSocialite('discord', \SocialiteProviders\Discord\Provider::class);
+        // Force root URL / scheme when needed
+        if ($this->app->environment('local')) {
+            URL::forceRootUrl(config('app.url'));
+            URL::forceScheme('https');
+        }
+
+        // Register Socialite provider
+        Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event) {
+            $event->extendSocialite('discord', Provider::class);
         });
     }
 }
