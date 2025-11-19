@@ -12,8 +12,7 @@
                             <h5 class="m-b-10">Home</h5>
                         </div>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
-
+                            <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
                             <li class="breadcrumb-item" aria-current="page">Dashboard</li>
                         </ul>
                     </div>
@@ -21,12 +20,13 @@
             </div>
         </div>
         <!-- [ breadcrumb ] end -->
+        
         <!-- [ Main Content ] start -->
         @if (auth()->user()->role == 'admin')
             @include('admin.dashboard')
         @else
             @include('user.dashboard')
         @endif
-
+        <!-- [ Main Content ] end -->
     </div>
 @endsection

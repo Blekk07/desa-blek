@@ -42,6 +42,14 @@
             </a>
         </li>
 
+                <!-- Manajemen User -->
+        <li class="sidebar-item">
+            <a href="{{ route('admin.users.index') }}" class="sidebar-link">
+                <i class="ti ti-users sidebar-icon"></i>
+                <span>Manajemen User</span>
+            </a>
+        </li>
+
         <!-- Logout -->
         <li class="sidebar-item">
             <form method="POST" action="{{ route('logout') }}" class="d-inline">

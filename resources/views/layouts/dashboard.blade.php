@@ -141,7 +141,7 @@
 
 <footer class="pc-footer">
     <div class="footer-wrapper container-fluid">
-        <p class="m-0">Sistem Informasi Desa © 2025</p>
+        <p class="m-0">Made in Blekk</p>
     </div>
 </footer>
 
