@@ -95,12 +95,6 @@
 
         <div class="navbar-content">
             <ul class="pc-navbar">
-                <li class="pc-item {{ request()->is('dashboard') ? 'active' : '' }}">
-                    <a href="/dashboard" class="pc-link">
-                        <span class="pc-micon"><i class="ti ti-dashboard"></i></span>
-                        <span class="pc-mtext">Dashboard</span>
-                    </a>
-                </li>
 
                 @if (auth()->user()->role === 'admin')
                     @include('admin.sidebar')

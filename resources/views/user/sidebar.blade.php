@@ -50,6 +50,17 @@
             </a>
         </li>
 
+        <!-- Logout -->
+        <li class="sidebar-item">
+            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                @csrf
+                <button type="submit" class="sidebar-link text-danger border-0 bg-transparent w-100 text-start">
+                    <i class="ti ti-logout sidebar-icon"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </li>
+
     </ul>
 </div>
 
@@ -93,6 +104,15 @@
     color: #333;
     text-decoration: none;
     transition: 0.25s;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Button Style untuk Logout */
+.sidebar-item form button.sidebar-link {
+    border: none;
+    background: transparent;
+    font: inherit;
 }
 
 /* Icon */
