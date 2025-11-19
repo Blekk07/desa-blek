@@ -1,12 +1,15 @@
 <!-- Sidebar User -->
 <div class="sidebar-container p-3">
 
-    <!-- Logo / Profil User -->
-    <div class="sidebar-header text-center mb-4">
-        <img src="{{ auth()->user()->avatar ?? '/assets/images/user-default.png' }}" class="sidebar-logo">
-        <h5 class="mt-2 fw-bold">{{ auth()->user()->name }}</h5>
-        <span class="text-muted small">Warga Desa</span>
-    </div>
+  <!-- Logo / Profil User -->
+<div class="sidebar-header text-center mb-4">
+    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('assets/images/user/avatar-1.jpg') }}" 
+         class="sidebar-logo" 
+         alt="User Avatar"
+         onerror="this.src='{{ asset('assets/images/user/avatar-1.jpg') }}'">
+    <h5 class="mt-2 fw-bold">{{ auth()->user()->name }}</h5>
+    <span class="text-muted small">Warga Desa</span>
+</div>
 
     <ul class="sidebar-menu mt-3">
 

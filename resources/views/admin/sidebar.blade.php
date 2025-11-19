@@ -3,7 +3,7 @@
 
     <!-- Logo / Profil Admin -->
     <div class="sidebar-header text-center mb-4">
-        <img src="/assets/images/logo-desa.png" class="sidebar-logo" alt="Logo Desa">
+        <img src="/assets/images/my/logo-white.png" class="sidebar-logo" alt="Logo Desa">
         <h5 class="mt-2 fw-bold">Sistem Informasi Desa</h5>
         <span class="text-muted small">Administrator Panel</span>
     </div>
