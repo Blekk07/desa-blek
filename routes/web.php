@@ -48,10 +48,11 @@ Route::middleware(['auth'])->group(function () {
     // ========== ADMIN ==========
     Route::middleware(['cekRole:admin'])->group(function () {
 
-        Route::get('/verifikasi', fn() => view('admin.verifikasi'))->name('admin.verifikasi');
-        Route::get('/seleksi', fn() => view('admin.seleksi'))->name('admin.seleksi');
-        Route::get('/pengumuman', fn() => view('admin.pengumuman'))->name('admin.pengumuman');
-        Route::get('/laporan', fn() => view('admin.laporan'))->name('admin.laporan');
+            Route::prefix('admin')->middleware(['auth'])->group(function () {
+            Route::get('/dashboard', function () {
+                return view('admin.dashboard');
+            })->name('admin.dashboard');
+        });
 
         // CRUD Penduduk
         Route::resource('penduduk', PendudukController::class)->names([
@@ -69,14 +70,23 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/pengajuan-surat/{id}', [PengajuanSuratController::class, 'adminShow'])->name('admin.pengajuan-surat.show');
         Route::post('/admin/pengajuan-surat/{id}/update-status', [PengajuanSuratController::class, 'updateStatus'])->name('admin.pengajuan-surat.update-status');
         Route::delete('/admin/pengajuan-surat/{id}', [PengajuanSuratController::class, 'destroy'])->name('admin.pengajuan-surat.destroy');
+
+                /** ADMIN PENGADUAN */
+        Route::get('/admin/pengaduan', [PengaduanController::class, 'adminIndex'])->name('admin.pengaduan.index');
+        Route::get('/admin/pengaduan/{id}', [PengaduanController::class, 'adminShow'])->name('admin.pengaduan.show');
+        Route::post('/admin/pengaduan/{id}/status', [PengaduanController::class, 'adminUpdateStatus'])->name('admin.pengaduan.updateStatus');
+
     });
 
-    // ========== USER ==========
+        // ========== USER ==========
     Route::middleware(['cekRole:user'])->group(function () {
 
-        Route::get('/biodata', fn() => view('user.biodata'))->name('user.biodata');
-        Route::get('/dokumen', fn() => view('user.dokumen'))->name('user.dokumen');
-        Route::get('/status', fn() => view('user.status'))->name('user.status');
+                Route::prefix('user')->middleware(['auth'])->group(function () {
+            Route::get('/dashboard', function () {
+                return view('user.dashboard');
+            })->name('user.dashboard');
+        });
+
 
         /** PENGADUAN USER */
         Route::get('/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
@@ -95,5 +105,20 @@ Route::middleware(['auth'])->group(function () {
 
         /** HELP PAGE */
         Route::get('/help', [HelpController::class, 'help'])->name('help');
+
+        /** LAPORAN WARGA (USER) → Masuk ke halaman admin */
+        Route::post('/laporan/store', function (\Illuminate\Http\Request $request) {
+
+            \App\Models\Laporan::create([
+                'user_id' => auth()->id(),
+                'judul' => $request->judul,
+                'isi' => $request->isi,
+                'status' => 'menunggu'
+            ]);
+
+            return redirect()->route('admin.laporan')
+                ->with('success', 'Laporan berhasil dikirim ke Admin!');
+        })->name('user.laporan.store');
+
     });
 });

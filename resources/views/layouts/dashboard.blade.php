@@ -1,66 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>@yield('title')</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<head>
+    <title>@yield('title')</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-        <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
-        <link rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
+    <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
 
-        <link rel="stylesheet" href="{{ asset('assets/fonts/tabler-icons.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/fonts/feather.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/fonts/material.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-        <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
+    <!-- LOCAL ICON FONT -->
+    <link rel="stylesheet" href="{{ asset('assets/fonts/tabler-icons.min.css') }}">
 
-        <!-- Tambahan CSS untuk toggle/sidebar behavior -->
-        <style>
-            /* adaptasi non-invansif ke template pc-sidebar / pc-container */
+    <!-- 🔥 FIX ICON HILANG — PAKAI CDN TABLER RESMI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+
+    <link rel="stylesheet" href="{{ asset('assets/fonts/feather.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/fonts/material.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
+
+    <!-- STYLE CUSTOM SIDEBAR -->
+    <style>
+        .pc-sidebar {
+            width: 250px;
+            transition: margin-left .28s ease, width .28s ease, transform .28s ease;
+            z-index: 1050;
+        }
+        .pc-sidebar.hidden {
+            transform: translateX(-260px);
+        }
+
+        .pc-container {
+            transition: margin-left .28s ease;
+            margin-left: 250px;
+        }
+        .pc-container.full {
+            margin-left: 0;
+        }
+
+        @media (max-width: 991px) {
             .pc-sidebar {
-                width: 250px;
-                transition: margin-left .28s ease, width .28s ease;
-                z-index: 1050;
+                transform: translateX(-260px);
+                position: fixed;
+                height: 100%;
             }
-            .pc-sidebar.hidden {
-                margin-left: -260px; /* sembunyikan */
+            .pc-sidebar.show-mobile {
+                transform: translateX(0);
             }
-
             .pc-container {
-                transition: margin-left .28s ease;
-                margin-left: 250px; /* default ada sidebar */
+                margin-left: 0 !important;
             }
-            .pc-container.full {
-                margin-left: 0; /* saat sidebar disembunyikan */
-            }
+        }
 
-            /* responsive: ketika layar kecil, pastikan sidebar overlay */
-            @media (max-width: 991px) {
-                .pc-sidebar {
-                    margin-left: -260px;
-                    position: fixed;
-                    height: 100%;
-                }
-                .pc-sidebar.show-mobile {
-                    margin-left: 0;
-                }
-                .pc-container {
-                    margin-left: 0 !important;
-                }
-            }
+        #toggleSidebar {
+            border: 0;
+            background: transparent;
+            font-size: 18px;
+            cursor: pointer;
+        }
 
-            /* kecilkan efek tombol toggle agar rapi di header */
-            #toggleSidebar {
-                border: 0;
-                background: transparent;
-                font-size: 18px;
-                cursor: pointer;
-            }
-        </style>
-    </head>
+        /* Header sticky */
+        .pc-header {
+            position: sticky;
+            top: 0;
+            z-index: 1100;
+            background: #ffffff;
+            transition: box-shadow .25s ease;
+        }
+        .pc-header.scrolled {
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
 
 <body data-pc-preset="preset-1" data-pc-direction="ltr" data-pc-theme="light">
 
@@ -77,6 +92,7 @@
                 <span class="fs-4">{{ auth()->user()->role }} Dashboard</span>
             </a>
         </div>
+
         <div class="navbar-content">
             <ul class="pc-navbar">
                 <li class="pc-item {{ request()->is('dashboard') ? 'active' : '' }}">
@@ -85,11 +101,13 @@
                         <span class="pc-mtext">Dashboard</span>
                     </a>
                 </li>
+
                 @if (auth()->user()->role === 'admin')
                     @include('admin.sidebar')
                 @else
                     @include('user.sidebar')
                 @endif
+            </ul>
         </div>
     </div>
 </nav>
@@ -97,9 +115,7 @@
 <header class="pc-header">
     <div class="header-wrapper">
         <div class="me-auto pc-mob-drp">
-            <!-- optional: jika kamu mau menaruh tombol toggle di header global,
-                 kamu bisa pakai ini (atau biarkan tombol toggle di setiap halaman seperti dashboard): -->
-            <button id="toggleSidebar" title="Sembunyikan/Tampilkan Sidebar" aria-label="Toggle sidebar">
+            <button id="toggleSidebar">
                 <i class="ti ti-menu-2"></i>
             </button>
         </div>
@@ -113,6 +129,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <a href="/myprofile" class="dropdown-item"><i class="ti ti-user"></i> My Profile</a>
+
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item"><i class="ti ti-power"></i> Logout</button>
@@ -143,11 +160,10 @@
 <script src="{{ asset('assets/js/pcoded.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
 
-<!-- ✅ Popup SweetAlert Modern -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    // hanya tampil sekali setiap login
     if(!sessionStorage.getItem("welcome_shown")) {
         sessionStorage.setItem("welcome_shown", "1");
 
@@ -161,61 +177,65 @@ document.addEventListener("DOMContentLoaded", function () {
             confirmButtonText: "Mulai",
             timer: 4500,
             timerProgressBar: true,
-            showClass: { popup: "animate__animated animate__fadeInDown" },
-            hideClass: { popup: "animate__animated animate__fadeOutUp" }
         });
     }
 });
 </script>
 
-<!-- ✅ Tambahkan animasi CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
-<!-- ===== Sidebar Toggle Script ===== -->
 <script>
 (function () {
     const sidebar = document.getElementById('sidebar');
     const content = document.getElementById('content');
     const toggle = document.getElementById('toggleSidebar');
+    const header = document.querySelector('.pc-header');
 
-    // restore state (jika ada)
-    if (localStorage.getItem('sidebarHidden') === '1') {
-        sidebar.classList.add('hidden');
-        content.classList.add('full');
+    function applyResponsive() {
+        if (window.innerWidth <= 991) {
+            sidebar.classList.remove('hidden');
+            content.classList.remove('full');
+        } else {
+            if (localStorage.getItem('sidebarHidden') === '1') {
+                sidebar.classList.add('hidden');
+                content.classList.add('full');
+            }
+        }
     }
 
-    function toggleSidebar() {
-        // untuk mobile: jika layar kecil, toggling memperlihatkan/menyembunyikan overlay
+    applyResponsive();
+    window.addEventListener('resize', applyResponsive);
+
+    toggle.addEventListener('click', function () {
         if (window.innerWidth <= 991) {
             sidebar.classList.toggle('show-mobile');
         } else {
             sidebar.classList.toggle('hidden');
             content.classList.toggle('full');
-            // simpan state
-            const hidden = sidebar.classList.contains('hidden') ? '1' : '0';
-            localStorage.setItem('sidebarHidden', hidden);
-        }
-    }
-
-    if (toggle) {
-        toggle.addEventListener('click', toggleSidebar);
-    }
-
-    // optional: klik area luar untuk menutup sidebar mobile
-    document.addEventListener('click', function (e) {
-        if (window.innerWidth <= 991) {
-            if (!sidebar.contains(e.target) && !toggle.contains(e.target) && sidebar.classList.contains('show-mobile')) {
-                sidebar.classList.remove('show-mobile');
-            }
+            localStorage.setItem('sidebarHidden', sidebar.classList.contains('hidden') ? '1' : '0');
         }
     });
 
-    // handle ESC untuk menutup mobile sidebar
+    document.addEventListener('click', function (e) {
+        if (window.innerWidth <= 991 &&
+            !sidebar.contains(e.target) &&
+            !toggle.contains(e.target) &&
+            sidebar.classList.contains('show-mobile')) {
+            sidebar.classList.remove('show-mobile');
+        }
+    });
+
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && sidebar.classList.contains('show-mobile')) {
             sidebar.classList.remove('show-mobile');
         }
     });
+
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 10) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
+    });
+
 })();
 </script>
 

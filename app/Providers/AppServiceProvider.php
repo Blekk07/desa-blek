@@ -39,11 +39,6 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-        // Force root URL / scheme when needed
-        if ($this->app->environment('local')) {
-            URL::forceRootUrl(config('app.url'));
-            URL::forceScheme('https');
-        }
 
         // Register Socialite provider
         Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event) {

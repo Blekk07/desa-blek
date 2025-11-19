@@ -24,117 +24,190 @@
                     <h5>Form Pengajuan Surat</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('user.pengajuan-surat.store') }}" method="POST">
+                    <form action="{{ route('user.pengajuan-surat.store') }}" method="POST" id="formPengajuanSurat">
                         @csrf
                         
                         <div class="row">
-                            <div class="col-12 mb-3">
-                                <h6 class="text-primary"><i class="ti ti-file-text"></i> Jenis Surat</h6>
+                            <!-- PILIH JENIS SURAT -->
+                            <div class="col-12 mb-4">
+                                <h6 class="text-primary"><i class="ti ti-file-text"></i> Pilih Jenis Surat</h6>
+                                <div class="alert alert-info">
+                                    <i class="ti ti-info-circle"></i> Pilih jenis surat terlebih dahulu
+                                </div>
                             </div>
 
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Jenis Surat <span class="text-danger">*</span></label>
-                                <select name="jenis_surat" class="form-select @error('jenis_surat') is-invalid @enderror" required>
-                                    <option value="">Pilih Jenis Surat</option>
-                                    @foreach($jenisSurat as $jenis)
-                                        <option value="{{ $jenis }}" {{ old('jenis_surat') == $jenis ? 'selected' : '' }}>
-                                            {{ $jenis }}
-                                        </option>
-                                    @endforeach
+                                <select name="jenis_surat" id="jenisSurat" class="form-select @error('jenis_surat') is-invalid @enderror" required>
+                                    <option value="">-- Pilih Jenis Surat --</option>
+                                    <option value="Surat Keterangan Domisili">Surat Keterangan Domisili</option>
+                                    <option value="Surat Keterangan Tidak Mampu">Surat Keterangan Tidak Mampu (SKTM)</option>
+                                    <option value="Surat Keterangan Usaha">Surat Keterangan Usaha</option>
+                                    <option value="Surat Pengantar KTP">Surat Pengantar KTP</option>
+                                    <option value="Surat Pengantar KK">Surat Pengantar Kartu Keluarga</option>
+                                    <option value="Surat Keterangan Kelahiran">Surat Keterangan Kelahiran</option>
+                                    <option value="Surat Keterangan Kematian">Surat Keterangan Kematian</option>
+                                    <option value="Surat Keterangan Pindah">Surat Keterangan Pindah</option>
+                                    <option value="Surat Keterangan Catatan Kepolisian">Surat Keterangan Catatan Kepolisian (SKCK)</option>
+                                    <option value="Surat Lainnya">Surat Lainnya</option>
                                 </select>
                                 @error('jenis_surat')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
-                            <div class="col-12 mt-3 mb-3">
+                            <!-- DESKRIPSI SURAT -->
+                            <div class="col-md-12 mb-3" id="deskripsiSurat" style="display:none;">
+                                <div class="alert alert-light border">
+                                    <strong>Keterangan:</strong>
+                                    <p class="mb-0" id="deskripsiText"></p>
+                                </div>
+                            </div>
+
+                            <!-- DATA PEMOHON -->
+                            <div class="col-12 mt-3 mb-3" id="dataPemohonSection" style="display:none;">
                                 <h6 class="text-primary"><i class="ti ti-user"></i> Data Pemohon</h6>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" id="fieldNamaLengkap" style="display:none;">
                                 <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                                <input type="text" name="nama_lengkap" 
-                                       class="form-control @error('nama_lengkap') is-invalid @enderror" 
-                                       value="{{ old('nama_lengkap', auth()->user()->name) }}" required>
-                                @error('nama_lengkap')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap', auth()->user()->name) }}">
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" id="fieldNIK" style="display:none;">
                                 <label class="form-label">NIK <span class="text-danger">*</span></label>
-                                <input type="text" name="nik" 
-                                       class="form-control @error('nik') is-invalid @enderror" 
-                                       value="{{ old('nik') }}" maxlength="16" required>
-                                @error('nik')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <input type="text" name="nik" class="form-control" value="{{ old('nik') }}" maxlength="16">
                             </div>
 
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-12 mb-3" id="fieldAlamat" style="display:none;">
                                 <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
-                                <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror" 
-                                          rows="3" required>{{ old('alamat') }}</textarea>
-                                @error('alamat')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <textarea name="alamat" class="form-control" rows="3">{{ old('alamat') }}</textarea>
                             </div>
 
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-3 mb-3" id="fieldRT" style="display:none;">
                                 <label class="form-label">RT <span class="text-danger">*</span></label>
-                                <input type="text" name="rt" 
-                                       class="form-control @error('rt') is-invalid @enderror" 
-                                       value="{{ old('rt') }}" maxlength="3" required>
-                                @error('rt')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <input type="text" name="rt" class="form-control" value="{{ old('rt') }}" maxlength="3">
                             </div>
 
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-3 mb-3" id="fieldRW" style="display:none;">
                                 <label class="form-label">RW <span class="text-danger">*</span></label>
-                                <input type="text" name="rw" 
-                                       class="form-control @error('rw') is-invalid @enderror" 
-                                       value="{{ old('rw') }}" maxlength="3" required>
-                                @error('rw')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <input type="text" name="rw" class="form-control" value="{{ old('rw') }}" maxlength="3">
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 mb-3" id="fieldTelepon" style="display:none;">
                                 <label class="form-label">No. Telepon <span class="text-danger">*</span></label>
-                                <input type="text" name="no_telepon" 
-                                       class="form-control @error('no_telepon') is-invalid @enderror" 
-                                       value="{{ old('no_telepon') }}" maxlength="15" required>
-                                @error('no_telepon')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <input type="text" name="no_telepon" class="form-control" value="{{ old('no_telepon') }}" maxlength="15">
                             </div>
 
-                            <div class="col-12 mt-3 mb-3">
+                            <!-- FIELD KHUSUS SURAT USAHA -->
+                            <div class="col-md-6 mb-3" id="fieldNamaUsaha" style="display:none;">
+                                <label class="form-label">Nama Usaha <span class="text-danger">*</span></label>
+                                <input type="text" name="nama_usaha" class="form-control" value="{{ old('nama_usaha') }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldJenisUsaha" style="display:none;">
+                                <label class="form-label">Jenis Usaha <span class="text-danger">*</span></label>
+                                <input type="text" name="jenis_usaha" class="form-control" value="{{ old('jenis_usaha') }}" placeholder="Contoh: Warung Kelontong">
+                            </div>
+
+                            <div class="col-md-12 mb-3" id="fieldAlamatUsaha" style="display:none;">
+                                <label class="form-label">Alamat Usaha <span class="text-danger">*</span></label>
+                                <textarea name="alamat_usaha" class="form-control" rows="2">{{ old('alamat_usaha') }}</textarea>
+                            </div>
+
+                            <!-- FIELD KHUSUS KELAHIRAN -->
+                            <div class="col-md-6 mb-3" id="fieldNamaAnak" style="display:none;">
+                                <label class="form-label">Nama Anak <span class="text-danger">*</span></label>
+                                <input type="text" name="nama_anak" class="form-control" value="{{ old('nama_anak') }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldJenisKelaminAnak" style="display:none;">
+                                <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
+                                <select name="jenis_kelamin_anak" class="form-select">
+                                    <option value="">Pilih</option>
+                                    <option value="Laki-laki">Laki-laki</option>
+                                    <option value="Perempuan">Perempuan</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldTempatLahir" style="display:none;">
+                                <label class="form-label">Tempat Lahir <span class="text-danger">*</span></label>
+                                <input type="text" name="tempat_lahir_anak" class="form-control" value="{{ old('tempat_lahir_anak') }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldTanggalLahir" style="display:none;">
+                                <label class="form-label">Tanggal Lahir <span class="text-danger">*</span></label>
+                                <input type="date" name="tanggal_lahir_anak" class="form-control" value="{{ old('tanggal_lahir_anak') }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldNamaAyah" style="display:none;">
+                                <label class="form-label">Nama Ayah <span class="text-danger">*</span></label>
+                                <input type="text" name="nama_ayah" class="form-control" value="{{ old('nama_ayah') }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldNamaIbu" style="display:none;">
+                                <label class="form-label">Nama Ibu <span class="text-danger">*</span></label>
+                                <input type="text" name="nama_ibu" class="form-control" value="{{ old('nama_ibu') }}">
+                            </div>
+
+                            <!-- FIELD KHUSUS KEMATIAN -->
+                            <div class="col-md-6 mb-3" id="fieldNamaAlmarhum" style="display:none;">
+                                <label class="form-label">Nama Almarhum/Almarhumah <span class="text-danger">*</span></label>
+                                <input type="text" name="nama_almarhum" class="form-control" value="{{ old('nama_almarhum') }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldTanggalMeninggal" style="display:none;">
+                                <label class="form-label">Tanggal Meninggal <span class="text-danger">*</span></label>
+                                <input type="date" name="tanggal_meninggal" class="form-control" value="{{ old('tanggal_meninggal') }}">
+                            </div>
+
+                            <div class="col-md-12 mb-3" id="fieldTempatMeninggal" style="display:none;">
+                                <label class="form-label">Tempat Meninggal <span class="text-danger">*</span></label>
+                                <input type="text" name="tempat_meninggal" class="form-control" value="{{ old('tempat_meninggal') }}">
+                            </div>
+
+                            <div class="col-md-12 mb-3" id="fieldSebabMeninggal" style="display:none;">
+                                <label class="form-label">Sebab Meninggal</label>
+                                <textarea name="sebab_meninggal" class="form-control" rows="2">{{ old('sebab_meninggal') }}</textarea>
+                            </div>
+
+                            <!-- FIELD KHUSUS PINDAH -->
+                            <div class="col-md-12 mb-3" id="fieldAlamatTujuan" style="display:none;">
+                                <label class="form-label">Alamat Tujuan <span class="text-danger">*</span></label>
+                                <textarea name="alamat_tujuan" class="form-control" rows="3">{{ old('alamat_tujuan') }}</textarea>
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldAlasanPindah" style="display:none;">
+                                <label class="form-label">Alasan Pindah <span class="text-danger">*</span></label>
+                                <select name="alasan_pindah" class="form-select">
+                                    <option value="">Pilih</option>
+                                    <option value="Pekerjaan">Pekerjaan</option>
+                                    <option value="Pendidikan">Pendidikan</option>
+                                    <option value="Keamanan">Keamanan</option>
+                                    <option value="Kesehatan">Kesehatan</option>
+                                    <option value="Perumahan">Perumahan</option>
+                                    <option value="Keluarga">Keluarga</option>
+                                    <option value="Lainnya">Lainnya</option>
+                                </select>
+                            </div>
+
+                            <!-- KEPERLUAN -->
+                            <div class="col-12 mt-3 mb-3" id="keperluanSection" style="display:none;">
                                 <h6 class="text-primary"><i class="ti ti-info-circle"></i> Keperluan Surat</h6>
                             </div>
 
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-12 mb-3" id="fieldKeperluan" style="display:none;">
                                 <label class="form-label">Keperluan <span class="text-danger">*</span></label>
-                                <textarea name="keperluan" class="form-control @error('keperluan') is-invalid @enderror" 
-                                          rows="3" placeholder="Jelaskan keperluan pembuatan surat ini..." required>{{ old('keperluan') }}</textarea>
-                                @error('keperluan')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <textarea name="keperluan" class="form-control" rows="3" placeholder="Jelaskan keperluan pembuatan surat ini...">{{ old('keperluan') }}</textarea>
                             </div>
 
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-12 mb-3" id="fieldKeterangan" style="display:none;">
                                 <label class="form-label">Keterangan Tambahan</label>
-                                <textarea name="keterangan_tambahan" 
-                                          class="form-control @error('keterangan_tambahan') is-invalid @enderror" 
-                                          rows="2" placeholder="Keterangan tambahan (opsional)">{{ old('keterangan_tambahan') }}</textarea>
-                                @error('keterangan_tambahan')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <textarea name="keterangan_tambahan" class="form-control" rows="2" placeholder="Keterangan tambahan (opsional)">{{ old('keterangan_tambahan') }}</textarea>
                             </div>
                         </div>
 
-                        <div class="mt-4">
+                        <div class="mt-4" id="buttonSection" style="display:none;">
                             <button type="submit" class="btn btn-primary">
                                 <i class="ti ti-send"></i> Kirim Pengajuan
                             </button>
@@ -148,4 +221,115 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const jenisSurat = document.getElementById('jenisSurat');
+    const deskripsiSurat = document.getElementById('deskripsiSurat');
+    const deskripsiText = document.getElementById('deskripsiText');
+    
+    // Deskripsi untuk setiap jenis surat - SESUAIKAN DENGAN OPTION VALUE
+    const deskripsiMap = {
+        'Surat Keterangan Domisili': 'Surat yang menyatakan bahwa seseorang berdomisili di wilayah tertentu. Biasa digunakan untuk syarat administrasi sekolah, kuliah, melamar pekerjaan, atau pembuatan KTP.',
+        'Surat Keterangan Tidak Mampu': 'Surat yang menyatakan kondisi ekonomi keluarga yang kurang mampu. Digunakan untuk mengajukan bantuan, beasiswa, keringanan biaya, atau keperluan sosial lainnya.',
+        'Surat Keterangan Usaha': 'Surat yang menyatakan bahwa seseorang memiliki dan menjalankan usaha di wilayah desa. Digunakan untuk mengajukan kredit usaha, izin usaha, atau keperluan bisnis lainnya.',
+        'Surat Pengantar KTP': 'Surat pengantar untuk mengurus pembuatan atau perpanjangan KTP di Dukcapil. Wajib dibawa saat mengurus KTP baru atau yang hilang.',
+        'Surat Pengantar KK': 'Surat pengantar untuk mengurus Kartu Keluarga (KK) di Dukcapil. Diperlukan untuk penambahan anggota keluarga, perubahan data, atau KK hilang.', // VALUE SESUAI DENGAN OPTION
+        'Surat Keterangan Kelahiran': 'Surat keterangan kelahiran bayi yang akan digunakan untuk mengurus Akta Kelahiran di Dukcapil. Harus diurus maksimal 60 hari setelah kelahiran.',
+        'Surat Keterangan Kematian': 'Surat keterangan kematian seseorang yang diperlukan untuk pengurusan Akta Kematian dan keperluan administrasi lainnya.',
+        'Surat Keterangan Pindah': 'Surat yang menyatakan seseorang pindah dari satu wilayah ke wilayah lain. Diperlukan untuk pengurusan administrasi kependudukan di tempat tujuan.',
+        'Surat Keterangan Catatan Kepolisian': 'Surat pengantar dari desa untuk mengurus SKCK di Polsek/Polres. Biasa digunakan untuk melamar pekerjaan atau keperluan administrasi tertentu.',
+        'Surat Lainnya': 'Jenis surat lainnya yang tidak termasuk dalam kategori di atas. Silakan jelaskan keperluan surat Anda pada bagian keterangan.'
+    };
+    
+    // Field yang wajib untuk setiap jenis surat - SESUAIKAN DENGAN OPTION VALUE
+    const fieldMap = {
+        'Surat Keterangan Domisili': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Tidak Mampu': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Usaha': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaUsaha', 'fieldJenisUsaha', 'fieldAlamatUsaha', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Pengantar KTP': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Pengantar KK': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'], // VALUE SESUAI DENGAN OPTION
+        'Surat Keterangan Kelahiran': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaAnak', 'fieldJenisKelaminAnak', 'fieldTempatLahir', 'fieldTanggalLahir', 'fieldNamaAyah', 'fieldNamaIbu', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Kematian': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaAlmarhum', 'fieldTanggalMeninggal', 'fieldTempatMeninggal', 'fieldSebabMeninggal', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Pindah': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldAlamatTujuan', 'fieldAlasanPindah', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Catatan Kepolisian': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Lainnya': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection']
+    };
+    
+    // Debug function untuk mengecek field
+    function showAllFieldIds() {
+        const allFields = document.querySelectorAll('[id]');
+        console.log('Semua ID yang ada:');
+        allFields.forEach(field => {
+            if (field.id.includes('field') || field.id.includes('Section')) {
+                console.log('- ' + field.id);
+            }
+        });
+    }
+    
+    // Panggil debug function
+    showAllFieldIds();
+    
+    jenisSurat.addEventListener('change', function() {
+        console.log('Jenis surat dipilih:', this.value);
+        
+        // Sembunyikan semua field
+        const allFields = document.querySelectorAll('[id^="field"], [id$="Section"], #buttonSection');
+        allFields.forEach(field => {
+            field.style.display = 'none';
+            // Reset required attribute
+            const inputs = field.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => input.removeAttribute('required'));
+        });
+        
+        const selectedValue = this.value;
+        
+        if (selectedValue && deskripsiMap[selectedValue]) {
+            // Tampilkan deskripsi
+            deskripsiText.textContent = deskripsiMap[selectedValue];
+            deskripsiSurat.style.display = 'block';
+            
+            // Tampilkan field yang sesuai
+            if (fieldMap[selectedValue]) {
+                console.log('Field yang harus ditampilkan:', fieldMap[selectedValue]);
+                
+                fieldMap[selectedValue].forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        console.log('Menampilkan field:', fieldId);
+                        field.style.display = 'block';
+                        
+                        // Set required attribute untuk input fields (kecuali keterangan tambahan)
+                        const inputs = field.querySelectorAll('input, select, textarea');
+                        inputs.forEach(input => {
+                            if (input.name !== 'keterangan_tambahan' && input.name !== 'sebab_meninggal') {
+                                input.setAttribute('required', 'required');
+                            }
+                        });
+                    } else {
+                        console.log('Field tidak ditemukan:', fieldId);
+                    }
+                });
+            }
+        } else {
+            deskripsiSurat.style.display = 'none';
+            console.log('Jenis surat tidak valid atau tidak dipilih');
+        }
+    });
+    
+    // Trigger change event untuk menampilkan field jika sudah ada value (setelah form validation error)
+    if (jenisSurat.value) {
+        jenisSurat.dispatchEvent(new Event('change'));
+    }
+});
+</script>
+
+<style>
+.form-label {
+    font-weight: 500;
+}
+.alert-light {
+    background-color: #f8f9fa;
+}
+</style>
 @endsection

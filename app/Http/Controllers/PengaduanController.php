@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class PengaduanController extends Controller
 {
+    /** =========================
+     *  USER AREA
+     *  ========================= */
     public function index()
     {
         $pengaduan = Pengaduan::where('user_id', auth()->id())
@@ -32,7 +35,7 @@ class PengaduanController extends Controller
             'user_id' => auth()->id(),
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi,
-            'isi' => $request->deskripsi, 
+            'isi' => $request->deskripsi,
             'status' => 'pending'
         ]);
 
@@ -47,5 +50,34 @@ class PengaduanController extends Controller
                             ->firstOrFail();
         
         return view('user.pengaduan.show', compact('pengaduan'));
+    }
+
+
+    /** =========================
+     *  ADMIN AREA
+     *  ========================= */
+    public function adminIndex()
+    {
+        $pengaduan = Pengaduan::latest()->get();
+        return view('admin.pengaduan.index', compact('pengaduan'));
+    }
+
+    public function adminShow($id)
+    {
+        $pengaduan = Pengaduan::findOrFail($id);
+        return view('admin.pengaduan.show', compact('pengaduan'));
+    }
+
+    public function adminUpdateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,proses,selesai'
+        ]);
+
+        $pengaduan = Pengaduan::findOrFail($id);
+        $pengaduan->status = $request->status;
+        $pengaduan->save();
+
+        return redirect()->back()->with('success', 'Status laporan berhasil diperbarui');
     }
 }
