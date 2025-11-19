@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
         // Admin
         DB::table('users')->insert([
             'name' => 'Admin Satu',
-            'nik' => '9876543210987654', // NIK admin
+            'nik' => '0000000000000000', // NIK admin
             'email' => 'admin@gmail.com',
             'role' => 'admin',
             'password' => Hash::make('admin123'),

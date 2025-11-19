@@ -37,7 +37,7 @@
 <div class="row g-4 mt-3">
     @php
         $menus = [
-            ['name' => 'Data Penduduk', 'icon' => 'bi-people', 'url' => '/admin/penduduk'],
+            ['name' => 'Data Penduduk', 'icon' => 'bi-people', 'url' => '/penduduk'],
             ['name' => 'Pengajuan Surat', 'icon' => 'bi-file-text', 'url' => '/admin/pengajuan-surat'],
             ['name' => 'Laporan Warga', 'icon' => 'bi-megaphone', 'url' => '/admin/pengaduan'],
             ['name' => 'Manajemen User', 'icon' => 'bi-person-lines-fill', 'url' => '/admin/users'],
