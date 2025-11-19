@@ -6,6 +6,7 @@ use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\PendudukController;
 use App\Http\Controllers\HelpController;
 use App\Http\Controllers\PengajuanSuratController;
+use App\Http\Controllers\ProfileController; // TAMBAHKAN INI
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,12 +44,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/myprofile', fn() => view('myprofile'))->name('myprofile');
+    // PROFILE ROUTES - UBAH DARI SIMPLE ROUTE KE CONTROLLER
+    Route::get('/myprofile', [ProfileController::class, 'index'])->name('myprofile');
+    Route::put('/myprofile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/myprofile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // ========== ADMIN ==========
     Route::middleware(['cekRole:admin'])->group(function () {
 
-            Route::prefix('admin')->middleware(['auth'])->group(function () {
+        Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/dashboard', function () {
                 return view('admin.dashboard');
             })->name('admin.dashboard');
@@ -71,22 +75,21 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/pengajuan-surat/{id}/update-status', [PengajuanSuratController::class, 'updateStatus'])->name('admin.pengajuan-surat.update-status');
         Route::delete('/admin/pengajuan-surat/{id}', [PengajuanSuratController::class, 'destroy'])->name('admin.pengajuan-surat.destroy');
 
-                /** ADMIN PENGADUAN */
+        /** ADMIN PENGADUAN */
         Route::get('/admin/pengaduan', [PengaduanController::class, 'adminIndex'])->name('admin.pengaduan.index');
         Route::get('/admin/pengaduan/{id}', [PengaduanController::class, 'adminShow'])->name('admin.pengaduan.show');
         Route::post('/admin/pengaduan/{id}/status', [PengaduanController::class, 'adminUpdateStatus'])->name('admin.pengaduan.updateStatus');
 
     });
 
-        // ========== USER ==========
+    // ========== USER ==========
     Route::middleware(['cekRole:user'])->group(function () {
 
-                Route::prefix('user')->middleware(['auth'])->group(function () {
+        Route::prefix('user')->middleware(['auth'])->group(function () {
             Route::get('/dashboard', function () {
                 return view('user.dashboard');
             })->name('user.dashboard');
         });
-
 
         /** PENGADUAN USER */
         Route::get('/pengaduan', [PengaduanController::class, 'index'])->name('pengaduan.index');
