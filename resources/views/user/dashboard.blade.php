@@ -79,7 +79,7 @@
     <div class="col">
         <a href="{{ route('pengaduan.index') }}" class="menu-link">
             <div class="p-3 menu-card">
-                <i class="ti ti-megaphone fs-3 mb-2"></i>
+                <i class="ti ti-report fs-3 mb-2"></i>
                 <div>Laporan Warga</div>
             </div>
         </a>
@@ -164,7 +164,8 @@
 <style>
 
 .hero-section {
-    background: linear-gradient(135deg, #28A745, #6fe68a);
+    background: linear-gradient(135deg, #1e3c72 0%, #2a69ac 100%);
+    position: relative;
 }
 
 /* STAT CARD */
@@ -211,7 +212,7 @@
 
 /* BUTTON */
 .btn-modern {
-    background: linear-gradient(135deg, #28A745, #6fdc88);
+    background: linear-gradient(135deg, #1e3c72, #2a69ac);
     color: white !important;
     border-radius: 25px;
 }
@@ -226,7 +227,7 @@
     right: 35px;
 }
 .quick-btn a {
-    background: #28A745;
+    background: #1e3c72;
     color: white;
     width: 60px;
     height: 60px;
