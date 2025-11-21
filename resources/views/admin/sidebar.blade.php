@@ -38,7 +38,7 @@
         <li class="sidebar-item">
             <a href="{{ route('admin.pengaduan.index') }}" class="sidebar-link">
                 <i class="ti ti-report sidebar-icon"></i>
-                <span>Laporan Pengaduan</span>
+                <span>Laporan Warga</span>
             </a>
         </li>
 
