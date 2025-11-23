@@ -8,7 +8,7 @@
 
     <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
     <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
 
     <!-- LOCAL ICON FONT -->
     <link rel="stylesheet" href="{{ asset('assets/fonts/tabler-icons.min.css') }}">
@@ -23,56 +23,289 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
 
-    <!-- STYLE CUSTOM SIDEBAR -->
+    <!-- MODERN STYLE CUSTOM -->
     <style>
-        .pc-sidebar {
-            width: 250px;
-            transition: margin-left .28s ease, width .28s ease, transform .28s ease;
-            z-index: 1050;
-        }
-        .pc-sidebar.hidden {
-            transform: translateX(-260px);
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --sidebar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            --sidebar-hover: rgba(255, 255, 255, 0.1);
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --smooth-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .pc-container {
-            transition: margin-left .28s ease;
-            margin-left: 250px;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
         }
+
+        /* MODERN SIDEBAR */
+        .pc-sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            z-index: 1050;
+            box-shadow: var(--smooth-shadow);
+        }
+
+        .pc-sidebar.hidden {
+            transform: translateX(-280px);
+        }
+
+        .pc-sidebar .m-header {
+            padding: 1.5rem 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pc-sidebar .m-header .b-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .pc-sidebar .m-header .b-brand span {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* NAVBAR MODERN STYLING */
+        .pc-navbar {
+            padding: 1rem 0;
+        }
+
+        .pc-navbar .pc-item {
+            margin: 0.25rem 1rem;
+        }
+
+        .pc-navbar .pc-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .pc-navbar .pc-link:hover {
+            background: var(--sidebar-hover);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .pc-navbar .pc-link.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .pc-navbar .pc-link i {
+            font-size: 1.25rem;
+            width: 24px;
+        }
+
+        /* MODERN HEADER */
+        .pc-header {
+            background: var(--header-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: var(--smooth-shadow);
+            transition: var(--transition);
+        }
+
+        .pc-header.scrolled {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-wrapper {
+            padding: 1rem 2rem;
+        }
+
+        #toggleSidebar {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: var(--border-radius);
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        #toggleSidebar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* USER PROFILE DROPDOWN */
+        .header-user-profile .pc-head-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .header-user-profile .pc-head-link:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .user-avtar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #667eea;
+            object-fit: cover;
+        }
+
+        .dropdown-user-profile {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 0.5rem;
+            min-width: 200px;
+        }
+
+        .dropdown-user-profile .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: var(--transition);
+            color: #64748b;
+            text-decoration: none;
+        }
+
+        .dropdown-user-profile .dropdown-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            transform: translateX(4px);
+        }
+
+        .dropdown-user-profile .dropdown-item i {
+            width: 20px;
+        }
+
+        /* MAIN CONTENT */
+        .pc-container {
+            transition: var(--transition);
+            margin-left: 280px;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+
         .pc-container.full {
             margin-left: 0;
         }
 
+        /* MODERN FOOTER */
+        .pc-footer {
+            background: white;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1.5rem 0;
+            margin-top: auto;
+        }
+
+        .footer-wrapper {
+            text-align: center;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* LOADER MODERN */
+        .loader-bg {
+            background: var(--primary-gradient);
+        }
+
+        .loader-track {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .loader-fill {
+            background: white;
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 991px) {
             .pc-sidebar {
-                transform: translateX(-260px);
+                transform: translateX(-280px);
                 position: fixed;
-                height: 100%;
+                height: 100vh;
+                box-shadow: var(--card-shadow);
             }
+            
             .pc-sidebar.show-mobile {
                 transform: translateX(0);
             }
+            
             .pc-container {
                 margin-left: 0 !important;
             }
+            
+            .header-wrapper {
+                padding: 1rem;
+            }
         }
 
-        #toggleSidebar {
-            border: 0;
-            background: transparent;
-            font-size: 18px;
-            cursor: pointer;
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
 
-        /* Header sticky */
-        .pc-header {
-            position: sticky;
-            top: 0;
-            z-index: 1100;
-            background: #ffffff;
-            transition: box-shadow .25s ease;
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
         }
-        .pc-header.scrolled {
-            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* GLASS MORPHISM UTILITY */
+        .glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
     </style>
 </head>
@@ -88,14 +321,13 @@
 <nav class="pc-sidebar" id="sidebar">
     <div class="navbar-wrapper">
         <div class="m-header justify-content-center">
-            <a href="/" class="b-brand text-dark text-capitalize fw-bold">
+            <a href="/" class="b-brand text-capitalize fw-bold">
                 <span class="fs-4">{{ auth()->user()->role }} Dashboard</span>
             </a>
         </div>
 
         <div class="navbar-content">
             <ul class="pc-navbar">
-
                 @if (auth()->user()->role === 'admin')
                     @include('admin.sidebar')
                 @else
@@ -122,11 +354,17 @@
                         <span>{{ $name }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
-                        <a href="/myprofile" class="dropdown-item"><i class="ti ti-user"></i> My Profile</a>
+                        <a href="/myprofile" class="dropdown-item">
+                            <i class="ti ti-user"></i> 
+                            <span>My Profile</span>
+                        </a>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="dropdown-item"><i class="ti ti-power"></i> Logout</button>
+                            <button type="submit" class="dropdown-item">
+                                <i class="ti ti-power"></i> 
+                                <span>Logout</span>
+                            </button>
                         </form>
                     </div>
                 </li>
@@ -136,12 +374,14 @@
 </header>
 
 <div class="pc-container" id="content">
-    @yield('content')
+    <div class="fade-in-up">
+        @yield('content')
+    </div>
 </div>
 
 <footer class="pc-footer">
     <div class="footer-wrapper container-fluid">
-        <p class="m-0">Made in Blekk</p>
+        <p class="m-0">Made in Blekk with ❤️</p>
     </div>
 </footer>
 
@@ -164,13 +404,18 @@ document.addEventListener("DOMContentLoaded", function () {
         Swal.fire({
             title: "Selamat Datang, {{ $name }}! 👋",
             html: `
-                <p>Anda masuk sebagai <b>{{ $role }}</b></p>
-                <p>Semoga harimu menyenangkan 😊</p>
+                <div style="text-align: center;">
+                    <p>Anda masuk sebagai <b style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ $role }}</b></p>
+                    <p>Semoga harimu menyenangkan 😊</p>
+                </div>
             `,
             icon: "success",
             confirmButtonText: "Mulai",
+            confirmButtonColor: "#667eea",
             timer: 4500,
             timerProgressBar: true,
+            background: '#ffffff',
+            color: '#1e293b',
         });
     }
 });
@@ -228,6 +473,11 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener('scroll', function () {
         if (window.scrollY > 10) header.classList.add('scrolled');
         else header.classList.remove('scrolled');
+    });
+
+    // Add smooth animations to page load
+    document.querySelectorAll('.pc-navbar .pc-link').forEach(link => {
+        link.style.animationDelay = Math.random() * 0.5 + 's';
     });
 
 })();
