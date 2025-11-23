@@ -113,13 +113,23 @@
             width: 24px;
         }
 
-        /* MODERN HEADER */
+        /* MODERN HEADER - FIXED POSITION */
         .pc-header {
             background: var(--header-bg);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             box-shadow: var(--smooth-shadow);
             transition: var(--transition);
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            z-index: 1040;
+            height: 70px;
+        }
+
+        .pc-header.full-width {
+            left: 0 !important;
         }
 
         .pc-header.scrolled {
@@ -434,27 +444,48 @@ document.addEventListener("DOMContentLoaded", function () {
         if (window.innerWidth <= 991) {
             sidebar.classList.remove('hidden');
             content.classList.remove('full');
+            header.classList.add('full-width');
         } else {
             if (localStorage.getItem('sidebarHidden') === '1') {
                 sidebar.classList.add('hidden');
                 content.classList.add('full');
+                header.classList.add('full-width');
+            } else {
+                sidebar.classList.remove('hidden');
+                content.classList.remove('full');
+                header.classList.remove('full-width');
             }
         }
     }
 
+    // Initialize
     applyResponsive();
-    window.addEventListener('resize', applyResponsive);
 
+    // Event listeners
+    window.addEventListener('resize', function() {
+        applyResponsive();
+    });
+
+    // Sidebar Toggle
     toggle.addEventListener('click', function () {
         if (window.innerWidth <= 991) {
             sidebar.classList.toggle('show-mobile');
         } else {
             sidebar.classList.toggle('hidden');
             content.classList.toggle('full');
+            
+            // Update header position
+            if (sidebar.classList.contains('hidden')) {
+                header.classList.add('full-width');
+            } else {
+                header.classList.remove('full-width');
+            }
+            
             localStorage.setItem('sidebarHidden', sidebar.classList.contains('hidden') ? '1' : '0');
         }
     });
 
+    // Mobile Search
     document.addEventListener('click', function (e) {
         if (window.innerWidth <= 991 &&
             !sidebar.contains(e.target) &&

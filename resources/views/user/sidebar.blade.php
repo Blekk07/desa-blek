@@ -69,7 +69,7 @@
                 </div>
                 <span class="sidebar-text">Pengajuan Surat</span>
                 <div class="sidebar-badge">
-                    <span class="notification-badge">12</span>
+                   <i class="ti ti-chevron-right"></i>
                 </div>
             </a>
         </li>
@@ -82,7 +82,7 @@
                 </div>
                 <span class="sidebar-text">Laporan Warga</span>
                 <div class="sidebar-badge">
-                    <span class="notification-badge">5</span>
+                    <i class="ti ti-chevron-right"></i>
                 </div>
             </a>
         </li>
