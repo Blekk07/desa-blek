@@ -37,6 +37,12 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/auth/{provider}', [AuthController::class, 'redirect'])->name('sso.redirect');
     Route::get('/auth/{provider}/callback', [AuthController::class, 'callback'])->name('sso.callback');
 
+        // Google Registration Complete
+    Route::get('/register/google/complete', [AuthController::class, 'showGoogleRegistrationForm'])
+        ->name('register.google.complete');
+    Route::post('/register/google/complete', [AuthController::class, 'completeGoogleRegistration'])
+        ->name('register.google.store');
+
     Route::get('/forgot-password', [AuthController::class, 'showRequestForm'])->name('forgot_password.email_form');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot_password.send_link');
     Route::get('/password-reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
