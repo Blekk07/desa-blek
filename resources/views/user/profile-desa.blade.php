@@ -244,7 +244,7 @@
 <style>
 /* HERO PROFILE */
 .hero-profile {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a69ac 100%);
+    background: linear-gradient(135deg, #0052d4);
     position: relative;
 }
 .hero-overlay {

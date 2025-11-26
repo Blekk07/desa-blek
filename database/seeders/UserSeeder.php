@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         // Default role user
         DB::table('users')->insert([
             'name' => 'Dimass',
-            'nik' => '1234567890123456', // NIK user
+            'nik' => '1111111111111111', // NIK user
             'email' => 'Dimas@gmail.com',
             'role' => 'user', // default role
             'password' => Hash::make('Dimas12'),
