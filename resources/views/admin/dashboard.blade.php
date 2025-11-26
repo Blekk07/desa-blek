@@ -329,7 +329,7 @@
 
 <!-- FLOATING ACTION BUTTON MODERN -->
 <div class="quick-btn">
-    <a href="/admin/pengaduan/create" class="floating-btn" data-bs-toggle="tooltip" data-bs-placement="left" title="Tambah Data Baru">
+    <a href="/admin/pengaduan" class="floating-btn" data-bs-toggle="tooltip" data-bs-placement="left" title="Tambah Data Baru">
         <i class="ti ti-plus"></i>
     </a>
 </div>

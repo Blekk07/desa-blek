@@ -74,8 +74,15 @@ class PengaduanController extends Controller
             'status' => 'required|in:pending,proses,selesai'
         ]);
 
+        // Mapping status dari request ke ENUM MySQL
+        $mapStatus = [
+            'pending' => 'pending',
+            'proses' => 'diproses',
+            'selesai' => 'selesai'
+        ];
+
         $pengaduan = Pengaduan::findOrFail($id);
-        $pengaduan->status = $request->status;
+        $pengaduan->status = $mapStatus[$request->status]; // aman & tidak error
         $pengaduan->save();
 
         return redirect()->back()->with('success', 'Status laporan berhasil diperbarui');

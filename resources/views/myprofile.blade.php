@@ -188,32 +188,6 @@
                                                         </div>
                                                     </div>
                                                 </li>
-                                                <li class="list-group-item px-0 pb-0">
-                                                    <p class="mb-1 text-muted">Alamat Lengkap</p>
-                                                    <p class="mb-0">{{ $penduduk->alamat }}</p>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5>Data Keluarga</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item px-0 pt-0">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <p class="mb-1 text-muted">Nama Ayah</p>
-                                                            <p class="mb-0">{{ $penduduk->nama_ayah ?? '-' }}</p>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <p class="mb-1 text-muted">Nama Ibu</p>
-                                                            <p class="mb-0">{{ $penduduk->nama_ibu ?? '-' }}</p>
-                                                        </div>
-                                                    </div>
-                                                </li>
                                             </ul>
                                         </div>
                                     </div>

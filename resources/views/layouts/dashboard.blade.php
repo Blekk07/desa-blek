@@ -41,6 +41,11 @@
             background: #f8fafc;
         }
 
+        /* TAMBAHAN AGAR TIDAK MEPET BAWAH */
+        .pc-container {
+            padding-bottom: 40px !important;
+        }
+
         /* MODERN SIDEBAR */
         .pc-sidebar {
             width: 280px;
@@ -75,7 +80,6 @@
             background-clip: text;
         }
 
-        /* NAVBAR MODERN STYLING */
         .pc-navbar {
             padding: 1rem 0;
         }
@@ -113,7 +117,6 @@
             width: 24px;
         }
 
-        /* MODERN HEADER - FIXED POSITION */
         .pc-header {
             background: var(--header-bg);
             backdrop-filter: blur(20px);
@@ -160,7 +163,6 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        /* USER PROFILE DROPDOWN */
         .header-user-profile .pc-head-link {
             display: flex;
             align-items: center;
@@ -216,7 +218,6 @@
             width: 20px;
         }
 
-        /* MAIN CONTENT */
         .pc-container {
             transition: var(--transition);
             margin-left: 280px;
@@ -228,7 +229,6 @@
             margin-left: 0;
         }
 
-        /* MODERN FOOTER */
         .pc-footer {
             background: white;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -242,7 +242,6 @@
             font-weight: 500;
         }
 
-        /* LOADER MODERN */
         .loader-bg {
             background: var(--primary-gradient);
         }
@@ -255,7 +254,6 @@
             background: white;
         }
 
-        /* RESPONSIVE */
         @media (max-width: 991px) {
             .pc-sidebar {
                 transform: translateX(-280px);
@@ -277,7 +275,6 @@
             }
         }
 
-        /* CUSTOM SCROLLBAR */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -295,23 +292,15 @@
             background: #94a3b8;
         }
 
-        /* ANIMATIONS */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .fade-in-up {
             animation: fadeInUp 0.6s ease-out;
         }
 
-        /* GLASS MORPHISM UTILITY */
         .glass {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(10px);
@@ -389,11 +378,12 @@
     </div>
 </div>
 
-<footer class="pc-footer">
-    <div class="footer-wrapper container-fluid">
+<footer class="pc-footer mt-auto bg-light border-top py-4">
+    <div class="footer-wrapper container-fluid text-center">
         <p class="m-0">Made in Blekk with ❤️</p>
     </div>
 </footer>
+
 
 <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/dashboard-default.js') }}"></script>
@@ -458,15 +448,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Initialize
     applyResponsive();
 
-    // Event listeners
     window.addEventListener('resize', function() {
         applyResponsive();
     });
 
-    // Sidebar Toggle
     toggle.addEventListener('click', function () {
         if (window.innerWidth <= 991) {
             sidebar.classList.toggle('show-mobile');
@@ -474,7 +461,6 @@ document.addEventListener("DOMContentLoaded", function () {
             sidebar.classList.toggle('hidden');
             content.classList.toggle('full');
             
-            // Update header position
             if (sidebar.classList.contains('hidden')) {
                 header.classList.add('full-width');
             } else {
@@ -485,7 +471,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Mobile Search
     document.addEventListener('click', function (e) {
         if (window.innerWidth <= 991 &&
             !sidebar.contains(e.target) &&
@@ -506,7 +491,6 @@ document.addEventListener("DOMContentLoaded", function () {
         else header.classList.remove('scrolled');
     });
 
-    // Add smooth animations to page load
     document.querySelectorAll('.pc-navbar .pc-link').forEach(link => {
         link.style.animationDelay = Math.random() * 0.5 + 's';
     });

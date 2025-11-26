@@ -8,6 +8,7 @@
             <form method="POST" action="{{ route('login.post') }}">
                 @csrf
                 <div class="card-body">
+
                     <div class="d-flex justify-content-between align-items-end mb-4">
                         <h3 class="mb-0"><b>Login</b></h3>
                         <a href="/register" class="link-primary">Don't have an account?</a>
@@ -27,15 +28,41 @@
                         </div>
                     @endif
 
+                    {{-- =======================
+                         NIK INPUT (FIXED)
+                    ======================== --}}
                     <div class="form-group mb-3">
                         <label class="form-label">NIK</label>
-                        <input type="text" class="form-control" name="nik" placeholder="NIK" 
-                            value="{{ old('nik') }}" autocomplete="off" required>
+                        <input 
+                            type="text"
+                            class="form-control @error('nik') is-invalid @enderror"
+                            name="nik" 
+                            id="nik"
+                            placeholder="NIK"
+                            value="{{ old('nik') }}" 
+                            autocomplete="off" 
+                            required
+                            maxlength="16"
+                            inputmode="numeric"
+                        >
+                        @error('nik')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
+                    {{-- =======================
+                         PASSWORD
+                    ======================== --}}
                     <div class="form-group mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
+                        <input 
+                            id="password" 
+                            type="password" 
+                            class="form-control" 
+                            name="password" 
+                            placeholder="Password" 
+                            required
+                        >
                     </div>
 
                     <div class="d-flex mt-1 justify-content-between">
@@ -54,6 +81,7 @@
                         <span>Login with</span>
                     </div>
                     @include('auth.sso')
+
                 </div>
             </form>
         </div>
@@ -64,4 +92,19 @@
             min-height: 100vh;
         }
     </style>
+
+    {{-- =======================
+         JS SCRIPT FIX NIK
+         (Only Numbers + Max 16)
+    ======================== --}}
+    <script>
+        document.getElementById('nik').addEventListener('input', function () {
+            // Hanya angka
+            this.value = this.value.replace(/[^0-9]/g, '');
+            // Maksimal 16 digit
+            if (this.value.length > 16) {
+                this.value = this.value.slice(0, 16);
+            }
+        });
+    </script>
 @endsection
