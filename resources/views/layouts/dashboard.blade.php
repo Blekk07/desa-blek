@@ -15,6 +15,7 @@
 
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/responsive-fixes.css') }}">
 
     <!-- MODERN STYLE CUSTOM -->
     <style>
@@ -268,6 +269,22 @@
             }
         }
 
+        /* Mobile sidebar overlay */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0; /* top:0; right:0; bottom:0; left:0 */
+            background: rgba(0,0,0,0.38);
+            z-index: 1040;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.18s ease-in-out;
+        }
+
+        .sidebar-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -329,6 +346,9 @@
         </div>
     </div>
 </nav>
+
+<!-- Overlay for mobile sidebar -->
+<div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true"></div>
 
 <header class="pc-header">
     <div class="header-wrapper">
@@ -422,13 +442,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const content = document.getElementById('content');
     const toggle = document.getElementById('toggleSidebar');
     const header = document.querySelector('.pc-header');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function showMobileSidebar() {
+        sidebar.classList.add('show-mobile');
+        overlay.classList.add('visible');
+        // prevent background scroll while sidebar open on mobile
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideMobileSidebar() {
+        sidebar.classList.remove('show-mobile');
+        overlay.classList.remove('visible');
+        document.body.style.overflow = '';
+    }
 
     function applyResponsive() {
         if (window.innerWidth <= 991) {
+            // ensure sidebar is closed by default on mobile
             sidebar.classList.remove('hidden');
             content.classList.remove('full');
             header.classList.add('full-width');
+            // cleanup any overlay that might be lingering
+            if (!sidebar.classList.contains('show-mobile')) hideMobileSidebar();
         } else {
+            hideMobileSidebar();
             if (localStorage.getItem('sidebarHidden') === '1') {
                 sidebar.classList.add('hidden');
                 content.classList.add('full');
@@ -449,7 +487,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     toggle.addEventListener('click', function () {
         if (window.innerWidth <= 991) {
-            sidebar.classList.toggle('show-mobile');
+            if (sidebar.classList.contains('show-mobile')) hideMobileSidebar();
+            else showMobileSidebar();
         } else {
             sidebar.classList.toggle('hidden');
             content.classList.toggle('full');
@@ -464,18 +503,24 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Click overlay to close sidebar on mobile
+    overlay.addEventListener('click', function () {
+        if (sidebar.classList.contains('show-mobile')) hideMobileSidebar();
+    });
+
+    // Click outside sidebar should also close (keeps previous behavior)
     document.addEventListener('click', function (e) {
         if (window.innerWidth <= 991 &&
             !sidebar.contains(e.target) &&
             !toggle.contains(e.target) &&
             sidebar.classList.contains('show-mobile')) {
-            sidebar.classList.remove('show-mobile');
+            hideMobileSidebar();
         }
     });
 
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && sidebar.classList.contains('show-mobile')) {
-            sidebar.classList.remove('show-mobile');
+            hideMobileSidebar();
         }
     });
 

@@ -14,6 +14,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/responsive-fixes.css') }}">
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">

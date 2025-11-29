@@ -33,6 +33,7 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/responsive-fixes.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}">
 
     <style>

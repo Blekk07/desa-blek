@@ -39,10 +39,15 @@ class AppServiceProvider extends ServiceProvider
             }
         });
 
-
         // Register Socialite provider
         Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event) {
             $event->extendSocialite('discord', Provider::class);
         });
+
+        // Force URL scheme in local environment
+        if ($this->app->environment('local')) {
+            URL::forceRootUrl(config('app.url'));
+            URL::forceScheme('https');
+        }
     }
 }

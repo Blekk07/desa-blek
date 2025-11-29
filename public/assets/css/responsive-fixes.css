@@ -1,0 +1,62 @@
+/* Responsive fixes and helpers for mobile & small screens */
+:root{
+  --container-padding:16px;
+}
+
+/* Make main containers responsive */
+.container, .container-fluid, .auth-container, .pc-container {
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+}
+
+/* Ensure cards and auth-card scale nicely */
+.auth-card, .card {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Make buttons wrap and icons visible */
+.btn {
+  white-space: nowrap;
+}
+
+/* Tables: allow horizontal scrolling on small screens */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Improve form inputs on small screens */
+.form-control {
+  font-size: 15px;
+  padding: 10px 12px;
+}
+
+/* Sidebar tweaks already exist; ensure header and content adapt */
+@media (max-width: 991px) {
+  .pc-sidebar { width: 260px; }
+  .pc-header { left: 0 !important; }
+  .pc-container { margin-left: 0 !important; padding-top: 80px; }
+}
+
+@media (max-width: 576px) {
+  :root{ --container-padding:12px; }
+  .auth-card { padding: 20px; border-radius: 12px; }
+  .card { padding: 12px; }
+  .pc-header { height: 64px; }
+  .user-avtar { width: 32px; height:32px; }
+  .ti { font-size: 14px; }
+  .d-grid { gap: 8px; }
+}
+
+/* Make modal/dialog full width on small screens when needed */
+.modal-dialog {
+  max-width: 100%;
+  margin: 12px;
+}
+
+/* Utility: hide long text on mobile */
+.truncate-mobile { display: inline-block; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Ensure PDF view scales */
+.pdf-preview { width:100%; height:auto; }

@@ -14,31 +14,26 @@
 
         <div class="container mt-5 pt-5">
             <div class="row justify-content-center">
-                <div class="col-lg-10 col-xl-8 text-center">
-                    <div class="hero-content-wrapper">
-                        <h1 class="mt-sm-3 text-white mb-4 f-w-600 hero-title" data-wow-delay="0.2s">
-                            Selamat Datang di
-                            <br>
-                            <span class="text-primary typed-text" data-typed-items='["Sistem Informasi Desa Bangah", "Desa Bangah Digital", "Pelayanan Desa Modern"]'></span>
-                        </h1>
-                        <h5 class="mb-4 text-white opacity-75 hero-subtitle" data-wow-delay="0.4s">
-                            Wujudkan Tata Kelola Pemerintahan Desa yang Transparan, Efisien, dan Inovatif.
-                            <br class="d-none d-md-block">
-                            Akses informasi dan layanan desa dengan mudah melalui sistem kami.
-                        </h5>
-                        <div class="my-5 hero-buttons" data-wow-delay="0.6s">
-                            <a href="{{ route('register') }}"
-                                class="btn btn-primary btn-lg d-inline-flex align-items-center me-2 animated-btn" target="_blank">
-                                <span>Daftar Akun</span>
-                                <i class="ti ti-arrow-right ms-2"></i>
-                            </a>
-                            <a href="#alur" class="btn btn-outline-light btn-lg me-2 scroll-to-btn">
-                                Lihat Alur Layanan
-                                <i class="ti ti-chevron-down ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-lg-10 col-xl-8 text-center">
+            <div class="hero-content-wrapper">
+            <h1 class="mt-sm-3 text-white mb-4 f-w-600 hero-title" data-wow-delay="0.2s">
+                Selamat Datang di Desa Bangah
+                <br>
+                <span class="text-primary typed-text" data-typed-items='["Sistem Informasi Desa Bangah", "Desa Bangah Digital", "Pelayanan Desa Modern"]'></span>
+            </h1>
+            <h5 class="mb-4 text-white opacity-75 hero-subtitle" data-wow-delay="0.4s">
+                Wujudkan Tata Kelola Pemerintahan Desa yang Transparan, Efisien, dan Inovatif.
+                <br class="d-none d-md-block">
+                Akses informasi dan layanan desa dengan mudah melalui sistem kami.
+            </h5>
+            <div class="my-5 hero-buttons" data-wow-delay="0.6s">
+                <a href="{{ route('login') }}" class="btn btn-primary btn-lg animated-btn">
+                <span>Masuk</span>
+                <i class="ti ti-login ms-2"></i>
+                </a>
+            </div>
+            </div>
+            </div>
             </div>
         </div>
         
@@ -683,9 +678,133 @@
         }
     }
 
+    /* More aggressive header / hero tweaks for tablets and small devices */
+    @media (max-width: 768px) {
+        header#home {
+            /* override inline min-height on small screens */
+            min-height: 60vh !important;
+            padding-top: 2rem !important;
+            padding-bottom: 2rem !important;
+            background-position: center top !important;
+        }
+
+        /* reduce the top spacing inside header container */
+        header#home .container.mt-5.pt-5 {
+            margin-top: 0.5rem !important;
+            padding-top: 0.5rem !important;
+        }
+
+        .hero-title { font-size: 2rem !important; }
+        .hero-subtitle { font-size: 1rem !important; }
+
+        .hero-content-wrapper { padding-left: 1rem; padding-right: 1rem; }
+
+        /* hide particles on tablets & phones for performance and clarity */
+        .particles-container { display: none !important; }
+    }
+
+    /* Mobile-specific fixes to prevent background/image zoom and stacking */
+    @media (max-width: 576px) {
+        header#home {
+            min-height: 60vh !important;
+            background-position: center top !important;
+            background-attachment: scroll !important;
+        }
+
+        .hero-title { font-size: 1.8rem !important; }
+        .hero-subtitle { font-size: 1rem !important; }
+
+        /* Make hero buttons full width and spaced */
+        .hero-buttons { gap: .5rem; }
+        .hero-buttons .btn { max-width: 100%; width: 100%; }
+
+        /* Feature icons smaller and disable hover zoom on mobile */
+        .feature-icon { height: 56px; }
+        .feature-icon img { max-height: 56px; width: auto; }
+        .feature-card:hover .feature-icon img { transform: none; }
+
+        /* Process cards spacing to avoid overlap */
+        .process-card { margin-bottom: 1rem; }
+        .process-number { top: -12px; width: 28px; height: 28px; font-size: 0.85rem; }
+
+        /* Testimonials: ensure avatar and text wrap */
+        .testimonial-card .d-flex { flex-direction: row; gap: 12px; }
+        .wid-40 { width: 40px !important; height: 40px !important; }
+
+        /* Prevent CTA background fixed behaviour on mobile (can cause zooming) */
+        .cta-block { background-attachment: scroll !important; padding: 60px 0 !important; }
+    }
+
     /* Animation Classes */
     .wow {
         visibility: hidden;
+    }
+
+    /* Extra mobile fixes: improve hero layout and performance on small devices */
+    @media (max-width: 480px) {
+        header#home {
+            min-height: 55vh !important;
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
+            background-position: center top !important;
+            background-size: cover !important;
+            background-repeat: no-repeat !important;
+            background-attachment: scroll !important;
+        }
+
+        .hero-content-wrapper {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .hero-title { font-size: 1.6rem !important; line-height: 1.25; }
+        .hero-subtitle { font-size: 0.95rem !important; }
+
+        .scroll-indicator { bottom: 18px; font-size: 0.75rem; }
+        .scroll-line { height: 28px; }
+
+        /* Make feature images and cards behave on small widths */
+        .feature-icon img { max-width: 100%; height: auto; }
+
+        /* Reduce visual noise / CPU on very small screens: hide particles and subtle animations */
+        .particles-container { display: none !important; }
+        .animated-bg-overlay { background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.12) 100%); }
+    }
+
+    /* Extra tiny-screen tweaks to ensure background photo scales and content fits */
+    @media (max-width: 420px) {
+        header#home {
+            min-height: 50vh !important;
+            padding-top: 1.25rem !important;
+            padding-bottom: 1.25rem !important;
+            background-position: center top !important;
+            background-size: cover !important;
+            background-repeat: no-repeat !important;
+            background-attachment: scroll !important;
+        }
+
+        .hero-content-wrapper {
+            max-width: 100% !important;
+            padding-left: 0.75rem !important;
+            padding-right: 0.75rem !important;
+        }
+
+        .hero-title {
+            font-size: 1.3rem !important;
+            line-height: 1.2 !important;
+            margin-bottom: 0.75rem !important;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem !important;
+            margin-bottom: 1rem !important;
+        }
+
+        .hero-buttons { gap: .4rem; }
+        .hero-buttons .btn { width: 100% !important; max-width: none !important; }
+
+        /* ensure scroll indicator doesn't overlap content */
+        .scroll-indicator { bottom: 12px; }
     }
 </style>
 @endpush
@@ -717,8 +836,9 @@
             });
         }
 
-        // Initialize Particles.js
-        if (document.getElementById('particles-js')) {
+        // Initialize Particles.js (disabled on small screens for performance)
+        if (document.getElementById('particles-js') && window.innerWidth > 768) {
+            // particles only on larger screens
             particlesJS('particles-js', {
                 particles: {
                     number: {
