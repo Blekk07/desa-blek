@@ -65,6 +65,18 @@
                                            class="btn btn-sm btn-info" title="Detail">
                                             <i class="ti ti-eye"></i> Detail
                                         </a>
+
+                                        @if($item->status == 'selesai')
+                                            @if($item->file_surat)
+                                                <a href="{{ asset('storage/' . $item->file_surat) }}" class="btn btn-sm btn-success ms-1" title="Download Surat" target="_blank">
+                                                    <i class="ti ti-download"></i>
+                                                </a>
+                                            @endif
+
+                                            <a href="{{ route('user.pengajuan-surat.print', $item->id) }}" class="btn btn-sm btn-primary ms-1" title="Cetak / Download PDF">
+                                                <i class="ti ti-printer"></i>
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

@@ -108,13 +108,16 @@
                             </div>
                             @endif
 
-                            @if($pengajuan->status == 'selesai' && $pengajuan->file_surat)
+                            @if($pengajuan->status == 'selesai')
                             <div class="alert alert-success">
                                 <h6><i class="ti ti-check"></i> Surat Sudah Selesai!</h6>
                                 <p class="mb-2">Surat Anda telah selesai diproses. Silakan download surat di bawah ini:</p>
-                                <a href="{{ asset('storage/' . $pengajuan->file_surat) }}" class="btn btn-success btn-sm" target="_blank">
-                                    <i class="ti ti-download"></i> Download Surat
-                                </a>
+                                @if($pengajuan->file_surat)
+                                    <a href="{{ asset('storage/' . $pengajuan->file_surat) }}" class="btn btn-success btn-sm" target="_blank">
+                                        <i class="ti ti-download"></i> Download Surat
+                                    </a>
+                                @endif
+
                                 <a href="{{ route('user.pengajuan-surat.print', $pengajuan->id) }}" class="btn btn-primary btn-sm ms-2">
                                     <i class="ti ti-printer"></i> Cetak / Download PDF
                                 </a>
