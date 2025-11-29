@@ -352,7 +352,11 @@
                     for (let id of requiredFields) {
                         const field = document.getElementById(id);
                         if (!field.value.trim()) {
-                            alert(`Harap lengkapi field: ${field.previousElementSibling.textContent.trim()}`);
+                            if (window.Swal) {
+                                Swal.fire({ icon: 'warning', title: 'Perhatian', text: `Harap lengkapi field: ${field.previousElementSibling.textContent.trim()}`, confirmButtonText: 'OK' });
+                            } else {
+                                alert(`Harap lengkapi field: ${field.previousElementSibling.textContent.trim()}`);
+                            }
                             field.focus();
                             return false;
                         }
@@ -361,7 +365,11 @@
                     // Validate NIK length
                     const nik = document.getElementById('nik').value;
                     if (nik.length !== 16) {
-                        alert('NIK harus 16 digit');
+                        if (window.Swal) {
+                            Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'NIK harus 16 digit', confirmButtonText: 'OK' });
+                        } else {
+                            alert('NIK harus 16 digit');
+                        }
                         document.getElementById('nik').focus();
                         return false;
                     }
@@ -372,7 +380,11 @@
                     for (let id of requiredFields) {
                         const field = document.getElementById(id);
                         if (!field.value.trim()) {
-                            alert(`Harap lengkapi field: ${field.previousElementSibling.textContent.trim()}`);
+                            if (window.Swal) {
+                                Swal.fire({ icon: 'warning', title: 'Perhatian', text: `Harap lengkapi field: ${field.previousElementSibling.textContent.trim()}`, confirmButtonText: 'OK' });
+                            } else {
+                                alert(`Harap lengkapi field: ${field.previousElementSibling.textContent.trim()}`);
+                            }
                             field.focus();
                             return false;
                         }

@@ -51,9 +51,12 @@
                         </div>
                     </div>
                     <div class="form-check mt-3 text-start">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                        <label class="form-check-label" for="flexCheckChecked">
-                            Saya setuju dengan <a href="#" class="link-primary"> Kebijakan Privasi</a>.
+                        <label class="switch-label-inline">
+                            <span class="switch">
+                                <input type="checkbox" id="flexCheckChecked" checked>
+                                <span class="switch-slider"></span>
+                            </span>
+                            <span class="form-check-label">Saya setuju dengan <a href="#" class="link-primary"> Kebijakan Privasi</a>.</span>
                         </label>
                     </div>
                     <div class="mt-3 text-end">

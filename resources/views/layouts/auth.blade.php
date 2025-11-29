@@ -350,6 +350,53 @@
         <script src="{{ asset('assets/js/pcoded.js') }}"></script>
         <script src="{{ asset('assets/js/plugins/feather.min.js') }}"></script>
 
+        <!-- SweetAlert2 for auth pages -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!-- Simple Switch CSS -->
+        <style>
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 44px;
+                height: 24px;
+                vertical-align: middle;
+            }
+            .switch input { display: none; }
+            .switch-slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #e5e7eb;
+                transition: .25s;
+                border-radius: 999px;
+                box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            }
+            .switch-slider:before {
+                content: "";
+                position: absolute;
+                height: 18px;
+                width: 18px;
+                left: 3px;
+                top: 3px;
+                background: white;
+                border-radius: 50%;
+                transition: .25s;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            }
+            .switch input:checked + .switch-slider {
+                background-color: var(--primary);
+            }
+            .switch input:checked + .switch-slider:before {
+                transform: translateX(20px);
+            }
+            /* small helper spacing */
+            .switch-label-inline { display: inline-flex; align-items: center; gap: 10px; }
+        </style>
+
         <script>
             layout_change('light');
             change_box_container('false');

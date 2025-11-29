@@ -63,9 +63,14 @@
         </div>
 
         <div class="d-flex mt-1 justify-content-between">
-            <div class="form-check">
-                <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" name="remember">
-                <label class="form-check-label text-muted" for="customCheckc1">Keep me signed in</label>
+            <div>
+                <label class="switch-label-inline">
+                    <span class="switch">
+                        <input type="checkbox" id="customCheckc1" name="remember">
+                        <span class="switch-slider"></span>
+                    </span>
+                    <span class="form-check-label text-muted">Keep me signed in</span>
+                </label>
             </div>
             <a href="{{ route('forgot_password.email_form') }}" class="text-secondary f-w-400">Forgot Password?</a>
         </div>

@@ -272,8 +272,10 @@
             nextButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const nextStep = this.getAttribute('data-next');
-                    showStep(nextStep);
-                    updateStepper(nextStep);
+                    if (validateCurrentStep(nextStep)) {
+                        showStep(nextStep);
+                        updateStepper(nextStep);
+                    }
                 });
             });
 
@@ -313,6 +315,57 @@
                         this.value = this.value.slice(0, 16);
                     }
                 });
+            }
+
+            function validateCurrentStep(nextStep) {
+                const currentStep = document.querySelector('.step-content.active').id;
+
+                if (currentStep === 'step1') {
+                    const requiredFields = ['nik', 'nama_lengkap', 'tempat_lahir', 'tanggal_lahir', 'jenis_kelamin', 'agama'];
+                    for (let id of requiredFields) {
+                        const field = document.querySelector(`[name="${id}"]`);
+                        if (!field || !field.value.trim()) {
+                            const label = field && field.previousElementSibling ? field.previousElementSibling.textContent.trim() : id;
+                            if (window.Swal) {
+                                Swal.fire({ icon: 'warning', title: 'Perhatian', text: `Harap lengkapi field: ${label}`, confirmButtonText: 'OK' });
+                            } else {
+                                alert(`Harap lengkapi field: ${label}`);
+                            }
+                            field && field.focus();
+                            return false;
+                        }
+                    }
+
+                    const nik = document.querySelector('input[name="nik"]').value;
+                    if (nik.length !== 16) {
+                        if (window.Swal) {
+                            Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'NIK harus 16 digit', confirmButtonText: 'OK' });
+                        } else {
+                            alert('NIK harus 16 digit');
+                        }
+                        document.querySelector('input[name="nik"]').focus();
+                        return false;
+                    }
+                }
+
+                if (currentStep === 'step2') {
+                    const requiredFields = ['alamat_lengkap', 'rt', 'rw'];
+                    for (let id of requiredFields) {
+                        const field = document.querySelector(`[name="${id}"]`);
+                        if (!field || !field.value.trim()) {
+                            const label = field && field.previousElementSibling ? field.previousElementSibling.textContent.trim() : id;
+                            if (window.Swal) {
+                                Swal.fire({ icon: 'warning', title: 'Perhatian', text: `Harap lengkapi field: ${label}`, confirmButtonText: 'OK' });
+                            } else {
+                                alert(`Harap lengkapi field: ${label}`);
+                            }
+                            field && field.focus();
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
             }
 
             // No. KK validation
