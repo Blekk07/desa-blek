@@ -284,8 +284,8 @@
                         <a class="nav-link {{ request()->is('help') ? 'active' : '' }}" href="/help">Bantuan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('pengaduan') ? 'active' : '' }}"
-                            href="/pengaduan">Laporan</a>
+                        <a class="nav-link {{ request()->is('reset-password') ? 'active' : '' }}"
+                            href="/forgot-password">Lupa Password</a>
                     </li>
 
                     @if (auth()->check())

@@ -46,7 +46,7 @@ Route::middleware(['guest'])->group(function () {
 
     Route::get('/forgot-password', [AuthController::class, 'showRequestForm'])->name('forgot_password.email_form');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot_password.send_link');
-    Route::get('/password-reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+    Route::get('/password-reset/{token}', [AuthController::class, 'showResetForm'])->where('token', '.*')->name('password.reset');
     Route::post('/password-reset', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 

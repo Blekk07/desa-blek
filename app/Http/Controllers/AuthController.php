@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Penduduk;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -18,6 +19,67 @@ class AuthController extends Controller
     public function showLoginForm()
     {
         return view('auth.login');
+    }
+
+    /**
+     * Show the form to request a password reset link.
+     */
+    public function showRequestForm()
+    {
+        return view('auth.forgot-password');
+    }
+
+    /**
+     * Send a password reset link to the given user.
+     */
+    public function sendResetLink(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        if ($status === Password::RESET_LINK_SENT) {
+            return back()->with('success', __($status));
+        }
+
+        return back()->withErrors(['email' => __($status)]);
+    }
+
+    /**
+     * Show the password reset form for the given token.
+     */
+    public function showResetForm($token)
+    {
+        $email = request('email');
+        return view('auth.reset-password', compact('token', 'email'));
+    }
+
+    /**
+     * Reset the given user's password.
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->password = Hash::make($password);
+                $user->save();
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('success', __($status));
+        }
+
+        return back()->withErrors(['email' => [__($status)]]);
     }
 
     /**
@@ -144,7 +206,7 @@ class AuthController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
+            $googleUser = Socialite::driver('google')->user();
 
             $user = User::where('email', $googleUser->getEmail())->first();
 
@@ -276,12 +338,12 @@ class AuthController extends Controller
             'rt' => $validated['rt'],
             'rw' => $validated['rw'],
             'status_perkawinan' => $validated['status_perkawinan'],
-            'pendidikan_terakhir' => $validated['pendidikan_terakhir'],
-            'pekerjaan' => $validated['pekerjaan'],
+            'pendidikan_terakhir' => $validated['pendidikan_terakhir'] ?? null,
+            'pekerjaan' => $validated['pekerjaan'] ?? null,
             'status_kependudukan' => $validated['status_kependudukan'] ?? 'Tetap',
-            'nama_ayah' => $validated['nama_ayah'],
-            'nama_ibu' => $validated['nama_ibu'],
-            'no_telepon' => $validated['no_telepon'],
+            'nama_ayah' => $validated['nama_ayah'] ?? null,
+            'nama_ibu' => $validated['nama_ibu'] ?? null,
+            'no_telepon' => $validated['no_telepon'] ?? null,
         ]);
 
         session()->forget('google_user');
