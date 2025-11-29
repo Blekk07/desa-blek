@@ -115,6 +115,9 @@
                                 <a href="{{ asset('storage/' . $pengajuan->file_surat) }}" class="btn btn-success btn-sm" target="_blank">
                                     <i class="ti ti-download"></i> Download Surat
                                 </a>
+                                <a href="{{ route('user.pengajuan-surat.print', $pengajuan->id) }}" class="btn btn-primary btn-sm ms-2">
+                                    <i class="ti ti-printer"></i> Cetak / Download PDF
+                                </a>
                             </div>
                             @endif
                         </div>

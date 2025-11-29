@@ -71,32 +71,32 @@
 
                             <div class="col-md-6 mb-3" id="fieldNamaLengkap" style="display:none;">
                                 <label class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                                <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap', auth()->user()->name) }}">
+                                <input type="text" name="nama_lengkap" class="form-control" value="{{ old('nama_lengkap', $user->name ?? auth()->user()->name) }}" readonly>
                             </div>
 
                             <div class="col-md-6 mb-3" id="fieldNIK" style="display:none;">
                                 <label class="form-label">NIK <span class="text-danger">*</span></label>
-                                <input type="text" name="nik" class="form-control" value="{{ old('nik') }}" maxlength="16">
+                                <input type="text" name="nik" class="form-control" value="{{ old('nik', $user->nik ?? ($penduduk->nik ?? '')) }}" maxlength="16" readonly>
                             </div>
 
                             <div class="col-md-12 mb-3" id="fieldAlamat" style="display:none;">
                                 <label class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
-                                <textarea name="alamat" class="form-control" rows="3">{{ old('alamat') }}</textarea>
+                                <textarea name="alamat" class="form-control" rows="3">{{ old('alamat', $penduduk->alamat_lengkap ?? '') }}</textarea>
                             </div>
 
                             <div class="col-md-3 mb-3" id="fieldRT" style="display:none;">
                                 <label class="form-label">RT <span class="text-danger">*</span></label>
-                                <input type="text" name="rt" class="form-control" value="{{ old('rt') }}" maxlength="3">
+                                <input type="text" name="rt" class="form-control" value="{{ old('rt', $penduduk->rt ?? '') }}" maxlength="3" readonly>
                             </div>
 
                             <div class="col-md-3 mb-3" id="fieldRW" style="display:none;">
                                 <label class="form-label">RW <span class="text-danger">*</span></label>
-                                <input type="text" name="rw" class="form-control" value="{{ old('rw') }}" maxlength="3">
+                                <input type="text" name="rw" class="form-control" value="{{ old('rw', $penduduk->rw ?? '') }}" maxlength="3" readonly>
                             </div>
 
                             <div class="col-md-6 mb-3" id="fieldTelepon" style="display:none;">
                                 <label class="form-label">No. Telepon <span class="text-danger">*</span></label>
-                                <input type="text" name="no_telepon" class="form-control" value="{{ old('no_telepon') }}" maxlength="15">
+                                <input type="text" name="no_telepon" class="form-control" value="{{ old('no_telepon', $penduduk->no_telepon ?? '') }}" maxlength="15">
                             </div>
 
                             <!-- FIELD KHUSUS SURAT USAHA -->

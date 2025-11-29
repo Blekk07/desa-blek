@@ -10,15 +10,8 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
 
-    <!-- LOCAL ICON FONT -->
-    <link rel="stylesheet" href="{{ asset('assets/fonts/tabler-icons.min.css') }}">
-
-    <!-- 🔥 FIX ICON HILANG — PAKAI CDN TABLER RESMI -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
-
-    <link rel="stylesheet" href="{{ asset('assets/fonts/feather.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/fonts/material.css') }}">
+    <!-- STANDARDIZED ICON FONT — TABLER ICONS ONLY -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">>
 
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
@@ -496,6 +489,44 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 })();
+</script>
+
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{!! session('success') !!}",
+            confirmButtonColor: '#667eea'
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: "{!! session('error') !!}",
+            confirmButtonColor: '#e11d48'
+        });
+    @endif
+
+    @if(session('warning'))
+        Swal.fire({
+            icon: 'warning',
+            title: 'Peringatan!',
+            text: "{!! session('warning') !!}",
+            confirmButtonColor: '#f59e0b'
+        });
+    @endif
+
+    @if($errors->any())
+        Swal.fire({
+            icon: 'error',
+            title: 'Terdapat Kesalahan',
+            html: "{!! implode('<br/>', $errors->all()) !!}",
+            confirmButtonColor: '#e11d48'
+        });
+    @endif
 </script>
 
 </body>

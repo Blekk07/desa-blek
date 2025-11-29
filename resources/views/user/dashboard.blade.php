@@ -2,6 +2,9 @@
 @section('title', 'Dashboard Warga Desa')
 
 @section('content')
+@php
+    use Illuminate\Support\Str;
+@endphp
 
 <!-- HERO SECTION MODERN -->
 <div class="p-5 rounded-4 mb-4 text-white hero-section shadow-sm position-relative overflow-hidden">
@@ -46,11 +49,11 @@
             </div>
             <div class="position-relative z-2">
                 <i class="ti ti-users fs-2 text-primary mb-2"></i>
-                <h3 class="fw-bold mt-2 mb-1">4,236</h3>
-                <p class="m-0 text-muted small">Total Penduduk</p>
+                <h3 class="fw-bold mt-2 mb-1">{{ number_format($totalPenduduk) }}</h3>
+                <p class="m-0 text-muted small">Total Penduduk Desa</p>
                 <div class="stat-trend text-success mt-1">
                     <i class="ti ti-trending-up me-1"></i>
-                    <small>+2.5% dari bulan lalu</small>
+                    <small>Data Terkini</small>
                 </div>
             </div>
         </div>
@@ -63,11 +66,11 @@
             </div>
             <div class="position-relative z-2">
                 <i class="ti ti-file-description fs-2 text-success mb-2"></i>
-                <h3 class="fw-bold mt-2 mb-1">12</h3>
-                <p class="m-0 text-muted small">Pengajuan Surat</p>
+                <h3 class="fw-bold mt-2 mb-1">{{ $totalSurat }}</h3>
+                <p class="m-0 text-muted small">Pengajuan Surat Anda</p>
                 <div class="stat-trend text-warning mt-1">
                     <i class="ti ti-clock me-1"></i>
-                    <small>3 menunggu verifikasi</small>
+                    <small>{{ $suratPending }} menunggu verifikasi</small>
                 </div>
             </div>
         </div>
@@ -80,11 +83,11 @@
             </div>
             <div class="position-relative z-2">
                 <i class="ti ti-report fs-2 text-warning mb-2"></i>
-                <h3 class="fw-bold mt-2 mb-1">5</h3>
-                <p class="m-0 text-muted small">Pengaduan Diproses</p>
+                <h3 class="fw-bold mt-2 mb-1">{{ $totalPengaduan }}</h3>
+                <p class="m-0 text-muted small">Total Pengaduan Desa</p>
                 <div class="stat-trend text-info mt-1">
                     <i class="ti ti-progress me-1"></i>
-                    <small>Sedang ditindaklanjuti</small>
+                    <small>{{ $pengaduanSelesai }} Selesai</small>
                 </div>
             </div>
         </div>
@@ -97,11 +100,11 @@
             </div>
             <div class="position-relative z-2">
                 <i class="ti ti-check fs-2 text-info mb-2"></i>
-                <h3 class="fw-bold mt-2 mb-1">87%</h3>
-                <p class="m-0 text-muted small">Tingkat Penyelesaian</p>
+                <h3 class="fw-bold mt-2 mb-1">{{ $suratSelesai }}</h3>
+                <p class="m-0 text-muted small">Surat Selesai Anda</p>
                 <div class="stat-trend text-success mt-1">
-                    <i class="ti ti-trending-up me-1"></i>
-                    <small>+5% dari bulan lalu</small>
+                    <i class="ti ti-check-circle me-1"></i>
+                    <small>Siap Diunduh</small>
                 </div>
             </div>
         </div>
@@ -210,6 +213,59 @@
 
 <!-- MAIN CONTENT GRID -->
 <div class="row g-4">
+    <!-- STATUS PENGAJUAN SURAT -->
+    <div class="col-xl-6">
+        <div class="modern-card p-4 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h5 class="fw-bold mb-0">
+                    <i class="ti ti-file-check me-2 text-success"></i>
+                    Status Pengajuan Surat
+                </h5>
+                <a href="{{ route('user.pengajuan-surat.index') }}" class="btn btn-sm btn-modern">
+                    Lihat Semua
+                    <i class="ti ti-arrow-right ms-1"></i>
+                </a>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="status-box p-3 rounded-3 text-center border">
+                        <i class="ti ti-clock text-warning fs-2"></i>
+                        <h6 class="fw-bold mt-2 mb-0">{{ $suratPending }}</h6>
+                        <small class="text-muted d-block">Menunggu</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="status-box p-3 rounded-3 text-center border">
+                        <i class="ti ti-spinner text-info fs-2"></i>
+                        <h6 class="fw-bold mt-2 mb-0">{{ $suratDiproses }}</h6>
+                        <small class="text-muted d-block">Diproses</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="status-box p-3 rounded-3 text-center border">
+                        <i class="ti ti-check text-success fs-2"></i>
+                        <h6 class="fw-bold mt-2 mb-0">{{ $suratSelesai }}</h6>
+                        <small class="text-muted d-block">Selesai</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="status-box p-3 rounded-3 text-center border">
+                        <i class="ti ti-file-text text-primary fs-2"></i>
+                        <h6 class="fw-bold mt-2 mb-0">{{ $totalSurat }}</h6>
+                        <small class="text-muted d-block">Total</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <a href="{{ route('user.pengajuan-surat.create') }}" class="btn btn-primary w-100 btn-sm">
+                    <i class="ti ti-plus me-1"></i> Ajukan Surat Baru
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- INFORMASI DESA MODERN -->
     <div class="col-xl-6">
         <div class="modern-card p-4 h-100">
@@ -273,51 +329,38 @@
             </div>
 
             <div class="complaint-list">
-                <!-- Item 1 -->
+                @forelse($riwayat as $item)
                 <div class="complaint-item p-3 rounded-3 mb-3">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h6 class="fw-bold mb-0">Penerangan Jalan Mati</h6>
-                        <span class="status-badge status-warning">
-                            <i class="ti ti-clock me-1"></i>
-                            Diproses
+                        <h6 class="fw-bold mb-0">{{ Str::limit($item->judul ?? ($item->isi ?? 'Pengaduan tanpa judul'), 70) }}</h6>
+                        @php
+                            $badgeClass = 'status-warning';
+                            if ($item->status == 'selesai') $badgeClass = 'status-success';
+                            if ($item->status == 'ditolak') $badgeClass = 'status-danger';
+                        @endphp
+                        <span class="status-badge {{ $badgeClass }}">
+                            {{ ucfirst($item->status) }}
                         </span>
                     </div>
-                    <p class="text-muted small mb-2">Lampu jalan di RT 05 tidak menyala sejak 3 hari yang lalu</p>
+                    <p class="text-muted small mb-2">{{ Str::limit($item->isi ?? '-', 120) }}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted">
                             <i class="ti ti-calendar me-1"></i>
-                            2 hari lalu
+                            {{ $item->created_at->diffForHumans() }}
                         </small>
                         <small class="text-primary">
                             <i class="ti ti-eye me-1"></i>
-                            Ditinjau
+                            {{ $item->views ?? '—' }}
                         </small>
                     </div>
                 </div>
-
-                <!-- Item 2 -->
-                <div class="complaint-item p-3 rounded-3 mb-3">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h6 class="fw-bold mb-0">Sampah Menumpuk</h6>
-                        <span class="status-badge status-success">
-                            <i class="ti ti-check me-1"></i>
-                            Selesai
-                        </span>
-                    </div>
-                    <p class="text-muted small mb-2">Tumpukan sampah di depan balai desa sudah dibersihkan</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <small class="text-muted">
-                            <i class="ti ti-calendar me-1"></i>
-                            5 hari lalu
-                        </small>
-                        <small class="text-success">
-                            <i class="ti ti-thumb-up me-1"></i>
-                            Teratasi
-                        </small>
-                    </div>
+                @empty
+                <div class="text-center p-4">
+                    <p class="mb-0 text-muted">Belum ada pengaduan terbaru.</p>
+                    <a href="{{ route('pengaduan.create') }}" class="btn btn-sm btn-primary mt-2">Buat Pengaduan</a>
                 </div>
+                @endforelse
 
-                <!-- View More -->
                 <div class="text-center pt-2">
                     <a href="{{ route('pengaduan.index') }}" class="text-primary text-decoration-none">
                         <i class="ti ti-list me-1"></i>
@@ -505,6 +548,18 @@
 .complaint-item:hover {
     background: white;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* STATUS BOX */
+.status-box {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+}
+
+.status-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .status-badge {

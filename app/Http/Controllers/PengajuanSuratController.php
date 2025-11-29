@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PengajuanSurat;
+use App\Models\Penduduk;
 use Illuminate\Http\Request;
 
 class PengajuanSuratController extends Controller
@@ -33,7 +34,13 @@ class PengajuanSuratController extends Controller
             'Surat Lainnya'
         ];
         
-        return view('user.pengajuan_surat.create', compact('jenisSurat'));
+        $user = auth()->user();
+        $penduduk = null;
+        if ($user && $user->nik) {
+            $penduduk = Penduduk::where('nik', $user->nik)->first();
+        }
+
+        return view('user.pengajuan_surat.create', compact('jenisSurat', 'user', 'penduduk'));
     }
 
     // Untuk User - Menyimpan pengajuan surat
@@ -139,5 +146,26 @@ class PengajuanSuratController extends Controller
 
         return redirect()->route('admin.pengajuan-surat.index')
                         ->with('success', 'Pengajuan surat berhasil dihapus!');
+    }
+
+    // Cetak / Export ke PDF untuk user (jika ingin download PDF)
+    public function print($id)
+    {
+        $pengajuan = PengajuanSurat::where('user_id', auth()->id())
+                                   ->where('id', $id)
+                                   ->firstOrFail();
+
+        try {
+            $pdf = null;
+            // Attempt to use the PDF facade (barryvdh/laravel-dompdf)
+            if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class) || class_exists(\Barryvdh\DomPDF\PDF::class) || class_exists('PDF')) {
+                $pdf = \PDF::loadView('pdfs.pengajuan_surat', compact('pengajuan'));
+                return $pdf->download('surat-' . str_pad($pengajuan->id, 5, '0', STR_PAD_LEFT) . '.pdf');
+            }
+
+            throw new \Exception('dompdf_not_installed');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Fitur cetak PDF belum tersedia. Jalankan: composer require barryvdh/laravel-dompdf lalu publish config jika perlu.');
+        }
     }
 }

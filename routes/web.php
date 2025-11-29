@@ -8,6 +8,7 @@ use App\Http\Controllers\HelpController;
 use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminDashboardController;
 
 Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
@@ -52,7 +53,45 @@ Route::middleware(['guest'])->group(function () {
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+    Route::get('/dashboard', function () {
+        $user = auth()->user();
+        if ($user->role === 'admin') {
+            return view('admin.dashboard');
+        } else {
+            // User Dashboard Stats
+            $riwayat = \App\Models\Pengaduan::where('user_id', auth()->id())
+                        ->latest()
+                        ->limit(5)
+                        ->get();
+            
+            // User's pengajuan surat stats
+            $totalSurat = \App\Models\PengajuanSurat::where('user_id', auth()->id())->count();
+            $suratPending = \App\Models\PengajuanSurat::where('user_id', auth()->id())
+                            ->where('status', 'pending')->count();
+            $suratDiproses = \App\Models\PengajuanSurat::where('user_id', auth()->id())
+                            ->where('status', 'diproses')->count();
+            $suratSelesai = \App\Models\PengajuanSurat::where('user_id', auth()->id())
+                            ->where('status', 'selesai')->count();
+            
+            // Total pengaduan warga (global - untuk statistik desa)
+            $totalPengaduan = \App\Models\Pengaduan::count();
+            $pengaduanSelesai = \App\Models\Pengaduan::where('status', 'selesai')->count();
+            
+            // Total penduduk
+            $totalPenduduk = \App\Models\Penduduk::count();
+            
+            return view('user.dashboard', compact(
+                'riwayat',
+                'totalSurat',
+                'suratPending',
+                'suratDiproses',
+                'suratSelesai',
+                'totalPengaduan',
+                'pengaduanSelesai',
+                'totalPenduduk'
+            ));
+        }
+    })->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // PROFILE ROUTES
@@ -64,9 +103,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['cekRole:admin'])->prefix('admin')->group(function () {
         
         // Admin Dashboard
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
         // CRUD Penduduk
         Route::resource('penduduk', PendudukController::class)->names([
@@ -110,7 +147,37 @@ Route::middleware(['auth'])->group(function () {
 
         // User Dashboard
         Route::get('/user/dashboard', function () {
-            return view('user.dashboard');
+            // User's pengajuan surat stats
+            $riwayat = \App\Models\Pengaduan::where('user_id', auth()->id())
+                        ->latest()
+                        ->limit(5)
+                        ->get();
+            
+            $totalSurat = \App\Models\PengajuanSurat::where('user_id', auth()->id())->count();
+            $suratPending = \App\Models\PengajuanSurat::where('user_id', auth()->id())
+                            ->where('status', 'pending')->count();
+            $suratDiproses = \App\Models\PengajuanSurat::where('user_id', auth()->id())
+                            ->where('status', 'diproses')->count();
+            $suratSelesai = \App\Models\PengajuanSurat::where('user_id', auth()->id())
+                            ->where('status', 'selesai')->count();
+            
+            // Total pengaduan warga (global - untuk statistik desa)
+            $totalPengaduan = \App\Models\Pengaduan::count();
+            $pengaduanSelesai = \App\Models\Pengaduan::where('status', 'selesai')->count();
+            
+            // Total penduduk
+            $totalPenduduk = \App\Models\Penduduk::count();
+            
+            return view('user.dashboard', compact(
+                'riwayat',
+                'totalSurat',
+                'suratPending',
+                'suratDiproses',
+                'suratSelesai',
+                'totalPengaduan',
+                'pengaduanSelesai',
+                'totalPenduduk'
+            ));
         })->name('user.dashboard');
 
         // PENGADUAN USER
@@ -127,6 +194,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pengajuan-surat/create', [PengajuanSuratController::class, 'create'])->name('user.pengajuan-surat.create');
         Route::post('/pengajuan-surat', [PengajuanSuratController::class, 'store'])->name('user.pengajuan-surat.store');
         Route::get('/pengajuan-surat/{id}', [PengajuanSuratController::class, 'show'])->name('user.pengajuan-surat.show');
+        Route::get('/pengajuan-surat/{id}/print', [PengajuanSuratController::class, 'print'])->name('user.pengajuan-surat.print');
 
         // HELP PAGE
         Route::get('/help', [HelpController::class, 'help'])->name('help');

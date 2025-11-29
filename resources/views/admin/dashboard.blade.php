@@ -2,6 +2,9 @@
 @section('title', 'Dashboard Admin Desa')
 
 @section('content')
+@php
+    use Illuminate\Support\Str;
+@endphp
 
 <!-- HERO SECTION MODERN -->
 <div class="p-4 p-md-5 rounded-4 mb-3 mb-md-4 text-white hero-section shadow-sm position-relative overflow-hidden">
@@ -43,34 +46,34 @@
         $stats = [
             [
                 'label' => 'Total Penduduk', 
-                'value' => '4,236', 
+                'value' => $totalPenduduk, 
                 'icon' => 'ti ti-users', 
                 'color' => 'primary',
-                'trend' => '+2.5% dari bulan lalu',
+                'trend' => 'Data Kependudukan',
                 'trend_color' => 'success'
             ],
             [
                 'label' => 'Pengajuan Surat', 
-                'value' => '122', 
+                'value' => $totalSurat, 
                 'icon' => 'ti ti-file-text', 
                 'color' => 'success',
-                'trend' => '12 menunggu verifikasi',
+                'trend' => $suratPending . ' menunggu verifikasi',
                 'trend_color' => 'warning'
             ],
             [
-                'label' => 'Laporan Masuk', 
-                'value' => '58', 
+                'label' => 'Total Pengaduan', 
+                'value' => $totalPengaduan, 
                 'icon' => 'ti ti-report', 
                 'color' => 'warning',
-                'trend' => '8 sedang diproses',
+                'trend' => $pengaduanDiproses . ' sedang diproses',
                 'trend_color' => 'info'
             ],
             [
                 'label' => 'User Terdaftar', 
-                'value' => '812', 
+                'value' => $totalUser, 
                 'icon' => 'ti ti-user-check', 
                 'color' => 'info',
-                'trend' => '+15 user baru',
+                'trend' => 'Pengguna Aktif',
                 'trend_color' => 'success'
             ],
         ];
@@ -84,7 +87,7 @@
             </div>
             <div class="position-relative z-2">
                 <i class="{{ $item['icon'] }} stat-icon text-{{ $item['color'] }} mb-2"></i>
-                <h3 class="fw-bold mt-2 mb-1 stat-number">{{ $item['value'] }}</h3>
+                <h3 class="fw-bold mt-2 mb-1 stat-number">{{ number_format($item['value']) }}</h3>
                 <p class="m-0 text-muted small stat-label">{{ $item['label'] }}</p>
                 <div class="stat-trend text-{{ $item['trend_color'] }} mt-1">
                     <i class="ti ti-trending-up me-1"></i>
@@ -183,62 +186,45 @@
             </div>
 
             <div class="complaint-list">
-                @php
-                    $pengaduan = [
-                        [
-                            'judul' => 'Lampu Jalan Mati', 
-                            'status' => 'Diproses', 
-                            'time' => '2 jam lalu',
-                            'desc' => 'Lampu jalan di RT 05 tidak menyala sejak kemarin malam',
-                            'status_type' => 'warning'
-                        ],
-                        [
-                            'judul' => 'Sampah Menumpuk', 
-                            'status' => 'Menunggu', 
-                            'time' => '1 hari lalu',
-                            'desc' => 'Tumpukan sampah di depan balai desa butuh penanganan',
-                            'status_type' => 'secondary'
-                        ],
-                        [
-                            'judul' => 'Air Tidak Mengalir', 
-                            'status' => 'Selesai', 
-                            'time' => '3 hari lalu',
-                            'desc' => 'Masalah saluran air di RT 03 sudah diperbaiki',
-                            'status_type' => 'success'
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($pengaduan as $p)
+                @forelse($pengaduanTerbaru as $p)
                 <div class="complaint-item p-2 p-md-3 rounded-3 mb-2 mb-md-3">
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-2">
-                        <h6 class="fw-bold mb-1 mb-sm-0 complaint-title">{{ $p['judul'] }}</h6>
-                        <span class="status-badge status-{{ $p['status_type'] }} mt-1 mt-sm-0">
+                        <h6 class="fw-bold mb-1 mb-sm-0 complaint-title">{{ Str::limit($p->judul ?? ($p->isi ?? 'Pengaduan tanpa judul'), 50) }}</h6>
+                        @php
+                            $badgeClass = 'status-secondary';
+                            if ($p->status == 'diproses') $badgeClass = 'status-warning';
+                            if ($p->status == 'selesai') $badgeClass = 'status-success';
+                        @endphp
+                        <span class="status-badge {{ $badgeClass }} mt-1 mt-sm-0">
                             <i class="ti 
-                                @if($p['status_type'] == 'success') ti-check 
-                                @elseif($p['status_type'] == 'warning') ti-clock 
+                                @if($p->status == 'selesai') ti-check 
+                                @elseif($p->status == 'diproses') ti-clock 
                                 @else ti-alert-circle @endif me-1">
                             </i>
-                            {{ $p['status'] }}
+                            {{ ucfirst($p->status) }}
                         </span>
                     </div>
-                    <p class="text-muted small mb-2 complaint-desc">{{ $p['desc'] }}</p>
+                    <p class="text-muted small mb-2 complaint-desc">{{ Str::limit($p->isi ?? '-', 80) }}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted complaint-date">
                             <i class="ti ti-calendar me-1"></i>
-                            {{ $p['time'] }}
+                            {{ $p->created_at->diffForHumans() }}
                         </small>
                         <small class="text-primary complaint-status">
                             <i class="ti ti-eye me-1"></i>
-                            Tinjau
+                            <a href="{{ route('admin.pengaduan.show', $p->id) }}" class="text-primary">Tinjau</a>
                         </small>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="text-center p-4">
+                    <p class="mb-0 text-muted">Belum ada pengaduan.</p>
+                </div>
+                @endforelse
 
                 <!-- View More -->
                 <div class="text-center pt-2">
-                    <a href="/admin/pengaduan" class="text-primary text-decoration-none view-more-link">
+                    <a href="{{ route('admin.pengaduan.index') }}" class="text-primary text-decoration-none view-more-link">
                         <i class="ti ti-list me-1"></i>
                         Lihat semua pengaduan
                     </a>
@@ -262,62 +248,45 @@
             </div>
 
             <div class="complaint-list">
-                @php
-                    $surat = [
-                        [
-                            'nama' => 'Surat Domisili', 
-                            'status' => 'Diproses', 
-                            'time' => '1 jam lalu',
-                            'pemohon' => 'Budi Santoso - RT 02',
-                            'status_type' => 'warning'
-                        ],
-                        [
-                            'nama' => 'Surat Keterangan Usaha', 
-                            'status' => 'Menunggu', 
-                            'time' => '3 jam lalu',
-                            'pemohon' => 'Siti Rahayu - RT 05',
-                            'status_type' => 'secondary'
-                        ],
-                        [
-                            'nama' => 'Surat SKCK', 
-                            'status' => 'Selesai', 
-                            'time' => '1 hari lalu',
-                            'pemohon' => 'Ahmad Fauzi - RT 03',
-                            'status_type' => 'success'
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($surat as $s)
+                @forelse($suratTerbaru as $s)
                 <div class="complaint-item p-2 p-md-3 rounded-3 mb-2 mb-md-3">
                     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-2">
-                        <h6 class="fw-bold mb-1 mb-sm-0 complaint-title">{{ $s['nama'] }}</h6>
-                        <span class="status-badge status-{{ $s['status_type'] }} mt-1 mt-sm-0">
+                        <h6 class="fw-bold mb-1 mb-sm-0 complaint-title">{{ Str::limit($s->jenis_surat, 50) }}</h6>
+                        @php
+                            $badgeClass = 'status-secondary';
+                            if ($s->status == 'diproses') $badgeClass = 'status-warning';
+                            if ($s->status == 'selesai') $badgeClass = 'status-success';
+                        @endphp
+                        <span class="status-badge {{ $badgeClass }} mt-1 mt-sm-0">
                             <i class="ti 
-                                @if($s['status_type'] == 'success') ti-check 
-                                @elseif($s['status_type'] == 'warning') ti-clock 
+                                @if($s->status == 'selesai') ti-check 
+                                @elseif($s->status == 'diproses') ti-clock 
                                 @else ti-alert-circle @endif me-1">
                             </i>
-                            {{ $s['status'] }}
+                            {{ ucfirst($s->status) }}
                         </span>
                     </div>
-                    <p class="text-muted small mb-2 complaint-desc">{{ $s['pemohon'] }}</p>
+                    <p class="text-muted small mb-2 complaint-desc">{{ $s->user->name ?? '-' }} - {{ $s->nama_lengkap ?? '-' }}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <small class="text-muted complaint-date">
                             <i class="ti ti-calendar me-1"></i>
-                            {{ $s['time'] }}
+                            {{ $s->created_at->diffForHumans() }}
                         </small>
                         <small class="text-primary complaint-status">
                             <i class="ti ti-eye me-1"></i>
-                            Proses
+                            <a href="{{ route('admin.pengajuan-surat.show', $s->id) }}" class="text-primary">Proses</a>
                         </small>
                     </div>
                 </div>
-                @endforeach
+                @empty
+                <div class="text-center p-4">
+                    <p class="mb-0 text-muted">Belum ada pengajuan surat.</p>
+                </div>
+                @endforelse
 
                 <!-- View More -->
                 <div class="text-center pt-2">
-                    <a href="/admin/pengajuan-surat" class="text-primary text-decoration-none view-more-link">
+                    <a href="{{ route('admin.pengajuan-surat.index') }}" class="text-primary text-decoration-none view-more-link">
                         <i class="ti ti-list me-1"></i>
                         Lihat semua pengajuan
                     </a>
