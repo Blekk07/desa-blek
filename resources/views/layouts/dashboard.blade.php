@@ -121,7 +121,7 @@
             top: 0;
             left: 280px;
             right: 0;
-            z-index: 1040;
+            z-index: 1060; /* raised so header (toggle) remains clickable above mobile overlay */
             height: 70px;
         }
 
@@ -252,8 +252,14 @@
             .pc-sidebar {
                 transform: translateX(-280px);
                 position: fixed;
+                top: 0;
+                left: 0;
+                width: 280px;
                 height: 100vh;
                 box-shadow: var(--card-shadow);
+                transition: transform 0.28s ease-in-out;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             .pc-sidebar.show-mobile {
@@ -353,7 +359,7 @@
 <header class="pc-header">
     <div class="header-wrapper">
         <div class="me-auto pc-mob-drp">
-            <button id="toggleSidebar">
+            <button id="toggleSidebar" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
                 <i class="ti ti-menu-2"></i>
             </button>
         </div>
@@ -449,12 +455,20 @@ document.addEventListener("DOMContentLoaded", function () {
         overlay.classList.add('visible');
         // prevent background scroll while sidebar open on mobile
         document.body.style.overflow = 'hidden';
+        console.debug('[SIDEBAR] showMobileSidebar called');
+        // small safety: ensure overlay is focusable for accessibility
+        overlay.setAttribute('tabindex', '-1');
+        // accessibility
+        toggle?.setAttribute('aria-expanded', 'true');
     }
 
     function hideMobileSidebar() {
         sidebar.classList.remove('show-mobile');
         overlay.classList.remove('visible');
         document.body.style.overflow = '';
+        console.debug('[SIDEBAR] hideMobileSidebar called');
+        // accessibility
+        toggle?.setAttribute('aria-expanded', 'false');
     }
 
     function applyResponsive() {
@@ -485,7 +499,8 @@ document.addEventListener("DOMContentLoaded", function () {
         applyResponsive();
     });
 
-    toggle.addEventListener('click', function () {
+    if (toggle) {
+        toggle.addEventListener('click', function () {
         if (window.innerWidth <= 991) {
             if (sidebar.classList.contains('show-mobile')) hideMobileSidebar();
             else showMobileSidebar();
@@ -502,11 +517,38 @@ document.addEventListener("DOMContentLoaded", function () {
             localStorage.setItem('sidebarHidden', sidebar.classList.contains('hidden') ? '1' : '0');
         }
     });
+        // add touchstart so mobile taps register even when some browsers coalesce events
+        toggle.addEventListener('touchstart', function (e) {
+            e.preventDefault();
+            if (window.innerWidth <= 991) {
+                if (sidebar.classList.contains('show-mobile')) hideMobileSidebar();
+                else showMobileSidebar();
+            }
+        });
+    } else {
+        // fallback: try to bind to any mobile toggle button inside header if id not present
+        const altToggle = document.querySelector('.pc-mob-drp button');
+        if (altToggle) {
+            altToggle.addEventListener('click', function () {
+                if (window.innerWidth <= 991) {
+                    if (sidebar.classList.contains('show-mobile')) hideMobileSidebar();
+                    else showMobileSidebar();
+                }
+            });
+            // also support touchstart
+            altToggle.addEventListener('touchstart', function (e) { e.preventDefault(); if (window.innerWidth <= 991) { if (sidebar.classList.contains('show-mobile')) hideMobileSidebar(); else showMobileSidebar(); } });
+        }
+    }
 
-    // Click overlay to close sidebar on mobile
-    overlay.addEventListener('click', function () {
-        if (sidebar.classList.contains('show-mobile')) hideMobileSidebar();
-    });
+    // Click / touch overlay to close sidebar on mobile
+    if (overlay) {
+        overlay.addEventListener('click', function () {
+            if (sidebar.classList.contains('show-mobile')) hideMobileSidebar();
+        });
+        overlay.addEventListener('touchstart', function () {
+            if (sidebar.classList.contains('show-mobile')) hideMobileSidebar();
+        });
+    }
 
     // Click outside sidebar should also close (keeps previous behavior)
     document.addEventListener('click', function (e) {
