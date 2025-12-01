@@ -3,7 +3,10 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 class VerifyOtpMail extends Mailable
@@ -13,25 +16,27 @@ class VerifyOtpMail extends Mailable
     public $code;
     public $userName;
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(string $code, string $userName = '')
+    public function __construct($code, $userName)
     {
         $this->code = $code;
         $this->userName = $userName;
     }
 
-    /**
-     * Build the message.
-     */
-    public function build()
+    public function envelope(): Envelope
     {
-        return $this->subject('Kode Verifikasi Email Anda')
-                    ->view('emails.verify_otp')
-                    ->with([
-                        'code' => $this->code,
-                        'userName' => $this->userName,
-                    ]);
+        return new Envelope(
+            subject: 'Kode Verifikasi Email Anda',
+        );
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.verify_otp',
+            with: [
+                'code' => $this->code,
+                'userName' => $this->userName,
+            ],
+        );
     }
 }

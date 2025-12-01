@@ -56,7 +56,7 @@
                     <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
                     <p class="text-muted">Belum ada pengaduan</p>
                     <a href="{{ route('pengaduan.create') }}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Buat Pengaduan Pertama
+                        <i class="ti ti-plus"></i> Buat Pengaduan Pertama
                     </a>
                 </div>
                 @endif

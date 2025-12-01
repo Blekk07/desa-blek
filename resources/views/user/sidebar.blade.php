@@ -358,7 +358,7 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 991px) {
     .sidebar-container {
         width: 100%;
         min-height: auto;
@@ -368,40 +368,37 @@
     
     .sidebar-menu {
         display: flex;
-        overflow-x: auto;
-        padding: 0.5rem 0;
+        flex-direction: column;
+        overflow: visible;
+        padding: 1rem 0;
     }
     
     .sidebar-item {
-        flex: 0 0 auto;
-        margin-bottom: 0;
-        margin-right: 0.5rem;
+        flex: none;
+        margin-bottom: 0.5rem;
+        margin-right: 0;
     }
     
     .sidebar-link {
-        flex-direction: column;
-        padding: 0.75rem;
-        min-width: 70px;
-        text-align: center;
+        flex-direction: row;
+        padding: 0.875rem 1rem;
+        min-width: auto;
+        text-align: left;
+        align-items: center;
     }
     
     .sidebar-icon-wrapper {
-        margin-right: 0;
-        margin-bottom: 0.5rem;
+        margin-right: 0.75rem;
+        margin-bottom: 0;
     }
     
     .sidebar-text {
-        font-size: 0.75rem;
+        font-size: 0.9rem;
     }
     
     .sidebar-badge {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-    }
-    
-    .sidebar-badge i {
-        display: none;
+        position: static;
+        display: flex;
     }
     
     .user-badge,

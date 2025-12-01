@@ -150,7 +150,7 @@ class AuthController extends Controller
             'no_telepon' => 'nullable|string|max:15',
         ]);
 
-        // Buat user (tanda belum terverifikasi)
+        // Buat user
         $user = User::create([
             'name' => $validated['nama_lengkap'],
             'nik' => $validated['nik'],
@@ -181,116 +181,25 @@ class AuthController extends Controller
             'no_telepon' => $validated['no_telepon'] ?? null,
         ]);
 
-        // Generate and send OTP, then redirect to verification page
-        $code = strtoupper(substr(str_replace('-', '', Str::uuid()), 0, 6));
-        $expiresAt = Carbon::now()->addMinutes(15);
-
+        // Generate OTP code
+        $otp_code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        
+        // Save OTP to database
         EmailOtp::create([
-            'user_id' => $user->id,
-            'email' => $user->email,
-            'code' => $code,
-            'expires_at' => $expiresAt,
+            'user_id' => null,
+            'email' => $validated['email'],
+            'code' => $otp_code,
+            'expires_at' => Carbon::now()->addMinutes(15),
+            'used' => false,
         ]);
 
-        try {
-            Mail::to($user->email)->send(new VerifyOtpMail($code, $user->name));
-        } catch (\Exception $e) {
-            // swallow — if mail fails, still show verify form and allow resend
-        }
+        // Send OTP email
+        Mail::to($validated['email'])->send(new VerifyOtpMail($otp_code, $validated['nama_lengkap']));
 
-        // Store pending user id in session to complete verification
+        // Store pending user ID in session
         session(['pending_user_id' => $user->id]);
 
-        return redirect()->route('verify.form')->with('success', 'Kode verifikasi telah dikirim ke email Anda.');
-    }
-
-    /**
-     * Show verification form
-     */
-    public function showVerifyForm()
-    {
-        if (!session('pending_user_id')) {
-            return redirect()->route('login')->with('info', 'Silakan login atau daftar terlebih dahulu.');
-        }
-
-        return view('auth.verify-email-otp');
-    }
-
-    /**
-     * Send (or resend) OTP for pending user
-     */
-    public function sendOtp(Request $request)
-    {
-        $userId = session('pending_user_id');
-        if (!$userId) {
-            return redirect()->route('login')->with('error', 'Tidak ada proses verifikasi aktif.');
-        }
-
-        $user = User::find($userId);
-        if (!$user) return redirect()->route('login');
-
-        $code = strtoupper(substr(str_replace('-', '', Str::uuid()), 0, 6));
-        $expiresAt = Carbon::now()->addMinutes(15);
-
-        EmailOtp::create([
-            'user_id' => $user->id,
-            'email' => $user->email,
-            'code' => $code,
-            'expires_at' => $expiresAt,
-        ]);
-
-        try {
-            Mail::to($user->email)->send(new VerifyOtpMail($code, $user->name));
-        } catch (\Exception $e) {
-            // ignore
-        }
-
-        return redirect()->route('verify.form')->with('success', 'Kode verifikasi baru telah dikirim.');
-    }
-
-    /**
-     * Verify OTP code
-     */
-    public function verify(Request $request)
-    {
-        $request->validate([ 'code' => 'required|string' ]);
-
-        $userId = session('pending_user_id');
-        if (!$userId) return redirect()->route('login')->with('error', 'Sesi verifikasi tidak ditemukan.');
-
-        $user = User::find($userId);
-        if (!$user) return redirect()->route('login')->with('error', 'Pengguna tidak ditemukan.');
-
-        $otp = EmailOtp::where('user_id', $user->id)
-                    ->where('used', false)
-                    ->where('email', $user->email)
-                    ->orderBy('created_at', 'desc')
-                    ->first();
-
-        if (!$otp) {
-            return back()->with('error', 'Kode tidak ditemukan. Silakan minta kode baru.');
-        }
-
-        if (Carbon::now()->greaterThan($otp->expires_at)) {
-            return back()->with('error', 'Kode telah kedaluwarsa. Silakan kirim ulang.');
-        }
-
-        if (trim(strtoupper($request->code)) !== trim(strtoupper($otp->code))) {
-            return back()->with('error', 'Kode yang Anda masukkan salah.');
-        }
-
-        // mark used and verify user
-        $otp->used = true;
-        $otp->save();
-
-        $user->is_verified = true;
-        $user->save();
-
-        // remove pending flag and login
-        session()->forget('pending_user_id');
-        Auth::login($user);
-
-        return redirect('/dashboard')->with('success', 'Email berhasil terverifikasi. Selamat datang!');
+        return redirect()->route('verify.form')->with('success', 'Registrasi berhasil! Silakan verifikasi email Anda dengan kode OTP yang telah dikirim.');
     }
 
     /**
@@ -463,5 +372,95 @@ class AuthController extends Controller
 
         return redirect('/dashboard')
             ->with('success', 'Registrasi berhasil! Selamat datang di Sistem Informasi Desa.');
+    }
+
+    /**
+     * Show email verification form
+     */
+    public function showVerifyForm()
+    {
+        if (!session('pending_user_id')) {
+            return redirect()->route('login');
+        }
+
+        return view('auth.verify-email-otp');
+    }
+
+    /**
+     * Send OTP (resend)
+     */
+    public function sendOtp(Request $request)
+    {
+        $user_id = session('pending_user_id');
+        if (!$user_id) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($user_id);
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Generate new OTP code
+        $otp_code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        
+        // Create new OTP entry
+        EmailOtp::create([
+            'user_id' => null,
+            'email' => $user->email,
+            'code' => $otp_code,
+            'expires_at' => Carbon::now()->addMinutes(15),
+            'used' => false,
+        ]);
+
+        // Send OTP email
+        Mail::to($user->email)->send(new VerifyOtpMail($otp_code, $user->name));
+
+        return back()->with('success', 'Kode OTP baru telah dikirim ke email Anda.');
+    }
+
+    /**
+     * Verify OTP code
+     */
+    public function verify(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|size:6',
+        ]);
+
+        $user_id = session('pending_user_id');
+        if (!$user_id) {
+            return redirect()->route('login');
+        }
+
+        $user = User::find($user_id);
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // Find matching OTP
+        $otp = EmailOtp::where('email', $user->email)
+            ->where('code', $request->code)
+            ->where('used', false)
+            ->where('expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$otp) {
+            return back()->withErrors(['code' => 'Kode OTP tidak valid atau sudah expired.']);
+        }
+
+        // Mark OTP as used
+        $otp->update(['used' => true]);
+
+        // Mark user as verified
+        $user->update(['is_verified' => true]);
+
+        // Clear session
+        session()->forget('pending_user_id');
+
+        // Login user
+        Auth::login($user);
+
+        return redirect('/dashboard')->with('success', 'Email terverifikasi! Selamat datang di Sistem Informasi Desa.');
     }
 }
