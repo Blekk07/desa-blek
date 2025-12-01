@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             'nik' => '0000000000000000', // NIK admin
             'email' => 'admin@gmail.com',
             'role' => 'admin',
-            'password' => Hash::make('admin123'),
+            'password' => Hash::make('admin1207'),
         ]);
     }
 }

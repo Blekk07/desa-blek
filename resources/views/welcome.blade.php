@@ -635,6 +635,72 @@
                 display: none;
             }
         }
+        /* Bottom navigation for mobile (appears on small screens) */
+        .bottom-nav {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: calc(60px + env(safe-area-inset-bottom, 0));
+            padding-bottom: env(safe-area-inset-bottom, 0);
+            background: rgba(255,255,255,0.98);
+            border-top: 1px solid #e6e9ef;
+            display: none;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 1000;
+            box-shadow: 0 -6px 20px rgba(0,0,0,0.04);
+            transition: transform 0.28s ease, opacity 0.2s ease;
+            /* improve touch target on iOS safe-area screens */
+            padding-top: 6px;
+        }
+
+        .bottom-nav a {
+            color: #374151;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .bottom-nav .ti {
+            font-size: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav { display: flex; }
+            /* ensure footer has extra bottom spacing so content isn't hidden under the nav */
+            footer { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)); position: relative; z-index: 2100; }
+        }
+
+        /* allow hiding bottom-nav when footer is visible */
+        .bottom-nav.hidden {
+            transform: translateY(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+        /* Footer readability on dark background */
+        footer.bg-dark, footer.bg-dark .container, footer.bg-dark .row {
+            color: #ffffff !important;
+        }
+        footer.bg-dark .text-muted {
+            color: rgba(255,255,255,0.92) !important;
+            opacity: 1 !important;
+        }
+        footer.bg-dark a.text-muted {
+            color: #ffffff !important;
+            opacity: 0.95 !important;
+            text-decoration: none !important;
+        }
+        footer.bg-dark .ti, footer.bg-dark i, footer.bg-dark .fa {
+            color: #ffffff !important;
+            opacity: 0.95 !important;
+        }
+        footer.bg-dark hr {
+            border-color: rgba(255,255,255,0.12) !important;
+        }
     </style>
 </head>
 <body>
@@ -976,6 +1042,8 @@
     <!-- [ Testimoni ] End -->
 
     <!-- Footer -->
+    <!-- sentinel observed by JS to hide bottom-nav slightly before footer becomes visible -->
+    <div id="footer-sentinel" aria-hidden="true" style="height:calc(80px + env(safe-area-inset-bottom, 0)); width:100%; pointer-events:none; opacity:0;"></div>
     <footer class="bg-dark text-white py-5">
         <div class="container">
             <div class="row">
@@ -1016,6 +1084,26 @@
             </div>
         </div>
     </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="bottom-nav" aria-label="Mobile bottom navigation">
+        <a href="#home" aria-label="Home">
+            <i class="ti ti-home"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="#alur" aria-label="Alur Layanan">
+            <i class="ti ti-flow"></i>
+            <span>Alur</span>
+        </a>
+        <a href="{{ route('login') }}" aria-label="Login">
+            <i class="ti ti-login"></i>
+            <span>Login</span>
+        </a>
+        <a href="{{ route('register') }}" aria-label="Daftar">
+            <i class="ti ti-user-plus"></i>
+            <span>Daftar</span>
+        </a>
+    </nav>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
@@ -1295,6 +1383,51 @@
                     }
                 }
             }, 250));
+        });
+    </script>
+    <script>
+        // Hide bottom-nav when footer is visible so footer doesn't look empty/covered
+        document.addEventListener('DOMContentLoaded', function () {
+            const bottomNav = document.querySelector('.bottom-nav');
+            const footer = document.querySelector('footer');
+            const sentinel = document.getElementById('footer-sentinel');
+            if (!bottomNav || !footer) return;
+
+            // Ensure footer sits above the bottom-nav visually when needed
+            footer.style.position = footer.style.position || 'relative';
+            footer.style.zIndex = footer.style.zIndex || '1095';
+
+            // Adjust bottom-nav sizing for safe-area (iPhone notch etc.)
+            bottomNav.style.paddingBottom = bottomNav.style.paddingBottom || 'env(safe-area-inset-bottom, 0)';
+            bottomNav.style.height = bottomNav.style.height || 'calc(60px + env(safe-area-inset-bottom, 0))';
+
+            const target = sentinel || footer;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        bottomNav.classList.add('hidden');
+                    } else {
+                        bottomNav.classList.remove('hidden');
+                    }
+                });
+            }, { root: null, threshold: 0.15 });
+
+            observer.observe(target);
+
+            // fallback: hide when footer is near bottom of viewport
+            function checkFooterOverlap() {
+                const rect = footer.getBoundingClientRect();
+                const hideZone = window.innerHeight - (bottomNav.offsetHeight || 60) - 10;
+                if (rect.top <= hideZone) bottomNav.classList.add('hidden');
+                else bottomNav.classList.remove('hidden');
+            }
+
+            window.addEventListener('scroll', checkFooterOverlap, { passive: true });
+            window.addEventListener('resize', checkFooterOverlap);
+
+            // initial check
+            checkFooterOverlap();
         });
     </script>
 </body>
