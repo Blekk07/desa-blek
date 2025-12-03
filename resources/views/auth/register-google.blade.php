@@ -80,8 +80,7 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label class="form-label">Tempat Lahir <span class="text-danger">*</span></label>
-                        <input type="text" name="tempat_lahir" class="form-control @error('tempat_lahir') is-invalid @enderror" 
-                               value="{{ old('tempat_lahir') }}" placeholder="Masukkan tempat lahir" required>
+                        @include('components.tempat-lahir-select')
                         @error('tempat_lahir')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -226,8 +225,19 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label class="form-label">Pekerjaan</label>
-                        <input type="text" name="pekerjaan" class="form-control @error('pekerjaan') is-invalid @enderror" 
-                               value="{{ old('pekerjaan') }}" placeholder="Masukkan pekerjaan">
+                        <select name="pekerjaan" class="form-control @error('pekerjaan') is-invalid @enderror">
+                            <option value="">-- Pilih Pekerjaan --</option>
+                            <option value="Pelajar/Mahasiswa" {{ old('pekerjaan') == 'Pelajar/Mahasiswa' ? 'selected' : '' }}>Pelajar/Mahasiswa</option>
+                            <option value="Belum/Tidak Bekerja" {{ old('pekerjaan') == 'Belum/Tidak Bekerja' ? 'selected' : '' }}>Belum/Tidak Bekerja</option>
+                            <option value="Petani" {{ old('pekerjaan') == 'Petani' ? 'selected' : '' }}>Petani</option>
+                            <option value="Pedagang" {{ old('pekerjaan') == 'Pedagang' ? 'selected' : '' }}>Pedagang</option>
+                            <option value="Wiraswasta" {{ old('pekerjaan') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
+                            <option value="Karyawan Swasta" {{ old('pekerjaan') == 'Karyawan Swasta' ? 'selected' : '' }}>Karyawan Swasta</option>
+                            <option value="PNS" {{ old('pekerjaan') == 'PNS' ? 'selected' : '' }}>PNS</option>
+                            <option value="TNI/Polri" {{ old('pekerjaan') == 'TNI/Polri' ? 'selected' : '' }}>TNI/Polri</option>
+                            <option value="Ibu Rumah Tangga" {{ old('pekerjaan') == 'Ibu Rumah Tangga' ? 'selected' : '' }}>Ibu Rumah Tangga</option>
+                            <option value="Lainnya" {{ old('pekerjaan') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                        </select>
                         @error('pekerjaan')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

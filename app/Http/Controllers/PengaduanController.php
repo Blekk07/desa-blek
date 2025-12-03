@@ -26,16 +26,41 @@ class PengaduanController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'judul' => 'required|string|max:255',
-            'deskripsi' => 'required|string',
+            'kategori' => 'required|string|max:255',
+            'tanggal_waktu_kejadian' => 'required|date_format:Y-m-d\TH:i',
+            'lokasi_kejadian' => 'required|string|max:255',
+            'kecamatan' => 'nullable|string|max:255',
+            'desa' => 'nullable|string|max:255',
+            'uraian_kejadian' => 'required|string',
+            'prioritas' => 'nullable|string|max:255',
+            'lampiran' => 'nullable|array',
+            'lampiran.*' => 'nullable|file|mimes:jpg,jpeg,png,mp4,avi,pdf,doc,docx,mp3,wav|max:10240'
         ]);
+
+        // Process file uploads if any
+        $lampiranPaths = [];
+        if ($request->hasFile('lampiran')) {
+            foreach ($request->file('lampiran') as $file) {
+                $path = $file->store('pengaduan-lampiran', 'public');
+                $lampiranPaths[] = $path;
+            }
+        }
 
         Pengaduan::create([
             'user_id' => auth()->id(),
-            'judul' => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'isi' => $request->deskripsi,
+            'judul' => $validated['judul'],
+            'kategori' => $validated['kategori'],
+            'tanggal_waktu_kejadian' => $validated['tanggal_waktu_kejadian'],
+            'lokasi_kejadian' => $validated['lokasi_kejadian'],
+            'kecamatan' => $validated['kecamatan'],
+            'desa' => $validated['desa'],
+            'uraian_kejadian' => $validated['uraian_kejadian'],
+            'deskripsi' => $validated['uraian_kejadian'], // For backward compatibility
+            'isi' => $validated['uraian_kejadian'], // For backward compatibility
+            'lampiran' => !empty($lampiranPaths) ? $lampiranPaths : null,
+            'prioritas' => $validated['prioritas'] ?? 'Sedang',
             'status' => 'pending'
         ]);
 

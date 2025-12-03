@@ -87,10 +87,6 @@
 
     </form>
 
-    {{-- =======================
-         JS SCRIPT FIX NIK
-         (Only Numbers + Max 16)
-    ======================== --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const nikInput = document.getElementById('nik');

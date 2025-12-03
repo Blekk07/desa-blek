@@ -54,17 +54,68 @@ class PengajuanSuratController extends Controller
             'rt' => 'required|string|max:3',
             'rw' => 'required|string|max:3',
             'no_telepon' => 'required|string|max:15',
-            'keperluan' => 'required|string',
-            'keterangan_tambahan' => 'nullable|string'
+            'keperluan' => 'nullable|string',
+            'keterangan_tambahan' => 'nullable|string',
+            // Fields untuk Surat Usaha
+            'nama_usaha' => 'nullable|string|max:255',
+            'jenis_usaha' => 'nullable|string|max:255',
+            'alamat_usaha' => 'nullable|string',
+            // Fields untuk Surat Kelahiran
+            'nama_anak' => 'nullable|string|max:255',
+            'jenis_kelamin_anak' => 'nullable|string',
+            'tempat_lahir_anak' => 'nullable|string|max:255',
+            'tanggal_lahir_anak' => 'nullable|date',
+            'nama_ayah' => 'nullable|string|max:255',
+            'nama_ibu' => 'nullable|string|max:255',
+            // Fields untuk Surat Kematian
+            'nama_almarhum' => 'nullable|string|max:255',
+            'tanggal_meninggal' => 'nullable|date',
+            'tempat_meninggal' => 'nullable|string|max:255',
+            'sebab_meninggal' => 'nullable|string',
+            // Fields untuk Surat Pindah
+            'alamat_tujuan' => 'nullable|string',
+            'alasan_pindah' => 'nullable|string|max:255',
+            // Jenis Surat Lainnya
+            'jenis_lainnya' => 'nullable|string|max:255',
+            // File uploads
+            'lampiran_ktp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'lampiran_kk' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'bukti_usaha' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'lampiran_pendukung' => 'nullable|array',
+            'lampiran_pendukung.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120'
         ]);
 
         $validated['user_id'] = auth()->id();
         $validated['status'] = 'pending';
 
+        // Generate keperluan otomatis jika kosong
+        if (empty($validated['keperluan'])) {
+            $validated['keperluan'] = $this->generateKeperluan($validated['jenis_surat']);
+        }
+
         PengajuanSurat::create($validated);
 
         return redirect()->route('user.pengajuan-surat.index')
                         ->with('success', 'Pengajuan surat berhasil dikirim! Mohon tunggu proses verifikasi.');
+    }
+
+    // Helper function untuk generate keperluan otomatis
+    private function generateKeperluan($jenisSurat)
+    {
+        $keperluanMap = [
+            'Surat Keterangan Domisili' => 'Untuk keperluan administrasi sekolah, kuliah, melamar pekerjaan, atau pembuatan/perpanjangan KTP.',
+            'Surat Keterangan Tidak Mampu' => 'Untuk mengajukan bantuan, beasiswa, keringanan biaya, atau keperluan sosial lainnya.',
+            'Surat Keterangan Usaha' => 'Untuk mengajukan kredit usaha, izin usaha, atau keperluan bisnis lainnya.',
+            'Surat Pengantar KTP' => 'Untuk mengurus pembuatan atau perpanjangan KTP di Dukcapil.',
+            'Surat Pengantar KK' => 'Untuk mengurus Kartu Keluarga (KK) di Dukcapil.',
+            'Surat Keterangan Kelahiran' => 'Untuk mengurus Akta Kelahiran bayi di Dukcapil.',
+            'Surat Keterangan Kematian' => 'Untuk pengurusan Akta Kematian dan keperluan administrasi lainnya.',
+            'Surat Keterangan Pindah' => 'Untuk pengurusan administrasi kependudukan di tempat tujuan.',
+            'Surat Keterangan Catatan Kepolisian' => 'Untuk mengurus SKCK di Polsek/Polres atau keperluan pekerjaan.',
+            'Surat Lainnya' => 'Sesuai dengan keperluan yang dijelaskan di bagian keterangan.'
+        ];
+
+        return $keperluanMap[$jenisSurat] ?? 'Sesuai dengan keperluan yang dimohonkan.';
     }
 
     // Untuk User - Menampilkan detail pengajuan surat

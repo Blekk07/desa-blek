@@ -144,7 +144,7 @@ class AuthController extends Controller
             'status_perkawinan' => 'required|in:Belum Kawin,Kawin,Cerai Hidup,Cerai Mati',
 
             'pendidikan_terakhir' => 'nullable|string',
-            'pekerjaan' => 'nullable|string',
+            'pekerjaan' => 'nullable|in:Pelajar/Mahasiswa,Belum/Tidak Bekerja,Petani,Pedagang,Wiraswasta,Karyawan Swasta,PNS,TNI/Polri,Ibu Rumah Tangga,Lainnya',
             'status_kependudukan' => 'nullable|in:Tetap,Pendatang,Pindah',
 
             'no_telepon' => 'nullable|string|max:15',
@@ -308,7 +308,7 @@ class AuthController extends Controller
             'rw' => 'required|string|max:3',
             'status_perkawinan' => 'required|in:Belum Kawin,Kawin,Cerai Hidup,Cerai Mati',
             'pendidikan_terakhir' => 'nullable|string',
-            'pekerjaan' => 'nullable|string',
+            'pekerjaan' => 'nullable|in:Pelajar/Mahasiswa,Belum/Tidak Bekerja,Petani,Pedagang,Wiraswasta,Karyawan Swasta,PNS,TNI/Polri,Ibu Rumah Tangga,Lainnya',
             'status_kependudukan' => 'nullable|in:Tetap,Pendatang,Pindah',
             'nama_ayah' => 'nullable|string|max:255',
             'nama_ibu' => 'nullable|string|max:255',

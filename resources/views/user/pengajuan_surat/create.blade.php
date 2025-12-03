@@ -24,7 +24,7 @@
                     <h5>Form Pengajuan Surat</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('user.pengajuan-surat.store') }}" method="POST" id="formPengajuanSurat">
+                    <form action="{{ route('user.pengajuan-surat.store') }}" method="POST" id="formPengajuanSurat" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="row">
@@ -198,12 +198,49 @@
 
                             <div class="col-md-12 mb-3" id="fieldKeperluan" style="display:none;">
                                 <label class="form-label">Keperluan <span class="text-danger">*</span></label>
-                                <textarea name="keperluan" class="form-control" rows="3" placeholder="Jelaskan keperluan pembuatan surat ini...">{{ old('keperluan') }}</textarea>
+                                <textarea name="keperluan" id="keperluanInput" class="form-control" rows="3" placeholder="Keperluan akan otomatis terisi berdasarkan jenis surat...">{{ old('keperluan') }}</textarea>
+                                <small class="text-muted">Anda dapat mengubah atau menambahkan keterangan jika diperlukan.</small>
                             </div>
 
                             <div class="col-md-12 mb-3" id="fieldKeterangan" style="display:none;">
                                 <label class="form-label">Keterangan Tambahan</label>
                                 <textarea name="keterangan_tambahan" class="form-control" rows="2" placeholder="Keterangan tambahan (opsional)">{{ old('keterangan_tambahan') }}</textarea>
+                            </div>
+
+                            <!-- UPLOAD / LAMPIRAN -->
+                            <div class="col-md-6 mb-3" id="fieldUploadKTP" style="display:none;">
+                                <label class="form-label">Upload KTP <span class="text-danger">*</span></label>
+                                <input type="file" name="lampiran_ktp" class="form-control @error('lampiran_ktp') is-invalid @enderror">
+                                @error('lampiran_ktp')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6 mb-3" id="fieldUploadKK" style="display:none;">
+                                <label class="form-label">Upload KK <span class="text-danger">*</span></label>
+                                <input type="file" name="lampiran_kk" class="form-control @error('lampiran_kk') is-invalid @enderror">
+                                @error('lampiran_kk')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-12 mb-3" id="fieldBuktiUsaha" style="display:none;">
+                                <label class="form-label">Bukti Usaha / Surat Dukungan</label>
+                                <input type="file" name="bukti_usaha" class="form-control @error('bukti_usaha') is-invalid @enderror">
+                                @error('bukti_usaha')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-12 mb-3" id="fieldLampiranUmum" style="display:none;">
+                                <label class="form-label">Lampiran Pendukung (opsional)</label>
+                                <input type="file" name="lampiran_pendukung[]" class="form-control" multiple>
+                            </div>
+
+                            <!-- JIKA SURAT LAINNYA -->
+                            <div class="col-md-12 mb-3" id="fieldJenisLainnya" style="display:none;">
+                                <label class="form-label">Sebutkan Jenis Surat Lainnya <span class="text-danger">*</span></label>
+                                <input type="text" name="jenis_lainnya" class="form-control" value="{{ old('jenis_lainnya') }}" placeholder="Nama jenis surat...">
                             </div>
                         </div>
 
@@ -227,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const jenisSurat = document.getElementById('jenisSurat');
     const deskripsiSurat = document.getElementById('deskripsiSurat');
     const deskripsiText = document.getElementById('deskripsiText');
+    const keperluanInput = document.getElementById('keperluanInput');
     
     // Deskripsi untuk setiap jenis surat - SESUAIKAN DENGAN OPTION VALUE
     const deskripsiMap = {
@@ -241,19 +279,33 @@ document.addEventListener('DOMContentLoaded', function() {
         'Surat Keterangan Catatan Kepolisian': 'Surat pengantar dari desa untuk mengurus SKCK di Polsek/Polres. Biasa digunakan untuk melamar pekerjaan atau keperluan administrasi tertentu.',
         'Surat Lainnya': 'Jenis surat lainnya yang tidak termasuk dalam kategori di atas. Silakan jelaskan keperluan surat Anda pada bagian keterangan.'
     };
+
+    // Keperluan otomatis untuk setiap jenis surat
+    const keperluanMap = {
+        'Surat Keterangan Domisili': 'Untuk keperluan administrasi sekolah, kuliah, melamar pekerjaan, atau pembuatan/perpanjangan KTP.',
+        'Surat Keterangan Tidak Mampu': 'Untuk mengajukan bantuan, beasiswa, keringanan biaya, atau keperluan sosial lainnya.',
+        'Surat Keterangan Usaha': 'Untuk mengajukan kredit usaha, izin usaha, atau keperluan bisnis lainnya.',
+        'Surat Pengantar KTP': 'Untuk mengurus pembuatan atau perpanjangan KTP di Dukcapil.',
+        'Surat Pengantar KK': 'Untuk mengurus Kartu Keluarga (KK) di Dukcapil.',
+        'Surat Keterangan Kelahiran': 'Untuk mengurus Akta Kelahiran bayi di Dukcapil.',
+        'Surat Keterangan Kematian': 'Untuk pengurusan Akta Kematian dan keperluan administrasi lainnya.',
+        'Surat Keterangan Pindah': 'Untuk pengurusan administrasi kependudukan di tempat tujuan.',
+        'Surat Keterangan Catatan Kepolisian': 'Untuk mengurus SKCK di Polsek/Polres atau keperluan pekerjaan.',
+        'Surat Lainnya': 'Sesuai dengan keperluan yang dijelaskan di bagian keterangan.'
+    };
     
     // Field yang wajib untuk setiap jenis surat - SESUAIKAN DENGAN OPTION VALUE
     const fieldMap = {
-        'Surat Keterangan Domisili': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
-        'Surat Keterangan Tidak Mampu': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
-        'Surat Keterangan Usaha': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaUsaha', 'fieldJenisUsaha', 'fieldAlamatUsaha', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
-        'Surat Pengantar KTP': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
-        'Surat Pengantar KK': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'], // VALUE SESUAI DENGAN OPTION
-        'Surat Keterangan Kelahiran': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaAnak', 'fieldJenisKelaminAnak', 'fieldTempatLahir', 'fieldTanggalLahir', 'fieldNamaAyah', 'fieldNamaIbu', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
-        'Surat Keterangan Kematian': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaAlmarhum', 'fieldTanggalMeninggal', 'fieldTempatMeninggal', 'fieldSebabMeninggal', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
-        'Surat Keterangan Pindah': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldAlamatTujuan', 'fieldAlasanPindah', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
-        'Surat Keterangan Catatan Kepolisian': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
-        'Surat Lainnya': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection']
+        'Surat Keterangan Domisili': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'fieldUploadKTP', 'fieldUploadKK', 'buttonSection'],
+        'Surat Keterangan Tidak Mampu': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'fieldUploadKTP', 'fieldUploadKK', 'fieldLampiranUmum', 'buttonSection'],
+        'Surat Keterangan Usaha': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaUsaha', 'fieldJenisUsaha', 'fieldAlamatUsaha', 'keperluanSection', 'fieldKeperluan', 'fieldBuktiUsaha', 'fieldLampiranUmum', 'buttonSection'],
+        'Surat Pengantar KTP': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldUploadKTP', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Pengantar KK': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldUploadKK', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Kelahiran': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaAnak', 'fieldJenisKelaminAnak', 'fieldTempatLahir', 'fieldTanggalLahir', 'fieldNamaAyah', 'fieldNamaIbu', 'keperluanSection', 'fieldKeperluan', 'fieldUploadKTP', 'fieldUploadKK', 'fieldLampiranUmum', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Kematian': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldNamaAlmarhum', 'fieldTanggalMeninggal', 'fieldTempatMeninggal', 'fieldSebabMeninggal', 'fieldUploadKTP', 'fieldUploadKK', 'fieldLampiranUmum', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Pindah': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldAlamatTujuan', 'fieldAlasanPindah', 'fieldUploadKTP', 'fieldUploadKK', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Keterangan Catatan Kepolisian': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldUploadKTP', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection'],
+        'Surat Lainnya': ['dataPemohonSection', 'fieldNamaLengkap', 'fieldNIK', 'fieldAlamat', 'fieldRT', 'fieldRW', 'fieldTelepon', 'fieldJenisLainnya', 'fieldLampiranUmum', 'keperluanSection', 'fieldKeperluan', 'fieldKeterangan', 'buttonSection']
     };
     
     // Debug function untuk mengecek field
@@ -288,6 +340,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Tampilkan deskripsi
             deskripsiText.textContent = deskripsiMap[selectedValue];
             deskripsiSurat.style.display = 'block';
+            
+            // Auto-fill keperluan
+            if (keperluanMap[selectedValue] && !document.querySelector('form').classList.contains('has-validation-error')) {
+                keperluanInput.value = keperluanMap[selectedValue];
+            }
             
             // Tampilkan field yang sesuai
             if (fieldMap[selectedValue]) {

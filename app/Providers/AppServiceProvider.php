@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 use SocialiteProviders\Discord\Provider;
+use App\Helpers\LocationHelper;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,14 +36,22 @@ class AppServiceProvider extends ServiceProvider
                     ? url('assets/images/user/' . $user->avatar)
                     : $user->avatar;
 
+                // share tempat lahir list for forms
+                $tempatLahirList = LocationHelper::getTempatLahirGrouped();
+
                 $view->with(compact('user', 'name', 'role', 'avatar'));
             }
         });
-
 
         // Register Socialite provider
         Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event) {
             $event->extendSocialite('discord', Provider::class);
         });
+
+        // Force HTTPS in production/local environment
+        if ($this->app->environment('local')) {
+            URL::forceRootUrl(config('app.url'));
+            URL::forceScheme('https');
+        }
     }
 }
