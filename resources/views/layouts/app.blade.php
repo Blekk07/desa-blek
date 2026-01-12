@@ -16,32 +16,6 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; }
-
-        /* Make default navbar style consistent with landing page */
-        #mainNavbar, .navbar {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: none;
-            background: #ffffff !important;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
-            padding: 1rem 0;
-        }
-
-        .navbar.scrolled, #mainNavbar.scrolled {
-            background: #ffffff !important;
-            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        .navbar.transparent {
-            /* keep transparent class available, but we won't apply it by default on Berita/Contact */
-            background: transparent !important;
-            box-shadow: none !important;
-        }
-
-        .navbar-brand img { transition: all 0.3s ease; filter: brightness(0); }
-
-        .nav-link { font-weight: 500; color: #1e293b !important; margin: 0 0.5rem; padding: 0.5rem 1rem !important; border-radius: 8px; }
-        .nav-link:hover, .nav-link.active { color: #4361ee !important; background: rgba(0,82,212,0.08); }
-
     </style>
     <link rel="stylesheet" href="{{ asset('assets/css/responsive-fixes.css') }}">
 
@@ -79,27 +53,16 @@
     <script>
         let lastScrollTop = 0;
         const navbar = document.getElementById('mainNavbar');
-
-        // Scroll behaviour: support pages that opt-in for transparent header
+        
         window.addEventListener('scroll', function() {
             let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-
-            if (!navbar) return;
-
+            
             if (currentScroll > 100) {
                 navbar.classList.add('scrolled');
-                // if the page requested auto transparency, remove it when scrolled
-                if (navbar.dataset.autotransparent === 'true') {
-                    navbar.classList.remove('transparent');
-                }
             } else {
                 navbar.classList.remove('scrolled');
-                // restore transparent state only if page requested it
-                if (navbar.dataset.autotransparent === 'true') {
-                    navbar.classList.add('transparent');
-                }
             }
-
+            
             lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
         });
     </script>
@@ -112,9 +75,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-200 text-center p-4 mt-10 border-t">
-        &copy; {{ date('Y') }} Sistem Informasi Desa — All Rights Reserved
-    </footer>
+    @include('partials.footer')
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
