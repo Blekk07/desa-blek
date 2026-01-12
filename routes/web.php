@@ -9,6 +9,9 @@ use App\Http\Controllers\PengajuanSuratController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ProfileDesaController;
+use App\Http\Controllers\BeritaController as PublicBeritaController;
+use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
 
 Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('google.callback');
@@ -16,11 +19,26 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
-Route::get('/contact-us', function () {
-    return view('contact');
-});
+use App\Http\Controllers\ContactController;
+
+Route::get('/contact-us', [ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.store');
+
+// Public profile and help pages (styled like contact page)
+Route::get('/profile-desa', [ProfileDesaController::class, 'publicShow'])->name('profile-desa');
+Route::get('/help', [\App\Http\Controllers\HelpController::class, 'publicHelp'])->name('help.public');
+
+// Berita public listing
+Route::get('/berita', [PublicBeritaController::class, 'index'])->name('berita.index');
+Route::get('/berita/{berita}', [PublicBeritaController::class, 'show'])->name('berita.show');
+
+// Public signed verification link for pengajuan surat (used by QR code)
+Route::get('/pengajuan/verify/{id}', [PengajuanSuratController::class, 'verify'])->name('pengajuan.verify')->middleware('signed');
+
+// TTD-style verification URL (format: /pengajuan/ttd?p=ID|USER_ID|ROLE|SIG)
+Route::get('/pengajuan/ttd', [PengajuanSuratController::class, 'ttd'])->name('pengajuan.ttd');
 
 // Email verification
 Route::get('/verify-email', [AuthController::class, 'showVerifyForm'])->name('verify.form');
@@ -127,6 +145,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pengaduan/{id}', [PengaduanController::class, 'adminShow'])->name('admin.pengaduan.show');
         Route::post('/pengaduan/{id}/status', [PengaduanController::class, 'adminUpdateStatus'])->name('admin.pengaduan.updateStatus');
 
+        // Admin Berita (CRUD + publish)
+        Route::resource('berita', AdminBeritaController::class)->names([
+            'index' => 'admin.berita.index',
+            'create' => 'admin.berita.create',
+            'store' => 'admin.berita.store',
+            'show' => 'admin.berita.show',
+            'edit' => 'admin.berita.edit',
+            'update' => 'admin.berita.update',
+            'destroy' => 'admin.berita.destroy',
+        ]);
+        Route::post('/berita/{berita}/publish', [AdminBeritaController::class, 'publish'])->name('admin.berita.publish');
+
         // Admin User Management - FIXED ROUTES
         Route::prefix('users')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('admin.users.index');
@@ -187,7 +217,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])->name('pengaduan.show');
 
         // PROFIL DESA
-        Route::get('/profile-desa', fn() => view('user.profile-desa'))->name('user.profile-desa');
+        Route::get('/profile-desa', [ProfileDesaController::class, 'show'])->name('user.profile-desa');
 
         // PENGAJUAN SURAT
         Route::get('/pengajuan-surat', [PengajuanSuratController::class, 'index'])->name('user.pengajuan-surat.index');
