@@ -85,3 +85,16 @@
 </section>
 
 @endsection
+
+@push('scripts')
+<script>
+    // Request transparent navbar behavior on this page (like landing)
+    document.addEventListener('DOMContentLoaded', function() {
+        var navbar = document.getElementById('mainNavbar');
+        if (navbar) {
+            navbar.dataset.autotransparent = 'true';
+            navbar.classList.add('transparent');
+        }
+    });
+</script>
+@endpush
