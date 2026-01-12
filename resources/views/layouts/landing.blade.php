@@ -38,11 +38,13 @@
 
     <style>
         :root {
-            --primary-color: #0052d4;
-            --secondary-color: #00a8ff;
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #6c757d;
             --accent-color: #ff6b6b;
             --dark-color: #1e293b;
             --light-color: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -51,18 +53,18 @@
             overflow-x: hidden;
         }
 
-        /* Modern Navbar */
+        /* Modern Navbar (always white background) */
         .navbar {
             transition: var(--transition);
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95) !important;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: none;
+            background: #ffffff !important;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
             padding: 1rem 0;
         }
 
         .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.98) !important;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            background: #ffffff !important;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
         }
 
         .navbar-brand img {
@@ -234,6 +236,65 @@
             }
         }
 
+        /* ---------- Hero / Welcome overrides (to match welcome.blade.php) ---------- */
+        header#home {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: var(--gradient-primary);
+        }
+
+        .header-bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .header-bg-desktop,
+        .header-bg-mobile,
+        .header-bg-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .animated-bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 60%);
+            z-index: 1;
+        }
+
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-title { color: #fff; font-size: 3.5rem; line-height:1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .hero-subtitle { color: rgba(255,255,255,0.9); font-size:1.25rem; }
+        .typed-text::after { content: '|'; animation: blink 0.7s infinite; margin-left:6px; }
+        @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
+
+        .scroll-indicator { position:absolute; bottom:30px; left:50%; transform:translateX(-50%); z-index:2; color:white; }
+
+        /* Navbar transparency when over hero */
+        .navbar.transparent { background: #ffffff !important; box-shadow: none !important; }
+
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -263,51 +324,7 @@
     </div>
 
     <!-- [ Modern Navbar ] -->
-    <nav class="navbar navbar-expand-md navbar-light fixed-top py-0" id="mainNavbar">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <img width="70" src="{{ asset('assets/images/my/logo-black-tp.png') }}" alt="logo" class="float-animation">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="/">Beranda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('profile-desa') ? 'active' : '' }}" href="/profile-desa">Profil Desa</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('help') ? 'active' : '' }}" href="/help">Bantuan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('reset-password') ? 'active' : '' }}"
-                            href="/forgot-password">Lupa Password</a>
-                    </li>
-
-                    @if (auth()->check())
-                        <li class="nav-item ms-2">
-                            <a class="btn btn-primary d-flex align-items-center" href="/myprofile">
-                                <i class="ti ti-user me-2"></i>
-                                <span>{{ auth()->user()->name }}</span>
-                            </a>
-                        </li>
-                    @else
-                        <li class="nav-item ms-2">
-                            <a class="btn btn-primary d-flex align-items-center" href="/login">
-                                <i class="ti ti-login me-2"></i>
-                                <span>Login</span>
-                            </a>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-        </div>
-    </nav>
+    @include('partials.navbar')
     <!-- [ Navbar End ] -->
 
     <!-- Main Content -->
@@ -349,6 +366,7 @@
                                     <li><a href="/">Beranda</a></li>
                                     <li><a href="/profile-desa">Profil Desa</a></li>
                                     <li><a href="/help">Pusat Bantuan</a></li>
+                                    <li><a href="/contact-us">Kontak</a></li>
                                     <li><a href="/pengaduan">Pengaduan Masyarakat</a></li>
                                     <li><a href="/register">Daftar Akun</a></li>
                                 </ul>
@@ -462,6 +480,60 @@
                     document.querySelector('.loader-bg').style.display = 'none';
                 }, 300);
             }, 1000);
+        });
+    </script>
+
+    <!-- Typed.js & Particles.js (only used on pages that include hero) -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // If welcome/hero elements exist, initialize Typed.js and Particles.js
+            if (document.querySelector('.typed-text')) {
+                try {
+                    var typed = new Typed('.typed-text', {
+                        strings: document.querySelector('.typed-text').getAttribute('data-typed-items').split(','),
+                        typeSpeed: 50,
+                        backSpeed: 30,
+                        backDelay: 2000,
+                        loop: true
+                    });
+                } catch (e) { console.warn('Typed.js init failed', e); }
+            }
+
+            if (document.getElementById('particles-js') && window.innerWidth > 768) {
+                try {
+                    particlesJS('particles-js', {
+                        particles: {
+                            number: { value: 60, density: { enable: true, value_area: 800 } },
+                            color: { value: '#ffffff' },
+                            shape: { type: 'circle' },
+                            opacity: { value: 0.3, random: true },
+                            size: { value: 2, random: true },
+                            line_linked: { enable: true, distance: 120, color: '#ffffff', opacity: 0.1, width: 1 },
+                            move: { enable: true, speed: 0.8, random: true, out_mode: 'out' }
+                        },
+                        interactivity: { detect_on: 'canvas', events: { onhover: { enable: false }, onclick: { enable: false }, resize: true } },
+                        retina_detect: true
+                    });
+                } catch (e) { console.warn('Particles init failed', e); }
+            }
+
+            // Navbar transparency when over hero
+            var navbar = document.getElementById('mainNavbar');
+            var headerHome = document.getElementById('home');
+            if (navbar && headerHome) {
+                navbar.classList.add('transparent');
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 100) {
+                        navbar.classList.remove('transparent');
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.add('transparent');
+                        navbar.classList.remove('scrolled');
+                    }
+                });
+            }
         });
     </script>
 
