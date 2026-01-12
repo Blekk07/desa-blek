@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContactRequest;
 use App\Mail\ContactMessageMail;
 use App\Models\ContactMessage;
+use App\Models\Berita;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -13,7 +14,8 @@ class ContactController extends Controller
 {
     public function show(Request $request)
     {
-        return view('contact');
+        $recentBeritas = Berita::query()->latest('published_at')->limit(5)->get();
+        return view('contact', compact('recentBeritas'));
     }
 
     public function store(ContactRequest $request): RedirectResponse
