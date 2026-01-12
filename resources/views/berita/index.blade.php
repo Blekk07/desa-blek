@@ -1,18 +1,19 @@
-@extends('layouts.app')
+@extends('layouts.landing')
 
 @section('title', 'Berita')
 
 @section('content')
-<section class="page-header py-5 bg-light border-bottom">
+<header id="home">
+    <div class="header-bg-container"></div>
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="h2 fw-bold mb-1">Berita & Pengumuman</h1>
-                <p class="text-muted mb-0">Informasi terbaru dari Desa Bangah.</p>
+                <h1 class="hero-title fw-bold mb-1">Berita & Pengumuman</h1>
+                <p class="hero-subtitle mb-0">Informasi terbaru dari Desa Bangah.</p>
             </div>
         </div>
     </div>
-</section>
+</header> 
 
 <section class="py-5">
     <div class="container">
@@ -45,5 +46,3 @@
 </section>
 
 @endsection
-
-

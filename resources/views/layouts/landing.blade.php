@@ -239,11 +239,13 @@
         /* ---------- Hero / Welcome overrides (to match welcome.blade.php) ---------- */
         header#home {
             position: relative;
-            min-height: 100vh;
+            min-height: 60vh;
             display: flex;
             align-items: center;
             overflow: hidden;
-            background: var(--gradient-primary);
+            background: transparent;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
         }
 
         .header-bg-container {
@@ -271,7 +273,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 60%);
+            background: none;
             z-index: 1;
         }
 
@@ -284,8 +286,8 @@
             z-index: 0;
         }
 
-        .hero-title { color: #fff; font-size: 3.5rem; line-height:1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .hero-subtitle { color: rgba(255,255,255,0.9); font-size:1.25rem; }
+        .hero-title { color: var(--dark-color); font-size: 3rem; line-height:1.2; }
+        .hero-subtitle { color: rgba(30,41,59,0.7); font-size:1.1rem; }
         .typed-text::after { content: '|'; animation: blink 0.7s infinite; margin-left:6px; }
         @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
 

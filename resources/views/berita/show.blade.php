@@ -1,13 +1,21 @@
-@extends('layouts.app')
+@extends('layouts.landing')
 
 @section('title', $berita->judul)
 
 @section('content')
-<article class="prose max-w-none">
-    <header class="mb-6">
-        <h1 class="text-2xl font-bold">{{ $berita->judul }}</h1>
-        <div class="text-sm text-gray-500">{{ $berita->published_at ? $berita->published_at->format('d M Y') : 'Draft' }} • {{ $berita->user?->name ?? '-' }}</div>
-    </header>
+<header id="home">
+    <div class="header-bg-container"></div>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="hero-title fw-bold mb-1">{{ $berita->judul }}</h1>
+                <p class="hero-subtitle mb-0">{{ $berita->published_at ? $berita->published_at->format('d M Y') : 'Draft' }} • {{ $berita->user?->name ?? '-' }}</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<article class="prose max-w-none mt-4"> 
 
     @if($berita->gambar)
         <div class="mb-6">
@@ -28,5 +36,3 @@
 </article>
 
 @endsection
-
-
