@@ -29,15 +29,4 @@
 
 @endsection
 
-@push('scripts')
-<script>
-    // Make navbar transparent on Berita detail page to match landing hero style
-    document.addEventListener('DOMContentLoaded', function() {
-        var navbar = document.getElementById('mainNavbar');
-        if (navbar) {
-            navbar.dataset.autotransparent = 'true';
-            navbar.classList.add('transparent');
-        }
-    });
-</script>
-@endpush
+
