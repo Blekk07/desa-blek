@@ -18,7 +18,7 @@ class Penduduk extends Model
         'tanggal_lahir',
         'jenis_kelamin',
         'agama',
-        'alamat_lengkap',
+        'alamat',
         'rt',
         'rw',
         'status_perkawinan',
@@ -28,7 +28,8 @@ class Penduduk extends Model
         'nama_ayah',
         'nama_ibu',
         'no_telepon',
-        'keterangan'
+        'keterangan',
+        'desa'
     ];
 
     protected $casts = [

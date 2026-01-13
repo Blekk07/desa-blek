@@ -3,24 +3,23 @@
 @section('title', $berita->judul)
 
 @section('content')
-<header id="home">
-    <div class="header-bg-container"></div>
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="hero-title fw-bold mb-1">{{ $berita->judul }}</h1>
-                <p class="hero-subtitle mb-0">{{ $berita->published_at ? $berita->published_at->format('d M Y') : 'Draft' }} • {{ $berita->user?->name ?? '-' }}</p>
-            </div>
-        </div>
-    </div>
-</header>
-
-<article class="prose max-w-none mt-4"> 
+<main class="site-main">
+<article class="prose max-w-none">
+    <header class="mb-6">
+        <h1 class="text-2xl font-bold">{{ $berita->judul }}</h1>
+        <div class="text-sm text-gray-500">{{ $berita->published_at ? $berita->published_at->format('d M Y') : 'Draft' }} • {{ $berita->user?->name ?? '-' }}</div>
+    </header>
 
     @if($berita->gambar)
-        <div class="mb-6">
-            <img src="{{ asset('storage/' . $berita->gambar) }}" alt="{{ $berita->judul }}" class="w-full rounded">
-        </div>
+        @php
+            $imgSrc = str_starts_with($berita->gambar, 'http') ? $berita->gambar : asset($berita->gambar);
+        @endphp
+        <figure class="mb-6">
+            <img src="{{ $imgSrc }}" alt="{{ $berita->judul }}" class="w-full rounded">
+            @if(!empty($berita->caption))
+                <figcaption class="text-sm text-muted mt-2">{{ $berita->caption }}</figcaption>
+            @endif
+        </figure>
     @endif
 
     <div class="content mb-8">{!! $berita->konten !!}</div>
@@ -34,5 +33,6 @@
         </ul>
     </aside>
 </article>
+</main>
 
 @endsection

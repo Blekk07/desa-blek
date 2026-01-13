@@ -1,11 +1,22 @@
-@extends('layouts.dashboard')
+@extends('layouts.landing')
 
 @section('title', 'Help / Bantuan Sistem Informasi Desa')
 
 @section('content')
-<div class="pc-container content">
-    <h1>Help / Bantuan Sistem Informasi Desa</h1>
+<main class="site-main">
+<section class="page-header py-5 bg-light border-bottom">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h1 class="h2 fw-bold mb-1">Help / Bantuan</h1>
+        <p class="text-muted mb-0">Panduan dan jawaban atas pertanyaan umum mengenai Sistem Informasi Desa.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
+<section class="py-5">
+  <div class="container">
     <div class="card">
         <h3>1. Apa itu Sistem Informasi Desa?</h3>
         <p>
@@ -72,5 +83,7 @@
             <b>Telepon:</b> 0812-3456-7890
         </p>
     </div>
-</div>
+  </div>
+</section>
+</main>
 @endsection

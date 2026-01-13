@@ -22,9 +22,9 @@
             <div class="hero-profile p-5 rounded-4 text-white position-relative overflow-hidden">
                 <div class="hero-overlay"></div>
                 <div class="position-relative z-1">
-                    <h1 class="fw-bold mb-2">Desa Maju Jaya</h1>
-                    <p class="mb-0 fs-5">Kecamatan Gunung Sari, Kabupaten Lamongan</p>
-                    <p class="mb-0">"Bersama Membangun Desa yang Lebih Baik"</p>
+                    <h1 class="fw-bold mb-2">{{ $profileData['nama_desa'] }}</h1>
+                    <p class="mb-0 fs-5">{{ $profileData['kecamatan'] }}, Kabupaten {{ $profileData['kabupaten'] }}</p>
+                    <p class="mb-0">"{{ $profileData['visi'] }}"</p>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 <div class="icon-circle bg-primary mx-auto mb-3">
                     <i class="ti ti-users text-white fs-3"></i>
                 </div>
-                <h3 class="fw-bold mb-1">4,236</h3>
+                <h3 class="fw-bold mb-1">{{ number_format($totalPenduduk) }}</h3>
                 <p class="text-muted mb-0">Jumlah Penduduk</p>
             </div>
         </div>
@@ -46,7 +46,7 @@
                 <div class="icon-circle bg-success mx-auto mb-3">
                     <i class="ti ti-home text-white fs-3"></i>
                 </div>
-                <h3 class="fw-bold mb-1">1,205</h3>
+                <h3 class="fw-bold mb-1">{{ number_format($totalKeluarga) }}</h3>
                 <p class="text-muted mb-0">Kepala Keluarga</p>
             </div>
         </div>
@@ -55,7 +55,7 @@
                 <div class="icon-circle bg-warning mx-auto mb-3">
                     <i class="ti ti-building-community text-white fs-3"></i>
                 </div>
-                <h3 class="fw-bold mb-1">8</h3>
+                <h3 class="fw-bold mb-1">{{ $totalDusun }}</h3>
                 <p class="text-muted mb-0">Dusun</p>
             </div>
         </div>
@@ -64,7 +64,7 @@
                 <div class="icon-circle bg-info mx-auto mb-3">
                     <i class="ti ti-map-pin text-white fs-3"></i>
                 </div>
-                <h3 class="fw-bold mb-1">550</h3>
+                <h3 class="fw-bold mb-1">{{ $profileData['luas_wilayah'] }}</h3>
                 <p class="text-muted mb-0">Luas (Ha)</p>
             </div>
         </div>
@@ -86,7 +86,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Nama Desa</label>
-                                <p class="fw-bold mb-0">Desa Maju Jaya</p>
+                                <p class="fw-bold mb-0">{{ $profileData['nama_desa'] }}</p>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center mb-3">
@@ -95,7 +95,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Kecamatan</label>
-                                <p class="fw-bold mb-0">Gunung Sari</p>
+                                <p class="fw-bold mb-0">{{ $profileData['kecamatan'] }}</p>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center mb-3">
@@ -104,7 +104,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Kabupaten</label>
-                                <p class="fw-bold mb-0">Lamongan</p>
+                                <p class="fw-bold mb-0">{{ $profileData['kabupaten'] }}</p>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center mb-3">
@@ -113,7 +113,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Provinsi</label>
-                                <p class="fw-bold mb-0">Jawa Timur</p>
+                                <p class="fw-bold mb-0">{{ $profileData['provinsi'] }}</p>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center">
@@ -122,7 +122,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Kode Pos</label>
-                                <p class="fw-bold mb-0">62251</p>
+                                <p class="fw-bold mb-0">{{ $profileData['kode_pos'] }}</p>
                             </div>
                         </div>
                     </div>
@@ -144,8 +144,8 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Kepala Desa</label>
-                                <p class="fw-bold mb-0">Budi Santoso</p>
-                                <small class="text-muted">Masa Jabatan: 2024 - 2030</small>
+                                <p class="fw-bold mb-0">{{ $profileData['kepala_desa'] }}</p>
+                                <small class="text-muted">Masa Jabatan: {{ $profileData['masa_jabatan_kepala'] }}</small>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center mb-3">
@@ -154,7 +154,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Sekretaris Desa</label>
-                                <p class="fw-bold mb-0">Agus Pratama</p>
+                                <p class="fw-bold mb-0">{{ $profileData['sekretaris_desa'] }}</p>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center mb-3">
@@ -163,7 +163,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Bendahara Desa</label>
-                                <p class="fw-bold mb-0">Siti Aminah</p>
+                                <p class="fw-bold mb-0">{{ $profileData['bendahara_desa'] }}</p>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center">
@@ -172,7 +172,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Alamat Kantor</label>
-                                <p class="fw-bold mb-0">Jl. Desa Maju No. 123</p>
+                                <p class="fw-bold mb-0">{{ $profileData['alamat_kantor'] }}</p>
                             </div>
                         </div>
                     </div>
@@ -190,8 +190,8 @@
                     <div class="d-flex align-items-start">
                         <i class="ti ti-bulb text-warning fs-2 me-3 mt-1"></i>
                         <div>
-                            <p class="fw-semibold mb-2">"Terwujudnya Desa Maju Jaya yang Mandiri, Sejahtera, dan Berbudaya"</p>
-                            <p class="text-muted mb-0">Menjadi desa yang unggul dalam pembangunan berkelanjutan dengan melibatkan partisipasi aktif seluruh masyarakat.</p>
+                            <p class="fw-semibold mb-2">"{{ $profileData['visi'] }}"</p>
+                            <p class="text-muted mb-0">{{ $profileData['visi_deskripsi'] }}</p>
                         </div>
                     </div>
                 </div>
@@ -212,7 +212,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Poskesdes</label>
-                                <p class="fw-bold mb-0">(0321) 456789</p>
+                                <p class="fw-bold mb-0">{{ $profileData['poskesdes'] }}</p>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center mb-3">
@@ -221,7 +221,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Pos Kamling</label>
-                                <p class="fw-bold mb-0">(0321) 456790</p>
+                                <p class="fw-bold mb-0">{{ $profileData['pos_kamling'] }}</p>
                             </div>
                         </div>
                         <div class="info-item d-flex align-items-center">
@@ -230,7 +230,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <label class="text-muted small mb-1">Kebakaran</label>
-                                <p class="fw-bold mb-0">113</p>
+                                <p class="fw-bold mb-0">{{ $profileData['kebakaran'] }}</p>
                             </div>
                         </div>
                     </div>

@@ -386,16 +386,30 @@
     <div class="navbar-wrapper">
         <div class="m-header justify-content-center">
             <a href="/" class="b-brand text-capitalize fw-bold">
-                <span class="fs-4">{{ auth()->user()->role }} Dashboard</span>
+                <span class="fs-4">{{ $role ?? 'Guest' }} Dashboard</span>
             </a>
         </div>
 
         <div class="navbar-content">
             <ul class="pc-navbar">
-                @if (auth()->user()->role === 'admin')
+                @if (auth()->check() && auth()->user()->role === 'admin')
                     @include('admin.sidebar')
-                @else
+                @elseif (auth()->check())
                     @include('user.sidebar')
+                @else
+                    {{-- Guest links for public users --}}
+                    <li class="pc-item">
+                        <a href="/" class="pc-link"><i class="ti ti-home"></i><span class="pc-mtext">Beranda</span></a>
+                    </li>
+                    <li class="pc-item">
+                        <a href="{{ route('berita.index') }}" class="pc-link"><i class="ti ti-newspaper"></i><span class="pc-mtext">Berita</span></a>
+                    </li>
+                    <li class="pc-item">
+                        <a href="/profile-desa" class="pc-link"><i class="ti ti-info-circle"></i><span class="pc-mtext">Profil Desa</span></a>
+                    </li>
+                    <li class="pc-item">
+                        <a href="/login" class="pc-link"><i class="ti ti-login"></i><span class="pc-mtext">Login</span></a>
+                    </li>
                 @endif
             </ul>
         </div>
@@ -474,7 +488,7 @@ document.addEventListener("DOMContentLoaded", function () {
             html: `
                 <div style="text-align: center;">
                     <p>Anda masuk sebagai <b style="background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{{ $role }}</b></p>
-                    <p>Semoga harimu menyenangkan 😊</p>
+                    <p>Welcome to the Dashboard!</p>
                 </div>
             `,
             icon: "success",

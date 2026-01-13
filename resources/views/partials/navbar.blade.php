@@ -49,36 +49,3 @@
         </div>
     </div>
 </nav>
-
-<script>
-    (function(){
-        const navbar = document.getElementById('mainNavbar');
-        const headerHome = document.getElementById('home');
-
-        function updateNav() {
-            if (!navbar) return;
-
-            if (headerHome) {
-                // Over hero: show transparent at top, scrolled after threshold
-                if (window.scrollY > 100) {
-                    navbar.classList.remove('transparent');
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.add('transparent');
-                    navbar.classList.remove('scrolled');
-                }
-            } else {
-                // Regular pages: no transparent, only scrolled state
-                if (window.scrollY > 100) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-                navbar.classList.remove('transparent');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', updateNav);
-        window.addEventListener('scroll', updateNav);
-    })();
-</script>

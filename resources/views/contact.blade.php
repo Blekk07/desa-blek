@@ -3,18 +3,18 @@
 @section('title', 'Hubungi Kami')
 
 @section('content')
+<main class="site-main">
 
-<header id="home">
-    <div class="header-bg-container"></div>
+<section class="page-header py-5 bg-light border-bottom">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-8">
-                <h1 class="hero-title fw-bold mb-1">Hubungi Kami</h1>
-                <p class="hero-subtitle mb-0">Kirim pertanyaan atau laporan, kami akan membalas secepatnya.</p>
+                <h1 class="h2 fw-bold mb-1">Hubungi Kami</h1>
+                <p class="text-muted mb-0">Kirim pertanyaan atau laporan, kami akan membalas secepatnya.</p>
             </div>
         </div>
     </div>
-</header> 
+</section>
 
 <section class="py-5">
     <div class="container">
@@ -114,5 +114,6 @@
         </div>
     </div>
 </section>
+</main>
 
 @endsection

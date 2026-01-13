@@ -26,7 +26,7 @@
 </head>
 <body>
     @php
-        $logoPath = public_path('images/logo.png');
+        $logoPath = public_path('assets/images/my/logo-tp.png');
     @endphp
 
     <div class="header">
@@ -40,7 +40,7 @@
 
         <div class="header-text">
             <div class="gov">PEMERINTAH DESA BANGAH</div>
-            <div class="area">KETUA RT. XXX RW. XXX (Nama Desa)</div>
+            <div class="area">KETUA RT. XXX RW. XXX (Bangah)</div>
             <h2 class="surat">SURAT KETERANGAN {{ strtoupper($pengajuan->jenis_surat) }}</h2>
             <div class="no">No: {{ str_pad($pengajuan->id, 5, '0', STR_PAD_LEFT) }}</div>
         </div>
@@ -234,18 +234,34 @@
             <p>{{ $pengajuan->getValue('keterangan_tambahan') }}</p>
         @endif
 
-        <div style="height:30px;"></div>
+        <div style="height:18px"></div>
 
         <p>Demikian surat keterangan ini dibuat untuk digunakan sebagaimana mestinya.</p>
 
-        <div style="height:40px"></div>
+        <div style="height:12px"></div>
 
         <table class="table">
             <tr>
                 <td width="55%"></td>
                 <td style="text-align:center">
-                    <p>Desa, {{ now()->format('d F Y') }}</p>
-                    <p style="margin-top:60px">( Kepala Desa )</p>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <p style="margin:0">Desa Bangah, {{ now()->format('d F Y') }}</p>
+
+                        <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+                            @if(!empty($qrSrc))
+                                <img src="{{ $qrSrc }}" alt="QR Code" style="width:80px;height:80px; display:block;">
+                            @endif
+
+                            <div style="text-align:center;">
+                                <p style="margin:0 0 8px 0">&nbsp;</p>
+                                <p style="margin:0">( Kepala Desa )</p>
+                            </div>
+                        </div>
+
+                        @if(!empty($qrSrc))
+                            <div style="font-size:10px;margin-top:6px;">Scan untuk verifikasi</div>
+                        @endif
+                    </div>
                 </td>
             </tr>
         </table>

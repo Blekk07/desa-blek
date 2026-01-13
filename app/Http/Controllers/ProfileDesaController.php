@@ -101,7 +101,7 @@ class ProfileDesaController extends Controller
             'luas_wilayah' => 550,
         ];
 
-        return view('profile-desa', [
+        return view('public.profile', [
             'totalPenduduk' => $totalPenduduk,
             'totalKeluarga' => $totalKeluarga,
             'totalDusun' => $totalDusun,

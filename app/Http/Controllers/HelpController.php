@@ -16,6 +16,6 @@ class HelpController extends Controller
      */
     public function publicHelp()
     {
-        return view('help-public');
+        return view('help');
     }
 }

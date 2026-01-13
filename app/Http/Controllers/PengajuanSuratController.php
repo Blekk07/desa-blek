@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PengajuanSurat;
 use App\Models\Penduduk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class PengajuanSuratController extends Controller
 {
@@ -93,6 +94,36 @@ class PengajuanSuratController extends Controller
             $validated['keperluan'] = $this->generateKeperluan($validated['jenis_surat']);
         }
 
+        // Handle file uploads
+        if ($request->hasFile('lampiran_ktp')) {
+            $file = $request->file('lampiran_ktp');
+            $path = $file->store('pengajuan-surat/lampiran-ktp', 'public');
+            $validated['lampiran_ktp'] = [$path];
+        }
+
+        if ($request->hasFile('lampiran_kk')) {
+            $file = $request->file('lampiran_kk');
+            $path = $file->store('pengajuan-surat/lampiran-kk', 'public');
+            $validated['lampiran_kk'] = [$path];
+        }
+
+        // Handle multiple lampiran_pendukung files
+        if ($request->hasFile('lampiran_pendukung')) {
+            $paths = [];
+            foreach ($request->file('lampiran_pendukung') as $file) {
+                if ($file) {
+                    $path = $file->store('pengajuan-surat/lampiran-pendukung', 'public');
+                    $paths[] = $path;
+                }
+            }
+            if (!empty($paths)) {
+                $validated['lampiran_pendukung'] = $paths;
+            }
+        }
+
+        // Remove file from validated since we don't need to store the file object
+        unset($validated['lampiran_ktp'], $validated['lampiran_kk'], $validated['lampiran_pendukung'], $validated['bukti_usaha']);
+
         PengajuanSurat::create($validated);
 
         return redirect()->route('user.pengajuan-surat.index')
@@ -167,6 +198,47 @@ class PengajuanSuratController extends Controller
         return view('admin.pengajuan_surat.show', compact('pengajuan'));
     }
 
+    // Public signed verification link for pengajuan (legacy)
+    public function verify(Request $request, $id)
+    {
+        $pengajuan = PengajuanSurat::findOrFail($id);
+        return view('pengajuan.verify', compact('pengajuan'));
+    }
+
+    // Public TTD-style verification using ?p=id|user_id|role|sig
+    public function ttd(Request $request)
+    {
+        $p = $request->query('p');
+        if (empty($p)) {
+            return response()->view('errors.403', [], 403);
+        }
+
+        // Expect 4 parts
+        $parts = explode('|', $p);
+        if (count($parts) !== 4) {
+            return response()->view('errors.403', [], 403);
+        }
+
+        [$id, $userId, $role, $sig] = $parts;
+
+        // Validate signature
+        $payload = $id . '|' . $userId . '|' . $role;
+        $expected = substr(hash_hmac('sha256', $payload, config('app.key')), 0, 6);
+
+        if (!hash_equals($expected, (string) $sig)) {
+            return response()->view('errors.403', [], 403);
+        }
+
+        $pengajuan = PengajuanSurat::find($id);
+        if (!$pengajuan) {
+            return response()->view('errors.403', [], 403);
+        }
+
+        $verifyUrl = url('/pengajuan/ttd') . '?p=' . urlencode($p);
+
+        return view('pengajuan.verify', compact('pengajuan', 'verifyUrl'));
+    }
+
     // Untuk Admin - Update status pengajuan
     public function updateStatus(Request $request, $id)
     {
@@ -210,7 +282,34 @@ class PengajuanSuratController extends Controller
             $pdf = null;
             // Attempt to use the PDF facade (barryvdh/laravel-dompdf)
             if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class) || class_exists(\Barryvdh\DomPDF\PDF::class) || class_exists('PDF')) {
-                $pdf = \PDF::loadView('pdfs.pengajuan_surat', compact('pengajuan'));
+                // Build verification parameter p in the format: id|user_id|role|sig
+                $role = 'kepsek';
+                $payload = $pengajuan->id . '|' . ($pengajuan->user_id ?? '') . '|' . $role;
+                $sig = substr(hash_hmac('sha256', $payload, config('app.key')), 0, 6);
+                $p = $payload . '|' . $sig;
+
+                $verifyUrl = url('/pengajuan/ttd') . '?p=' . urlencode($p);
+
+                // Generate QR image from remote service and embed as data URI so Dompdf renders it reliably
+                $qrSrc = null;
+                try {
+                    $remote = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' . urlencode($verifyUrl);
+                    if (class_exists(\Illuminate\Support\Facades\Http::class)) {
+                        $response = \Illuminate\Support\Facades\Http::get($remote);
+                        if ($response->ok()) {
+                            $qrSrc = 'data:image/png;base64,' . base64_encode($response->body());
+                        }
+                    } else {
+                        $img = @file_get_contents($remote);
+                        if ($img !== false) {
+                            $qrSrc = 'data:image/png;base64,' . base64_encode($img);
+                        }
+                    }
+                } catch (\Throwable $e) {
+                    $qrSrc = null;
+                }
+
+                $pdf = \PDF::loadView('pdfs.pengajuan_surat', compact('pengajuan', 'qrSrc', 'verifyUrl'));
                 return $pdf->download('surat-' . str_pad($pengajuan->id, 5, '0', STR_PAD_LEFT) . '.pdf');
             }
 

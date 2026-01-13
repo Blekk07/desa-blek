@@ -28,6 +28,12 @@ class AppServiceProvider extends ServiceProvider
     {
         // Share authenticated user data with all views
         View::composer('*', function ($view) {
+            // Provide defaults so views can render safely for guests
+            $user = null;
+            $name = 'Guest';
+            $role = 'guest';
+            $avatar = url('assets/images/user/default-avatar.png');
+
             if (Auth::check()) {
                 $user = Auth::user();
                 $name = $user->name;
@@ -35,12 +41,17 @@ class AppServiceProvider extends ServiceProvider
                 $avatar = $user->provider == null
                     ? url('assets/images/user/' . $user->avatar)
                     : $user->avatar;
-
-                // share tempat lahir list for forms
-                $tempatLahirList = LocationHelper::getTempatLahirGrouped();
-
-                $view->with(compact('user', 'name', 'role', 'avatar'));
             }
+
+            // share tempat lahir list for forms (if helper exists)
+            try {
+                $tempatLahirList = LocationHelper::getTempatLahirGrouped();
+                $view->with('tempatLahirList', $tempatLahirList);
+            } catch (\Throwable $e) {
+                // ignore if helper not available in some environments
+            }
+
+            $view->with(compact('user', 'name', 'role', 'avatar'));
         });
 
         // Register Socialite provider
@@ -49,9 +60,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Force HTTPS in production/local environment
-        if ($this->app->environment('local')) {
-            URL::forceRootUrl(config('app.url'));
-            URL::forceScheme('https');
-        }
+        // if ($this->app->environment('local')) {
+        //     URL::forceRootUrl(config('app.url'));
+        //     URL::forceScheme('https');
+        // }
     }
 }

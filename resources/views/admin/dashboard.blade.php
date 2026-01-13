@@ -315,25 +315,25 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* HERO SECTION RESPONSIVE */
+/* HERO SECTION */
 .hero-section {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a69ac 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     border: none;
     position: relative;
 }
 
 .hero-icon-wrapper {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
-    flex-shrink: 0;
+    font-size: 1.5rem;
 }
 
+/* HERO TYPOGRAPHY */
 .hero-title {
     font-size: 1.3rem;
     line-height: 1.3;
@@ -348,12 +348,6 @@
 }
 
 @media (min-width: 768px) {
-    .hero-icon-wrapper {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
-    }
-    
     .hero-title {
         font-size: 1.8rem;
     }
@@ -365,28 +359,27 @@
     .date-text, .time-text {
         font-size: 0.9rem;
     }
-}
+} 
 
-/* STAT CARDS RESPONSIVE */
+/* STAT CARDS */
 .stat-card {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     transition: var(--transition);
     overflow: hidden;
-    height: 100%;
 }
 
 .stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 .stat-bg-icon {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    font-size: 3rem;
+    top: -10px;
+    right: -10px;
+    font-size: 5rem;
     opacity: 0.03;
     color: var(--primary-color);
 }
@@ -404,9 +397,9 @@
 }
 
 .stat-trend {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 500;
-}
+} 
 
 @media (min-width: 768px) {
     .stat-bg-icon {
@@ -438,16 +431,15 @@
     }
 }
 
-/* MENU CARDS RESPONSIVE */
+/* MENU CARDS */
 .menu-card {
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
     transition: var(--transition);
     position: relative;
     overflow: hidden;
-    height: 100%;
 }
 
 .menu-bg-hover {

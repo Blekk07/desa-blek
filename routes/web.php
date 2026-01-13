@@ -28,7 +28,7 @@ Route::post('/contact-us', [ContactController::class, 'store'])->name('contact.s
 
 // Public profile and help pages (styled like contact page)
 Route::get('/profile-desa', [ProfileDesaController::class, 'publicShow'])->name('profile-desa');
-Route::get('/help', [\App\Http\Controllers\HelpController::class, 'publicHelp'])->name('help.public');
+Route::get('/help', [\App\Http\Controllers\HelpController::class, 'publicHelp'])->name('help');
 
 // Berita public listing
 Route::get('/berita', [PublicBeritaController::class, 'index'])->name('berita.index');
@@ -216,8 +216,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/pengaduan', [PengaduanController::class, 'store'])->name('pengaduan.store');
         Route::get('/pengaduan/{id}', [PengaduanController::class, 'show'])->name('pengaduan.show');
 
-        // PROFIL DESA
-        Route::get('/profile-desa', [ProfileDesaController::class, 'show'])->name('user.profile-desa');
+        // PROFIL DESA (user dashboard)
+        Route::get('/user/profile-desa', [ProfileDesaController::class, 'show'])->name('user.profile-desa');
 
         // PENGAJUAN SURAT
         Route::get('/pengajuan-surat', [PengajuanSuratController::class, 'index'])->name('user.pengajuan-surat.index');
@@ -226,8 +226,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pengajuan-surat/{id}', [PengajuanSuratController::class, 'show'])->name('user.pengajuan-surat.show');
         Route::get('/pengajuan-surat/{id}/print', [PengajuanSuratController::class, 'print'])->name('user.pengajuan-surat.print');
 
-        // HELP PAGE
-        Route::get('/help', [HelpController::class, 'help'])->name('help');
+        // HELP PAGE (dashboard)
+        Route::get('/user/help', [HelpController::class, 'help'])->name('help.dashboard');
 
         // LAPORAN WARGA (USER) - HAPUS ATAU PERBAIKI
         // Route::post('/laporan/store', function (\Illuminate\Http\Request $request) {

@@ -44,11 +44,18 @@ class PengajuanSurat extends Model
         'alamat_tujuan',
         'alasan_pindah',
         // Jenis Surat Lainnya
-        'jenis_lainnya'
+        'jenis_lainnya',
+        // File lampiran
+        'lampiran_ktp',
+        'lampiran_kk',
+        'lampiran_pendukung'
     ];
 
     protected $casts = [
-        'tanggal_selesai' => 'datetime'
+        'tanggal_selesai' => 'datetime',
+        'lampiran_ktp' => 'json',
+        'lampiran_kk' => 'json',
+        'lampiran_pendukung' => 'json'
     ];
 
     public function user()
