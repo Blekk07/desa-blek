@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Cache\RateLimiting\Limit;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 use SocialiteProviders\Discord\Provider;
 use App\Helpers\LocationHelper;
@@ -58,6 +61,28 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(SocialiteWasCalled::class, function (SocialiteWasCalled $event) {
             $event->extendSocialite('discord', Provider::class);
         });
+
+        // Rate limiters for auth-related endpoints to mitigate brute-force attacks
+        RateLimiter::for('login', function (Request $request) {
+            $key = $request->input('nik').'|'.$request->ip();
+            return Limit::perMinute(5)->by($key);
+        });
+
+        RateLimiter::for('register', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip());
+        });
+
+        RateLimiter::for('otp', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip());
+        });
+
+        RateLimiter::for('password', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip());
+        });
+
+        // Global input sanitization (lightweight) - defense in depth for SQLi/XSS
+        // We register a middleware into the "web" group to sanitize incoming request data
+        $this->app['router']->pushMiddlewareToGroup('web', \App\Http\Middleware\SanitizeInput::class);
 
         // Force HTTPS in production/local environment
         // if ($this->app->environment('local')) {

@@ -249,17 +249,20 @@
 
                         <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
                             @if(!empty($qrSrc))
-                                <img src="{{ $qrSrc }}" alt="QR Code" style="width:80px;height:80px; display:block;">
+                                <div style="display:inline-block; text-align:center; border:1px solid #e9f5ff; padding:8px; border-radius:8px;">
+                                    <img src="{{ $qrSrc }}" alt="QR Code" style="width:90px;height:90px; display:block;">
+                                    <div style="font-size:10px;margin-top:6px;color:#{{ config('app.qr.fg', '0052d4') }};">Sistem Informasi Desa Bangah</div>
+                                    <div style="font-size:9px;margin-top:4px;color:#777;">Scan untuk verifikasi</div>
+                                </div>
                             @endif
 
                             <div style="text-align:center;">
                                 <p style="margin:0 0 8px 0">&nbsp;</p>
                                 <p style="margin:0">( Kepala Desa )</p>
                             </div>
-                        </div>
 
                         @if(!empty($qrSrc))
-                            <div style="font-size:10px;margin-top:6px;">Scan untuk verifikasi</div>
+                            <div style="font-size:10px;margin-top:6px;">&nbsp;</div>
                         @endif
                     </div>
                 </td>

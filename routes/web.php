@@ -42,16 +42,16 @@ Route::get('/pengajuan/ttd', [PengajuanSuratController::class, 'ttd'])->name('pe
 
 // Email verification
 Route::get('/verify-email', [AuthController::class, 'showVerifyForm'])->name('verify.form');
-Route::post('/send-otp', [AuthController::class, 'sendOtp'])->name('send.otp');
-Route::post('/verify-email', [AuthController::class, 'verify'])->name('verify.otp');
+Route::post('/send-otp', [AuthController::class, 'sendOtp'])->name('send.otp')->middleware('throttle:otp');
+Route::post('/verify-email', [AuthController::class, 'verify'])->name('verify.otp')->middleware('throttle:otp');
 
 // Guest Routes
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post')->middleware('throttle:login');
 
     Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.post')->middleware('throttle:register');
 
     Route::get('/auth/{provider}', [AuthController::class, 'redirect'])->name('sso.redirect');
     Route::get('/auth/{provider}/callback', [AuthController::class, 'callback'])->name('sso.callback');
@@ -63,7 +63,7 @@ Route::middleware(['guest'])->group(function () {
         ->name('register.google.store');
 
     Route::get('/forgot-password', [AuthController::class, 'showRequestForm'])->name('forgot_password.email_form');
-    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot_password.send_link');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot_password.send_link')->middleware('throttle:password');
     Route::get('/password-reset/{token}', [AuthController::class, 'showResetForm'])->where('token', '.*')->name('password.reset');
     Route::post('/password-reset', [AuthController::class, 'resetPassword'])->name('password.update');
 });

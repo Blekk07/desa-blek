@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
 {
@@ -78,8 +79,8 @@ class BeritaController extends Controller
 
         if ($request->hasFile('gambar')) {
             // remove old if exists
-            if ($berita->gambar && \Storage::disk('public')->exists($berita->gambar)) {
-                \Storage::disk('public')->delete($berita->gambar);
+            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
+                Storage::disk('public')->delete($berita->gambar);
             }
             $data['gambar'] = $request->file('gambar')->store('berita', 'public');
         }
@@ -94,8 +95,8 @@ class BeritaController extends Controller
      */
     public function destroy(Berita $berita)
     {
-        if ($berita->gambar && \Storage::disk('public')->exists($berita->gambar)) {
-            \Storage::disk('public')->delete($berita->gambar);
+        if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
+            Storage::disk('public')->delete($berita->gambar);
         }
         $berita->delete();
         return redirect()->route('admin.berita.index')->with('success', 'Berita dihapus');

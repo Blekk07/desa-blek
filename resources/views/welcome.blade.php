@@ -4,8 +4,41 @@
 
 @section('content')
 <main class="site-main">
+    <style>
+      :root { --primary: #0052d4; --accent: #6a11cb; --muted: #6c757d; --card-radius: 12px; }
+
+      /* Header / Hero */
+      header#home { padding: 80px 0; min-height: 420px; position: relative; overflow: hidden; }
+      .hero-content-wrapper { padding-top: 20px; padding-bottom: 10px; }
+      .hero-title { font-size: 2.2rem; line-height:1.12; text-shadow: 0 10px 30px rgba(0,0,0,0.22); }
+      .hero-subtitle { max-width: 720px; margin: 0 auto; color: rgba(255,255,255,0.9); }
+      header .container { position:relative; z-index:2; }
+      .header-bg-container, .cta-bg-container { position:absolute; inset:0; z-index:0; opacity:0.9; }
+      .animated-bg-overlay, .particles-container { position:absolute; inset:0; z-index:1; }
+
+      /* Features */
+      .feature-card { border-radius:var(--card-radius); transition: transform .18s ease, box-shadow .18s ease; overflow:hidden; }
+      .feature-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(10,10,10,0.06); }
+      .feature-icon { width:72px; height:72px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:#f8fbff; color:var(--primary); margin:0 auto 12px auto; }
+      .feature-card .card-body { text-align:center; padding:24px; }
+      .features-section .section-title { margin-top:10px; margin-bottom:18px; }
+
+      /* CTA */
+      .cta-block { background: linear-gradient(135deg, rgba(58,123,213,0.92) 0%, rgba(123,58,213,0.85) 100%); padding: 56px 0; border-radius: 10px; margin-top: 30px; color: #fff; position:relative; overflow:hidden; }
+      .cta-block .container { position:relative; z-index:2; }
+      .cta-button { background: #fff; color: var(--primary); border:none; }
+
+      /* Testimonials */
+      .testimonial-card { border-radius:12px; box-shadow: 0 6px 18px rgba(15,15,15,0.06); }
+      .testimonial-card .card-body { min-height: 160px; }
+
+      /* Misc */
+      .scroll-indicator { position:absolute; left:50%; transform:translateX(-50%); bottom:16px; color:#fff; z-index:3; }
+
+      @media (max-width:768px) { .hero-title { font-size:1.6rem; } .features-section .row > .col-md-4 { margin-bottom:18px; } .hero-content-wrapper { padding-top:10px; } }
+    </style>
     <!-- [ Header ] start -->
-    <header id="home" class="d-flex align-items-center">
+    <header id="home" class="d-flex align-items-center" style="background: linear-gradient(135deg, #0052d4); background-size: cover; background-repeat: no-repeat;">
         <!-- Responsive Background Container (gradient fallback) -->
         <div class="header-bg-container">
             <div class="header-bg-fallback" style="background: linear-gradient(135deg, rgba(58,123,213,0.92) 0%, rgba(123,58,213,0.85) 100%); background-size: cover; background-repeat: no-repeat;"></div>
@@ -111,11 +144,15 @@
         </div>
     </section>
     <!-- [ Statistik ] End -->
-
     <!-- [ CTA ] start -->
     <section class="cta-block">
-        <!-- Animated Overlay -->
+        <!-- Responsive Background Container (gradient fallback) -->
+        <div class="cta-bg-container">
+            <div class="cta-bg-fallback" style="background: linear-gradient(135deg, rgba(58,123,213,0.92) 0%, rgba(123,58,213,0.85) 100%); background-size: cover; background-repeat: no-repeat;"></div>
+        </div>
+
         <div class="animated-cta-overlay"></div>
+        <div class="particles-container" id="particles-cta"></div>
 
         <div class="container" style="position: relative; z-index: 2;">
             <div class="row justify-content-center">

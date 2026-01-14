@@ -14,6 +14,7 @@ use App\Models\EmailOtp;
 use App\Mail\VerifyOtpMail;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AuthController extends Controller
 {
@@ -40,13 +41,23 @@ class AuthController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
+        // Throttle by ip+email to limit abuse
+        $key = 'password|'.$request->ip().'|'.$request->input('email');
+        if (RateLimiter::tooManyAttempts($key, 3)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors(['email' => 'Terlalu banyak permintaan reset. Coba lagi dalam '.$seconds.' detik.']);
+        }
+
         $status = Password::sendResetLink(
             $request->only('email')
         );
 
         if ($status === Password::RESET_LINK_SENT) {
+            RateLimiter::clear($key);
             return back()->with('success', __($status));
         }
+
+        RateLimiter::hit($key, 300);
 
         return back()->withErrors(['email' => __($status)]);
     }
@@ -96,9 +107,24 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
+        // Brute-force protection: limit attempts per nik+ip
+        $key = 'login|'.$request->ip().'|'.$request->input('nik');
+        $maxAttempts = 5;
+        $decaySeconds = 60; // 1 minute
+
+        if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors([
+                'nik' => 'Terlalu banyak percobaan login. Coba lagi dalam '.$seconds.' detik.'
+            ])->withInput($request->except('password'));
+        }
+
         $user = User::where('nik', $credentials['nik'])->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
+            // On successful login, clear attempts and proceed
+            RateLimiter::clear($key);
+
             Auth::login($user);
             $request->session()->regenerate();
 
@@ -106,6 +132,9 @@ class AuthController extends Controller
                 ? redirect()->route('admin.dashboard')
                 : redirect()->route('user.dashboard');
         }
+
+        // On failed attempt, record it
+        RateLimiter::hit($key, $decaySeconds);
 
         return back()->withErrors([
             'nik' => 'NIK atau password yang Anda masukkan salah.',
@@ -401,6 +430,13 @@ class AuthController extends Controller
             return redirect()->route('login');
         }
 
+        // Throttle OTP requests per email+ip
+        $key = 'otp|'.$request->ip().'|'.$user->email;
+        if (RateLimiter::tooManyAttempts($key, 3)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors(['code' => 'Terlalu banyak permintaan OTP. Coba lagi dalam '.$seconds.' detik.']);
+        }
+
         // Generate new OTP code
         $otp_code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         
@@ -415,6 +451,8 @@ class AuthController extends Controller
 
         // Send OTP email
         Mail::to($user->email)->send(new VerifyOtpMail($otp_code, $user->name));
+
+        RateLimiter::clear($key);
 
         return back()->with('success', 'Kode OTP baru telah dikirim ke email Anda.');
     }
@@ -438,6 +476,12 @@ class AuthController extends Controller
             return redirect()->route('login');
         }
 
+        $key = 'otp|'.$request->ip().'|'.$user->email;
+        if (RateLimiter::tooManyAttempts($key, 6)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors(['code' => 'Terlalu banyak percobaan verifikasi OTP. Coba lagi dalam '.$seconds.' detik.']);
+        }
+
         // Find matching OTP
         $otp = EmailOtp::where('email', $user->email)
             ->where('code', $request->code)
@@ -446,6 +490,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$otp) {
+            RateLimiter::hit($key, 300);
             return back()->withErrors(['code' => 'Kode OTP tidak valid atau sudah expired.']);
         }
 
@@ -457,6 +502,8 @@ class AuthController extends Controller
 
         // Clear session
         session()->forget('pending_user_id');
+
+        RateLimiter::clear($key);
 
         // Login user
         Auth::login($user);

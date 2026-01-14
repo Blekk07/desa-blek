@@ -54,6 +54,19 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    /* Verification URL (used in QR codes) */
+    'verification_url' => env('VERIFICATION_BASE_URL', env('APP_URL', 'http://localhost')),
+
+    /* QR appearance (hex without #) and size used by QR generator */
+    'qr' => [
+        'fg' => env('QR_FG_COLOR', '0052d4'),
+        'bg' => env('QR_BG_COLOR', 'FFFFFF'),
+        'size' => env('QR_SIZE', '300x300'),
+    ],
+
+    /* Default role used in TTD verification links (id|user_id|role|sig) */
+    'ttd_role' => env('TTD_ROLE', 'admin'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

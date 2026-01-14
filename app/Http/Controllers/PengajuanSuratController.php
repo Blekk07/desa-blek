@@ -6,6 +6,9 @@ use App\Models\PengajuanSurat;
 use App\Models\Penduduk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class PengajuanSuratController extends Controller
 {
@@ -234,7 +237,14 @@ class PengajuanSuratController extends Controller
             return response()->view('errors.403', [], 403);
         }
 
-        $verifyUrl = url('/pengajuan/ttd') . '?p=' . urlencode($p);
+        $base = rtrim(config('app.verification_url', config('app.url')), '/');
+        // If base points to localhost and uses https, switch to http so browsers can connect in local dev
+        if (preg_match('/^https:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i', $base)) {
+            $original = $base;
+            $base = preg_replace('/^https:/i', 'http', $base);
+            logger()->info('Verification base normalized for local dev', ['original' => $original, 'normalized' => $base]);
+        }
+        $verifyUrl = $base . '/pengajuan/ttd?p=' . urlencode($p);
 
         return view('pengajuan.verify', compact('pengajuan', 'verifyUrl'));
     }
@@ -283,17 +293,27 @@ class PengajuanSuratController extends Controller
             // Attempt to use the PDF facade (barryvdh/laravel-dompdf)
             if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class) || class_exists(\Barryvdh\DomPDF\PDF::class) || class_exists('PDF')) {
                 // Build verification parameter p in the format: id|user_id|role|sig
-                $role = 'kepsek';
+                $role = config('app.ttd_role', 'admin');
                 $payload = $pengajuan->id . '|' . ($pengajuan->user_id ?? '') . '|' . $role;
                 $sig = substr(hash_hmac('sha256', $payload, config('app.key')), 0, 6);
                 $p = $payload . '|' . $sig;
 
-                $verifyUrl = url('/pengajuan/ttd') . '?p=' . urlencode($p);
+                $base = rtrim(config('app.verification_url', config('app.url')), '/');
+                // If base points to localhost and uses https, switch to http so browsers can connect in local dev
+                if (preg_match('/^https:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i', $base)) {
+                    $original = $base;
+                    $base = preg_replace('/^https:/i', 'http', $base);
+                    logger()->info('Verification base normalized for local dev (PDF generation)', ['original' => $original, 'normalized' => $base]);
+                }
+                $verifyUrl = $base . '/pengajuan/ttd?p=' . urlencode($p);
 
                 // Generate QR image from remote service and embed as data URI so Dompdf renders it reliably
                 $qrSrc = null;
                 try {
-                    $remote = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' . urlencode($verifyUrl);
+                    $fg = config('app.qr.fg', '0052d4');
+                    $bg = config('app.qr.bg', 'FFFFFF');
+                    $size = config('app.qr.size', '300x300');
+                    $remote = 'https://api.qrserver.com/v1/create-qr-code/?size=' . $size . '&data=' . urlencode($verifyUrl) . '&color=' . $fg . '&bgcolor=' . $bg . '&qzone=2';
                     if (class_exists(\Illuminate\Support\Facades\Http::class)) {
                         $response = \Illuminate\Support\Facades\Http::get($remote);
                         if ($response->ok()) {
@@ -309,7 +329,7 @@ class PengajuanSuratController extends Controller
                     $qrSrc = null;
                 }
 
-                $pdf = \PDF::loadView('pdfs.pengajuan_surat', compact('pengajuan', 'qrSrc', 'verifyUrl'));
+                $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdfs.pengajuan_surat', compact('pengajuan', 'qrSrc', 'verifyUrl'));
                 return $pdf->download('surat-' . str_pad($pengajuan->id, 5, '0', STR_PAD_LEFT) . '.pdf');
             }
 
