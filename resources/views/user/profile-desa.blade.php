@@ -7,122 +7,102 @@
         <div class="page-block">
             <div class="row align-items-center">
                 <div class="col-md-12">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                        <li class="breadcrumb-item" aria-current="page">Profil Desa</li>
-                    </ul>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="fw-bold mb-1">Profil Desa</h4>
+                            <p class="text-muted mb-0">Informasi lengkap tentang desa dan pemerintahannya</p>
+                        </div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="{{ route('user.dashboard') }}">Dashboard</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Profil Desa</li>
+                            </ol>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- HERO SECTION -->
+    <!-- DESA HEADER -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="hero-profile p-5 rounded-4 text-white position-relative overflow-hidden">
-                <div class="hero-overlay"></div>
-                <div class="position-relative z-1">
-                    <h1 class="fw-bold mb-2">{{ $profileData['nama_desa'] }}</h1>
-                    <p class="mb-0 fs-5">{{ $profileData['kecamatan'] }}, Kabupaten {{ $profileData['kabupaten'] }}</p>
-                    <p class="mb-0">"{{ $profileData['visi'] }}"</p>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="fw-bold text-primary mb-2">{{ $profileData['nama_desa'] }}</h2>
+                            <p class="text-muted mb-2">{{ $profileData['kecamatan'] }}, {{ $profileData['kabupaten'] }}, {{ $profileData['provinsi'] }}</p>
+                            <p class="mb-0 text-secondary fst-italic">"{{ $profileData['visi'] }}"</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <div class="d-flex justify-content-end gap-3">
+                                <div class="text-center">
+                                    <div class="fw-bold fs-4 text-primary">{{ number_format($totalPenduduk) }}</div>
+                                    <small class="text-muted">Penduduk</small>
+                                </div>
+                                <div class="text-center">
+                                    <div class="fw-bold fs-4 text-success">{{ number_format($totalKeluarga) }}</div>
+                                    <small class="text-muted">Keluarga</small>
+                                </div>
+                                <div class="text-center">
+                                    <div class="fw-bold fs-4 text-info">{{ $totalDusun }}</div>
+                                    <small class="text-muted">Dusun</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- QUICK STATS -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="stat-card p-4 rounded-4 text-center">
-                <div class="icon-circle bg-primary mx-auto mb-3">
-                    <i class="ti ti-users text-white fs-3"></i>
-                </div>
-                <h3 class="fw-bold mb-1">{{ number_format($totalPenduduk) }}</h3>
-                <p class="text-muted mb-0">Jumlah Penduduk</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card p-4 rounded-4 text-center">
-                <div class="icon-circle bg-success mx-auto mb-3">
-                    <i class="ti ti-home text-white fs-3"></i>
-                </div>
-                <h3 class="fw-bold mb-1">{{ number_format($totalKeluarga) }}</h3>
-                <p class="text-muted mb-0">Kepala Keluarga</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card p-4 rounded-4 text-center">
-                <div class="icon-circle bg-warning mx-auto mb-3">
-                    <i class="ti ti-building-community text-white fs-3"></i>
-                </div>
-                <h3 class="fw-bold mb-1">{{ $totalDusun }}</h3>
-                <p class="text-muted mb-0">Dusun</p>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stat-card p-4 rounded-4 text-center">
-                <div class="icon-circle bg-info mx-auto mb-3">
-                    <i class="ti ti-map-pin text-white fs-3"></i>
-                </div>
-                <h3 class="fw-bold mb-1">{{ $profileData['luas_wilayah'] }}</h3>
-                <p class="text-muted mb-0">Luas (Ha)</p>
             </div>
         </div>
     </div>
 
     <div class="row g-4">
 
-        <!-- INFORMASI DESA -->
+        <!-- INFORMASI DASAR -->
         <div class="col-lg-6">
-            <div class="card modern-card">
-                <div class="card-header bg-gradient-primary text-white">
-                    <h5 class="fw-bold mb-0"><i class="ti ti-info-circle me-2"></i>Informasi Desa</h5>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light border-0">
+                    <h5 class="fw-bold mb-0 text-primary">
+                        <i class="ti ti-info-circle me-2"></i>Informasi Dasar
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="info-list">
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-primary rounded-circle p-2 me-3">
-                                <i class="ti ti-building-community text-primary fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="border-start border-primary border-3 ps-3">
                                 <label class="text-muted small mb-1">Nama Desa</label>
-                                <p class="fw-bold mb-0">{{ $profileData['nama_desa'] }}</p>
+                                <p class="fw-semibold mb-0">{{ $profileData['nama_desa'] }}</p>
                             </div>
                         </div>
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-success rounded-circle p-2 me-3">
-                                <i class="ti ti-map-pin text-success fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
+                        <div class="col-sm-6">
+                            <div class="border-start border-success border-3 ps-3">
                                 <label class="text-muted small mb-1">Kecamatan</label>
-                                <p class="fw-bold mb-0">{{ $profileData['kecamatan'] }}</p>
+                                <p class="fw-semibold mb-0">{{ $profileData['kecamatan'] }}</p>
                             </div>
                         </div>
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-warning rounded-circle p-2 me-3">
-                                <i class="ti ti-map text-warning fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
+                        <div class="col-sm-6">
+                            <div class="border-start border-warning border-3 ps-3">
                                 <label class="text-muted small mb-1">Kabupaten</label>
-                                <p class="fw-bold mb-0">{{ $profileData['kabupaten'] }}</p>
+                                <p class="fw-semibold mb-0">{{ $profileData['kabupaten'] }}</p>
                             </div>
                         </div>
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-info rounded-circle p-2 me-3">
-                                <i class="ti ti-world text-info fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
+                        <div class="col-sm-6">
+                            <div class="border-start border-info border-3 ps-3">
                                 <label class="text-muted small mb-1">Provinsi</label>
-                                <p class="fw-bold mb-0">{{ $profileData['provinsi'] }}</p>
+                                <p class="fw-semibold mb-0">{{ $profileData['provinsi'] }}</p>
                             </div>
                         </div>
-                        <div class="info-item d-flex align-items-center">
-                            <div class="info-icon bg-light-danger rounded-circle p-2 me-3">
-                                <i class="ti ti-mail text-danger fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
+                        <div class="col-sm-6">
+                            <div class="border-start border-danger border-3 ps-3">
                                 <label class="text-muted small mb-1">Kode Pos</label>
-                                <p class="fw-bold mb-0">{{ $profileData['kode_pos'] }}</p>
+                                <p class="fw-semibold mb-0">{{ $profileData['kode_pos'] }}</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="border-start border-secondary border-3 ps-3">
+                                <label class="text-muted small mb-1">Luas Wilayah</label>
+                                <p class="fw-semibold mb-0">{{ $profileData['luas_wilayah'] }} Ha</p>
                             </div>
                         </div>
                     </div>
@@ -132,49 +112,44 @@
 
         <!-- PEMERINTAHAN DESA -->
         <div class="col-lg-6">
-            <div class="card modern-card">
-                <div class="card-header bg-gradient-success text-white">
-                    <h5 class="fw-bold mb-0"><i class="ti ti-user-check me-2"></i>Pemerintahan Desa</h5>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light border-0">
+                    <h5 class="fw-bold mb-0 text-primary">
+                        <i class="ti ti-building-community me-2"></i>Pemerintahan Desa
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="info-list">
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-primary rounded-circle p-2 me-3">
-                                <i class="ti ti-crown text-primary fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
+                    <div class="mb-4">
+                        <div class="d-flex align-items-start mb-3">
+                            <i class="ti ti-crown text-primary fs-4 me-3 mt-1"></i>
+                            <div>
                                 <label class="text-muted small mb-1">Kepala Desa</label>
-                                <p class="fw-bold mb-0">{{ $profileData['kepala_desa'] }}</p>
+                                <p class="fw-semibold mb-1">{{ $profileData['kepala_desa'] }}</p>
                                 <small class="text-muted">Masa Jabatan: {{ $profileData['masa_jabatan_kepala'] }}</small>
                             </div>
                         </div>
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-success rounded-circle p-2 me-3">
-                                <i class="ti ti-notebook text-success fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="border-start border-success border-3 ps-3">
                                 <label class="text-muted small mb-1">Sekretaris Desa</label>
-                                <p class="fw-bold mb-0">{{ $profileData['sekretaris_desa'] }}</p>
+                                <p class="fw-semibold mb-0">{{ $profileData['sekretaris_desa'] }}</p>
                             </div>
                         </div>
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-warning rounded-circle p-2 me-3">
-                                <i class="ti ti-cash text-warning fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
+                        <div class="col-sm-6">
+                            <div class="border-start border-warning border-3 ps-3">
                                 <label class="text-muted small mb-1">Bendahara Desa</label>
-                                <p class="fw-bold mb-0">{{ $profileData['bendahara_desa'] }}</p>
+                                <p class="fw-semibold mb-0">{{ $profileData['bendahara_desa'] }}</p>
                             </div>
                         </div>
-                        <div class="info-item d-flex align-items-center">
-                            <div class="info-icon bg-light-info rounded-circle p-2 me-3">
-                                <i class="ti ti-building text-info fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <label class="text-muted small mb-1">Alamat Kantor</label>
-                                <p class="fw-bold mb-0">{{ $profileData['alamat_kantor'] }}</p>
-                            </div>
-                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="border-start border-info border-3 ps-3">
+                        <label class="text-muted small mb-1">Alamat Kantor</label>
+                        <p class="fw-semibold mb-0">{{ $profileData['alamat_kantor'] }}</p>
                     </div>
                 </div>
             </div>
@@ -182,15 +157,18 @@
 
         <!-- VISI & MISI -->
         <div class="col-lg-6">
-            <div class="card modern-card h-100">
-                <div class="card-header bg-gradient-warning text-white">
-                    <h5 class="fw-bold mb-0"><i class="ti ti-target-arrow me-2"></i>Visi Desa</h5>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light border-0">
+                    <h5 class="fw-bold mb-0 text-primary">
+                        <i class="ti ti-target me-2"></i>Visi & Misi
+                    </h5>
                 </div>
                 <div class="card-body">
                     <div class="d-flex align-items-start">
-                        <i class="ti ti-bulb text-warning fs-2 me-3 mt-1"></i>
+                        <i class="ti ti-bulb text-warning fs-3 me-3 mt-1"></i>
                         <div>
-                            <p class="fw-semibold mb-2">"{{ $profileData['visi'] }}"</p>
+                            <h6 class="fw-bold text-primary mb-2">Visi Desa</h6>
+                            <p class="fst-italic mb-3">"{{ $profileData['visi'] }}"</p>
                             <p class="text-muted mb-0">{{ $profileData['visi_deskripsi'] }}</p>
                         </div>
                     </div>
@@ -200,37 +178,39 @@
 
         <!-- KONTAK DARURAT -->
         <div class="col-lg-6">
-            <div class="card modern-card h-100">
-                <div class="card-header bg-gradient-danger text-white">
-                    <h5 class="fw-bold mb-0"><i class="ti ti-phone me-2"></i>Kontak Darurat</h5>
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-light border-0">
+                    <h5 class="fw-bold mb-0 text-primary">
+                        <i class="ti ti-phone me-2"></i>Kontak Darurat
+                    </h5>
                 </div>
                 <div class="card-body">
-                    <div class="info-list">
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-danger rounded-circle p-2 me-3">
-                                <i class="ti ti-phone-call text-danger fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <label class="text-muted small mb-1">Poskesdes</label>
-                                <p class="fw-bold mb-0">{{ $profileData['poskesdes'] }}</p>
-                            </div>
-                        </div>
-                        <div class="info-item d-flex align-items-center mb-3">
-                            <div class="info-icon bg-light-primary rounded-circle p-2 me-3">
-                                <i class="ti ti-shield-check text-primary fs-5"></i>
-                            </div>
-                            <div class="flex-grow-1">
-                                <label class="text-muted small mb-1">Pos Kamling</label>
-                                <p class="fw-bold mb-0">{{ $profileData['pos_kamling'] }}</p>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <i class="ti ti-phone-call text-danger fs-2 mb-2"></i>
+                                <div>
+                                    <label class="text-muted small mb-1">Poskesdes</label>
+                                    <p class="fw-semibold mb-0">{{ $profileData['poskesdes'] }}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="info-item d-flex align-items-center">
-                            <div class="info-icon bg-light-success rounded-circle p-2 me-3">
-                                <i class="ti ti-fire-extinguisher text-success fs-5"></i>
+                        <div class="col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <i class="ti ti-shield-check text-primary fs-2 mb-2"></i>
+                                <div>
+                                    <label class="text-muted small mb-1">Pos Kamling</label>
+                                    <p class="fw-semibold mb-0">{{ $profileData['pos_kamling'] }}</p>
+                                </div>
                             </div>
-                            <div class="flex-grow-1">
-                                <label class="text-muted small mb-1">Kebakaran</label>
-                                <p class="fw-bold mb-0">{{ $profileData['kebakaran'] }}</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-center p-3 border rounded">
+                                <i class="ti ti-fire-extinguisher text-success fs-2 mb-2"></i>
+                                <div>
+                                    <label class="text-muted small mb-1">Kebakaran</label>
+                                    <p class="fw-semibold mb-0">{{ $profileData['kebakaran'] }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -242,86 +222,52 @@
 </div>
 
 <style>
-/* HERO PROFILE */
-.hero-profile {
-    background: linear-gradient(135deg, #0052d4);
-    position: relative;
-}
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.1"><polygon points="1000,100 1000,0 0,100"/></svg>');
-    background-size: cover;
+/* Minimalist Card Styles */
+.card {
+    transition: all 0.3s ease;
 }
 
-/* STAT CARD */
-.stat-card {
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    transition: .25s;
-    border: 1px solid #f0f0f0;
-}
-.stat-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
 }
 
-/* MODERN CARD */
-.modern-card {
-    border: none;
-    border-radius: 18px;
-    background: #fff;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    transition: 0.25s;
-}
-.modern-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+.card-header {
+    padding: 1.25rem 1.5rem;
+    background-color: #f8f9fa !important;
 }
 
-/* CARD HEADER GRADIENTS */
-.bg-gradient-primary {
-    background: linear-gradient(135deg, #1e3c72, #2a69ac) !important;
-}
-.bg-gradient-success {
-    background: linear-gradient(135deg, #28A745, #6fe68a) !important;
-}
-.bg-gradient-warning {
-    background: linear-gradient(135deg, #FFC107, #ffdb70) !important;
-}
-.bg-gradient-danger {
-    background: linear-gradient(135deg, #DC3545, #f0838e) !important;
+.card-body {
+    padding: 1.5rem;
 }
 
-/* ICON CIRCLE */
-.icon-circle {
-    width: 65px;
-    height: 65px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Border accents */
+.border-primary { border-color: #0d6efd !important; }
+.border-success { border-color: #198754 !important; }
+.border-warning { border-color: #ffc107 !important; }
+.border-info { border-color: #0dcaf0 !important; }
+.border-danger { border-color: #dc3545 !important; }
+.border-secondary { border-color: #6c757d !important; }
+
+/* Icon styles */
+.ti {
+    opacity: 0.8;
 }
 
-/* INFO ICONS */
-.info-icon {
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
 
-/* LIGHT BACKGROUNDS */
-.bg-light-primary { background-color: #e3f2fd; }
-.bg-light-success { background-color: #e8f5e8; }
-.bg-light-warning { background-color: #fff3cd; }
-.bg-light-info { background-color: #d1ecf1; }
-.bg-light-danger { background-color: #f8d7da; }
+    .card-header {
+        padding: 1rem 1.25rem;
+    }
+
+    .fs-4 {
+        font-size: 1.25rem !important;
+    }
+}
 </style>
 
 @endsection

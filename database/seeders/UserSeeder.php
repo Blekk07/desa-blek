@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class UserSeeder extends Seeder
 {
@@ -15,21 +16,27 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Default role user
-        DB::table('users')->insert([
-            'name' => 'Dimass',
-            'nik' => '1111111111111111', // NIK user
-            'email' => 'Dimas@gmail.com',
-            'role' => 'user', // default role
-            'password' => Hash::make('Dimas12'),
-        ]);
+        DB::table('users')->updateOrInsert(
+            ['email' => 'Dimas@gmail.com'],
+            [
+                'name' => 'Dimass',
+                'nik' => '1111111111111111',
+                'role' => 'user',
+                'password' => Hash::make('Dimas12'),
+                'email_verified_at' => Carbon::now(),
+            ]
+        );
 
         // Admin
-        DB::table('users')->insert([
-            'name' => 'Admin Satu',
-            'nik' => '0000000000000000', // NIK admin
-            'email' => 'admin@gmail.com',
-            'role' => 'admin',
-            'password' => Hash::make('admin1207'),
-        ]);
+        DB::table('users')->updateOrInsert(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name' => 'Admin Desa',
+                'nik' => '0000000000000000',
+                'role' => 'admin',
+                'password' => Hash::make('admin1207'),
+                'email_verified_at' => Carbon::now(),
+            ]
+        );
     }
 }

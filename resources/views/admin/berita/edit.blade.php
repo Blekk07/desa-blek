@@ -1,10 +1,33 @@
-@extends('layouts.app')
-
+@extends('layouts.dashboard')
 @section('title', 'Edit Berita')
 
 @section('content')
-<div class="container">
-    <h2 class="mb-4">Edit Berita</h2>
-    @include('admin.berita._form', ['action' => route('admin.berita.update', $berita), 'method' => 'PUT'])
+<div class="pc-content">
+    <div class="page-header">
+        <div class="page-block">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.berita.index') }}">Manajemen Berita</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Edit Berita</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Form Edit Berita</h5>
+                </div>
+                <div class="card-body">
+                    @include('admin.berita._form', ['action' => route('admin.berita.update', $berita), 'method' => 'PUT'])
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

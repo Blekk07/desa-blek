@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
         ]);
 
-        // Seed berita (dummy data for public listing)
+        // Seed profile desa
         $this->call([
-            BeritaSeeder::class,
+            ProfileDesaSeeder::class,
         ]);
     }
 }

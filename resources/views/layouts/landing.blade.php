@@ -400,7 +400,7 @@
                                     </li>
                                     <li class="d-flex align-items-start">
                                         <i class="ti ti-mail me-2 mt-1"></i>
-                                        <span>desa@desa-maju.go.id</span>
+                                        <span>aryobebangah281@gmail.com</span>
                                     </li>
                                     <li class="d-flex align-items-start">
                                         <i class="ti ti-phone me-2 mt-1"></i>

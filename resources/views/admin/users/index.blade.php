@@ -99,7 +99,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        @if($user->is_verified)
+                                        @if($user->hasVerifiedEmail())
                                             <span class="badge bg-success"><i class="ti ti-check"></i> Verified</span>
                                         @else
                                             <span class="badge bg-warning"><i class="ti ti-alert-circle"></i> Not Verified</span>

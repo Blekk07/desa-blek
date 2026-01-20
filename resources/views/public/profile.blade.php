@@ -5,13 +5,13 @@
 @section('content')
 <main class="site-main">
   <section class="profile-hero py-6 position-relative text-white">
-  <div class="profile-hero-bg position-absolute top-0 start-0 w-100 h-100" style="background-image: url('{{ asset('assets/images/berita-sample.svg') }}'); background-size: cover; background-position: center; opacity:0.08;"></div>
+  <div class="profile-hero-bg position-absolute top-0 start-0 w-100 h-100" style="background-image: url('{{ asset('assets/images/desa1.jpg') }}'); background-size: cover; background-position: center; opacity:0.08;"></div>
   <div class="container position-relative" style="z-index:2;">
     <div class="row align-items-center">
       <div class="col-lg-7">
         <h1 class="display-5 fw-bold mb-2">{{ $profileData['nama_desa'] }}</h1>
         <p class="lead text-white-50 mb-3">{{ $profileData['kecamatan'] }}, Kabupaten {{ $profileData['kabupaten'] }} • {{ $profileData['provinsi'] }}</p>
-        <p class="text-white-75 mb-4">{{ $profileData['visi_deskripsi'] }}</p>
+        <p class="text-black-75 mb-4">{{ $profileData['visi_deskripsi'] }}</p>
         <a href="/berita" class="btn btn-primary me-2">Berita Desa</a>
         <a href="/contact-us" class="btn btn-outline-light">Hubungi Desa</a>
       </div>
@@ -19,7 +19,7 @@
         <div class="card modern-card p-4 shadow-sm border-0">
           <h5 class="fw-bold">Kontak Kantor Desa</h5>
           <p class="mb-0">{{ $profileData['alamat_kantor'] }}</p>
-          <p class="mb-0">Email: desa@desa-maju.go.id</p>
+          <p class="mb-0">Email: aryobebangah281@gmail.com</p>
           <p class="mb-0">Tel: (021) 9876-5432</p>
           <a href="/contact-us" class="btn btn-primary btn-sm mt-3">Kirim Pesan</a>
         </div>

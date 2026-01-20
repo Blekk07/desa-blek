@@ -40,6 +40,44 @@
     </div>
 </div>
 
+<!-- EMAIL VERIFICATION BANNER -->
+@if(!auth()->user()->hasVerifiedEmail())
+<div class="alert alert-warning border-0 rounded-4 mb-4 position-relative overflow-hidden" role="alert">
+    <div class="position-absolute top-0 end-0 opacity-25" style="transform: rotate(15deg);">
+        <i class="ti ti-mail fs-1"></i>
+    </div>
+    <div class="d-flex align-items-start">
+        <div class="flex-shrink-0 me-3">
+            <i class="ti ti-alert-circle fs-2 text-warning"></i>
+        </div>
+        <div class="flex-grow-1">
+            <h5 class="alert-heading mb-2">Verifikasi Email Diperlukan</h5>
+            <p class="mb-3">
+                Untuk keamanan akun Anda, silakan verifikasi alamat email <strong>{{ auth()->user()->email }}</strong>.
+                Link verifikasi telah dikirim ke email Anda saat registrasi.
+            </p>
+            <div class="d-flex gap-2 flex-wrap">
+                <form method="POST" action="{{ route('verification.send') }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-warning btn-sm">
+                        <i class="ti ti-send me-1"></i>Kirim Ulang Email Verifikasi
+                    </button>
+                </form>
+                <a href="{{ route('verification.notice') }}" class="btn btn-outline-warning btn-sm">
+                    <i class="ti ti-mail me-1"></i>Lihat Halaman Verifikasi
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    @if (session('resent'))
+        <div class="alert alert-success border-0 mt-3">
+            <i class="ti ti-check me-2"></i>Link verifikasi baru telah dikirim ke email Anda.
+        </div>
+    @endif
+</div>
+@endif
+
 <!-- STATISTICS GRID MODERN -->
 <div class="row g-3 mb-4">
     <div class="col-xl-3 col-md-6">
@@ -282,12 +320,12 @@
 
             @php
                 $villageInfo = [
-                    'Nama Desa' => 'Desa Maju Jaya',
-                    'Kecamatan' => 'Gunung Sari',
-                    'Kabupaten' => 'Lamongan',
-                    'Provinsi' => 'Jawa Timur',
-                    'Kode Pos' => '62271',
-                    'Luas Wilayah' => '125.5 Ha'
+                    'Nama Desa' => $profileDesa->nama_desa ?? 'Desa Bangah',
+                    'Kecamatan' => $profileDesa->kecamatan ?? 'Gedangan',
+                    'Kabupaten' => $profileDesa->kabupaten ?? 'Sidoarjo',
+                    'Provinsi' => $profileDesa->provinsi ?? 'Jawa Timur',
+                    'Kode Pos' => $profileDesa->kode_pos ?? '61254',
+                    'Luas Wilayah' => $profileDesa->luas_wilayah ?? '126.00 hektar'
                 ];
             @endphp
 

@@ -119,9 +119,9 @@
         <div id="contact" class="card shadow-sm border-0">
           <div class="card-body">
              <h5 class="fw-bold">Kontak Bantuan</h5>
-             <p class="mb-1"><strong>Email:</strong> support@desajayamakmur.id</p>
+             <p class="mb-1"><strong>Email:</strong> aryobebangah281@gmail.com</p>
              <p class="mb-2"><strong>Telepon:</strong> 0812-3456-7890</p>
-             <a href="mailto:support@desajayamakmur.id" class="btn btn-primary btn-sm">Kirim Pesan</a>
+             <a href="mailto:aryobebangah281@gmail.com" class="btn btn-primary btn-sm">Kirim Pesan</a>
           </div>
         </div>
       </div>

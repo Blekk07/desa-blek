@@ -174,7 +174,7 @@ class AuthController extends Controller
 
             'pendidikan_terakhir' => 'nullable|string',
             'pekerjaan' => 'nullable|in:Pelajar/Mahasiswa,Belum/Tidak Bekerja,Petani,Pedagang,Wiraswasta,Karyawan Swasta,PNS,TNI/Polri,Ibu Rumah Tangga,Lainnya',
-            'status_kependudukan' => 'nullable|in:Tetap,Pendatang,Pindah',
+            'status_kependudukan' => 'required|in:Tetap,Tidak Tetap',
 
             'no_telepon' => 'nullable|string|max:15',
         ]);
@@ -188,6 +188,9 @@ class AuthController extends Controller
             'role' => 'user',
             'is_verified' => false,
         ]);
+
+        // Login user setelah register
+        Auth::login($user);
 
         // Buat penduduk
         Penduduk::create([
@@ -210,25 +213,10 @@ class AuthController extends Controller
             'no_telepon' => $validated['no_telepon'] ?? null,
         ]);
 
-        // Generate OTP code
-        $otp_code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        
-        // Save OTP to database
-        EmailOtp::create([
-            'user_id' => null,
-            'email' => $validated['email'],
-            'code' => $otp_code,
-            'expires_at' => Carbon::now()->addMinutes(15),
-            'used' => false,
-        ]);
+        // Send email verification notification
+        $user->sendEmailVerificationNotification();
 
-        // Send OTP email
-        Mail::to($validated['email'])->send(new VerifyOtpMail($otp_code, $validated['nama_lengkap']));
-
-        // Store pending user ID in session
-        session(['pending_user_id' => $user->id]);
-
-        return redirect()->route('verify.form')->with('success', 'Registrasi berhasil! Silakan verifikasi email Anda dengan kode OTP yang telah dikirim.');
+        return redirect()->route('verification.notice')->with('success', 'Registrasi berhasil! Silakan periksa email Anda untuk link verifikasi.');
     }
 
     /**
@@ -338,7 +326,7 @@ class AuthController extends Controller
             'status_perkawinan' => 'required|in:Belum Kawin,Kawin,Cerai Hidup,Cerai Mati',
             'pendidikan_terakhir' => 'nullable|string',
             'pekerjaan' => 'nullable|in:Pelajar/Mahasiswa,Belum/Tidak Bekerja,Petani,Pedagang,Wiraswasta,Karyawan Swasta,PNS,TNI/Polri,Ibu Rumah Tangga,Lainnya',
-            'status_kependudukan' => 'nullable|in:Tetap,Pendatang,Pindah',
+            'status_kependudukan' => 'required|in:Tetap,Tidak Tetap',
             'nama_ayah' => 'nullable|string|max:255',
             'nama_ibu' => 'nullable|string|max:255',
             'no_telepon' => 'nullable|string|max:15',
@@ -359,19 +347,19 @@ class AuthController extends Controller
                 'provider' => $googleUser['provider'],
                 'provider_id' => $googleUser['provider_id'],
                 'avatar' => $googleUser['avatar'],
-                'is_verified' => true,
+                'email_verified_at' => now(), // Google users are pre-verified
             ]);
         } else {
             $user = User::create([
                 'name' => $validated['nama_lengkap'],
                 'nik' => $validated['nik'],
                 'email' => $googleUser['email'],
-                'password' => bcrypt(Str::random(16)),
+                'password' => bcrypt(Str::random(16)), // Generate random password for Google users
                 'role' => 'user',
                 'provider' => $googleUser['provider'],
                 'provider_id' => $googleUser['provider_id'],
                 'avatar' => $googleUser['avatar'],
-                'is_verified' => true,
+                'email_verified_at' => now(), // Google users are pre-verified
             ]);
         }
 
@@ -397,10 +385,13 @@ class AuthController extends Controller
 
         session()->forget('google_user');
 
+        // Send email verification notification
+        $user->sendEmailVerificationNotification();
+
         Auth::login($user);
 
-        return redirect('/dashboard')
-            ->with('success', 'Registrasi berhasil! Selamat datang di Sistem Informasi Desa.');
+        return redirect()->route('verification.notice')
+            ->with('success', 'Registrasi berhasil! Silakan periksa email Anda untuk link verifikasi.');
     }
 
     /**
@@ -498,7 +489,7 @@ class AuthController extends Controller
         $otp->update(['used' => true]);
 
         // Mark user as verified
-        $user->update(['is_verified' => true]);
+        $user->markEmailAsVerified();
 
         // Clear session
         session()->forget('pending_user_id');

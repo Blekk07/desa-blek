@@ -67,12 +67,17 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request)
     {
+        $user = Auth::user();
+
+        // Prevent password change for Google OAuth users
+        if ($user->provider === 'google') {
+            return back()->withErrors(['error' => 'User yang login dengan Google tidak dapat mengubah password.']);
+        }
+
         $request->validate([
             'current_password' => 'required',
             'password' => 'required|string|min:6|confirmed',
         ]);
-
-        $user = Auth::user();
 
         // Check if current password is correct
         if (!Hash::check($request->current_password, $user->password)) {

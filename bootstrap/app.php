@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'cekRole' => App\Http\Middleware\CekRole::class,
+            'verified' => App\Http\Middleware\EnsureEmailIsVerified::class,
             // JANGAN ada CheckRole di sini!
         ]);
     })

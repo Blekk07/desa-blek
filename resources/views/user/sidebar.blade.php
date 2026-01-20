@@ -17,10 +17,24 @@
         <div class="user-badge">
             <i class="ti ti-user-circle me-1"></i>
             <span>Warga Desa</span>
-        </div>
-    </div>
+        </div>        @if(auth()->user()->hasVerifiedEmail())
+            <div class="email-verification-badge">
+                <i class="ti ti-mail-check text-success me-1"></i>
+                <small class="text-success fw-medium">Email Terverifikasi</small>
+            </div>
+        @else
+            <div class="email-verification-badge">
+                <i class="ti ti-mail-x text-warning me-1"></i>
+                <small class="text-warning fw-medium">Email Belum Terverifikasi</small>
+            </div>
+        @endif    </div>
 
     <ul class="sidebar-menu">
+
+            <!-- Divider -->
+        <li class="sidebar-divider">
+            <span>Menu User</span>
+        </li>
 
         <!-- Dashboard -->
         <li class="sidebar-item">
@@ -29,9 +43,6 @@
                     <i class="ti ti-home"></i>
                 </div>
                 <span class="sidebar-text">Dashboard</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
@@ -42,9 +53,6 @@
                     <i class="ti ti-user"></i>
                 </div>
                 <span class="sidebar-text">Profil Saya</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
@@ -55,9 +63,6 @@
                     <i class="ti ti-building"></i>
                 </div>
                 <span class="sidebar-text">Informasi Desa</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
@@ -68,9 +73,6 @@
                     <i class="ti ti-file-text"></i>
                 </div>
                 <span class="sidebar-text">Pengajuan Surat</span>
-                <div class="sidebar-badge">
-                   <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
@@ -81,16 +83,14 @@
                     <i class="ti ti-report"></i>
                 </div>
                 <span class="sidebar-text">Laporan Warga</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
-        <!-- Divider -->
+            <!-- Divider -->
         <li class="sidebar-divider">
-            <span>Akun</span>
+            <span></span>
         </li>
+
 
         <!-- Logout -->
         <li class="sidebar-item">
@@ -101,9 +101,6 @@
                         <i class="ti ti-logout"></i>
                     </div>
                     <span class="sidebar-text">Keluar</span>
-                    <div class="sidebar-badge">
-                        <i class="ti ti-arrow-right"></i>
-                    </div>
                 </button>
             </form>
         </li>
@@ -486,6 +483,18 @@ style.textContent = `
             transform: scale(4);
             opacity: 0;
         }
+    }
+    
+    .email-verification-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 8px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 12px;
+        font-size: 0.75rem;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
 `;
 document.head.appendChild(style);

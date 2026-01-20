@@ -4,52 +4,77 @@
 
 @section('content')
 <main class="site-main">
-<section class="page-header py-5 bg-light border-bottom">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <h1 class="h2 fw-bold mb-1">Berita & Pengumuman</h1>
-                <p class="text-muted mb-0">Informasi terbaru dari Desa Bangah.</p>
+    <!-- Page Header -->
+    <section class="page-header py-5 bg-light border-bottom">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-6 fw-bold text-dark mb-2">Berita & Pengumuman</h1>
+                    <p class="text-muted mb-0 lead">Informasi terbaru dan pengumuman penting dari Desa Bangah.</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="py-5">
-    <div class="container">
-        <div class="row g-4">
-            @foreach($beritas as $b)
-                <div class="col-12 col-md-6">
-                    <article class="bg-white rounded shadow-sm overflow-hidden h-100 d-flex flex-column">
-                        @if($b->gambar)
-                            @php
-                                $imgSrc = str_starts_with($b->gambar, 'http') ? $b->gambar : asset($b->gambar);
-                            @endphp
-                            <div class="overflow-hidden" style="height:220px;">
-                                <img src="{{ $imgSrc }}" alt="{{ $b->judul }}" class="w-100 h-100" style="object-fit:cover;">
-                            </div>
-                            @if(!empty($b->caption))
-                                <small class="text-muted mt-2 d-block">{{ $b->caption }}</small>
-                            @endif
-                        @endif
-                        <div class="p-4 d-flex flex-column flex-grow-1">
-                            <h3 class="h5 mb-1"><a href="{{ route('berita.show', $b) }}" class="stretched-link text-decoration-none text-dark">{{ $b->judul }}</a></h3>
-                            <div class="text-muted small mb-2">{{ $b->published_at ? $b->published_at->format('d M Y') : 'Draft' }} • {{ $b->user?->name ?? '-' }}</div>
-                            <p class="text-muted mb-3">{{ Str::limit(strip_tags($b->konten), 140) }}</p>
-                            <div class="mt-auto">
-                                <a href="{{ route('berita.show', $b) }}" class="text-primary fw-bold">Baca selengkapnya →</a>
-                            </div>
+    <!-- Berita List -->
+    <section class="py-5">
+        <div class="container">
+            @if($beritas->count() > 0)
+                <div class="row g-4">
+                    @foreach($beritas as $b)
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <article class="card h-100 border-0 shadow-sm hover-shadow">
+                                @if($b->gambar)
+                                    @php
+                                        $imgSrc = str_starts_with($b->gambar, 'http') ? $b->gambar : (str_starts_with($b->gambar, 'assets/') ? asset($b->gambar) : asset('storage/' . $b->gambar));
+                                    @endphp
+                                    <div class="card-img-wrapper overflow-hidden" style="height: 200px;">
+                                        <img src="{{ $imgSrc }}" alt="{{ $b->judul }}" class="card-img-top object-fit-cover w-100 h-100">
+                                    </div>
+                                @endif
+                                <div class="card-body d-flex flex-column">
+                                    <h3 class="card-title h6 mb-2">
+                                        {{ $b->judul }}
+                                    </h3>
+                                    <div class="text-muted small mb-2">
+                                        {{ $b->published_at ? $b->published_at->format('d M Y') : 'Draft' }} • {{ $b->user?->name ?? '-' }}
+                                    </div>
+                                    <div class="card-text text-muted small flex-grow-1">
+                                        {!! $b->konten !!}
+                                    </div>
+                                </div>
+                            </article>
                         </div>
-                    </article>
+                    @endforeach
                 </div>
-            @endforeach
-        </div>
 
-        <nav class="mt-4 d-flex justify-content-center" aria-label="Berita pagination">
-            {{ $beritas->links('pagination::bootstrap-5') }}
-        </nav>
-    </div>
-</section>
+                <!-- Pagination -->
+                <nav class="mt-5 d-flex justify-content-center" aria-label="Berita pagination">
+                    {{ $beritas->links('pagination::bootstrap-5') }}
+                </nav>
+            @else
+                <div class="text-center py-5">
+                    <i class="ti ti-news-off display-1 text-muted mb-3"></i>
+                    <h3 class="text-muted">Belum ada berita</h3>
+                    <p class="text-muted">Berita akan segera dipublikasikan.</p>
+                </div>
+            @endif
+        </div>
+    </section>
 </main>
+
+<style>
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+.card-img-wrapper {
+    position: relative;
+}
+.object-fit-cover {
+    object-fit: cover;
+}
+</style>
 
 @endsection

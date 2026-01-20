@@ -21,7 +21,7 @@ class ContactMessageMail extends Mailable
 
     public function build()
     {
-        $to = env('CONTACT_EMAIL', 'desa@desa-maju.go.id');
+        $to = env('CONTACT_EMAIL', 'aryobebangah281@gmail.com');
 
         return $this->to($to)
                     ->subject("Pesan Kontak Baru: {$this->messageModel->subject}")

@@ -6,22 +6,27 @@
     <title>Surat - {{ $pengajuan->jenis_surat }}</title>
     <style>
         body { font-family: DejaVu Sans, sans-serif; font-size: 12px; color: #111; }
-        .header { display:flex; align-items:center; gap:16px; margin-bottom: 6px; }
-        .logo { width:80px; }
-        .logo img{ width:80px; }
-        .header-text{ flex:1; text-align:center; }
-        .gov{ font-weight:700; }
-        .area{ font-size:12px; }
-        .surat{ margin:6px 0; font-size:16px; font-weight:700; }
-        .no{ font-size:12px; }
-        .double-line{ border-top:2px solid #000; border-bottom:1px solid #000; margin:6px 0 18px; }
+        .header { display: flex; align-items: center; gap: 16px; margin-bottom: 6px; }
+        .logo { width: 80px; }
+        .logo img { width: 80px; }
+        .header-text { flex: 1; text-align: center; }
+        .gov { font-weight: 700; }
+        .area { font-size: 12px; }
+        .surat { margin: 6px 0; font-size: 16px; font-weight: 700; }
+        .no { font-size: 12px; }
+        .double-line { border-top: 2px solid #000; border-bottom: 1px solid #000; margin: 6px 0 18px; }
         .content { margin: 0 36px; }
         .meta { margin-bottom: 12px; }
         .table { width: 100%; border-collapse: collapse; }
         .table td { padding: 6px 0; vertical-align: top; }
         .title { font-weight: 700; }
         .separator { border-top: 1px solid #000; margin: 8px 0 16px; }
-        h4{ margin-bottom:6px; }
+        h4 { margin-bottom: 6px; }
+        .title-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        .title-table td { vertical-align: middle; padding: 0; }
+        .title-logo-cell { width: 80px; text-align: left; }
+        .title-text-cell { text-align: center; font-size: 18px; font-weight: bold; }
+        .surat-title { text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -34,19 +39,19 @@
             @if(file_exists($logoPath))
                 <img src="{{ $logoPath }}" alt="logo">
             @else
-                <!-- placeholder if no logo -->
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" alt="Logo Placeholder">
             @endif
         </div>
-
         <div class="header-text">
-            <div class="gov">PEMERINTAH DESA BANGAH</div>
-            <div class="area">KETUA RT. XXX RW. XXX (Bangah)</div>
-            <h2 class="surat">SURAT KETERANGAN {{ strtoupper($pengajuan->jenis_surat) }}</h2>
+            <div class="surat">PEMERINTAH DESA BANGAH</div>
+            <div class="area">Kecamatan Gedangan Kabupaten Sidoarjo</div>
             <div class="no">No: {{ str_pad($pengajuan->id, 5, '0', STR_PAD_LEFT) }}</div>
         </div>
     </div>
 
     <div class="double-line"></div>
+
+    <div class="surat-title">Surat Keterangan {{ ucfirst(strtolower($pengajuan->jenis_surat)) }}</div>
 
     <div class="content">
         <p>Yang bertanda tangan di bawah ini menerangkan bahwa:</p>
@@ -243,29 +248,30 @@
         <table class="table">
             <tr>
                 <td width="55%"></td>
-                <td style="text-align:center">
-                    <div style="display:flex; flex-direction:column; align-items:center;">
-                        <p style="margin:0">Desa Bangah, {{ now()->format('d F Y') }}</p>
+            <td style="text-align:center">
+                <div style="display:flex; flex-direction:column; align-items:center;">
+                    <p style="margin:0">Desa Bangah, {{ now()->format('d F Y') }}</p>
 
-                        <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
-                            @if(!empty($qrSrc))
-                                <div style="display:inline-block; text-align:center; border:1px solid #e9f5ff; padding:8px; border-radius:8px;">
-                                    <img src="{{ $qrSrc }}" alt="QR Code" style="width:90px;height:90px; display:block;">
-                                    <div style="font-size:10px;margin-top:6px;color:#{{ config('app.qr.fg', '0052d4') }};">Sistem Informasi Desa Bangah</div>
-                                    <div style="font-size:9px;margin-top:4px;color:#777;">Scan untuk verifikasi</div>
-                                </div>
-                            @endif
-
-                            <div style="text-align:center;">
-                                <p style="margin:0 0 8px 0">&nbsp;</p>
-                                <p style="margin:0">( Kepala Desa )</p>
+                    <div style="display:flex; align-items:center; gap:12px; margin-top:8px;">
+                        @if(!empty($qrSrc))
+                            <div style="display:inline-block; text-align:center; border:1px solid #e9f5ff; padding:8px; border-radius:8px;">
+                                <img src="{{ $qrSrc }}" alt="QR Code" style="width:90px;height:90px; display:block;">
+                                <div style="font-size:10px;margin-top:6px;color:#{{ config('app.qr.fg', '0052d4') }};">Sistem Informasi Desa Bangah</div>
+                                <div style="font-size:9px;margin-top:4px;color:#777;">Scan untuk verifikasi</div>
                             </div>
+                        @endif
+
+                        <div style="text-align:center;">
+                            <p style="margin:0 0 8px 0">&nbsp;</p>
+                            <p style="margin:0">( Kepala Desa )</p>
+                        </div>
 
                         @if(!empty($qrSrc))
                             <div style="font-size:10px;margin-top:6px;">&nbsp;</div>
                         @endif
                     </div>
-                </td>
+                </div>
+            </td>
             </tr>
         </table>
     </div>

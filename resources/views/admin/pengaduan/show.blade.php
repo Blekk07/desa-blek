@@ -83,7 +83,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Catatan / Komentar</label>
-                            <input type="text" name="catatan_admin" class="form-control" value="{{ $pengaduan->catatan_admin }}" placeholder="(opsional)">
+                            <input type="text" name="catatan_admin" class="form-control" value="{{ $pengaduan->catatan_admin }}" placeholder="Tambahkan catatan">
                         </div>
                         <div class="col-md-2 d-grid">
                             <button class="btn btn-primary mt-4">Update Status</button>

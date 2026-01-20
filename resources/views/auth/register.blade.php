@@ -146,10 +146,11 @@
                         <label class="form-label">RT <span class="text-danger">*</span></label>
                         <input type="number" name="rt" id="rt"
                             class="form-control @error('rt') is-invalid @enderror"
-                            value="{{ old('rt') }}" placeholder="RT" required min="1">
+                            value="{{ old('rt') }}" placeholder="RT" required min="1" max="999" inputmode="numeric" pattern="[0-9]+">
                         @error('rt')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <small class="form-text text-muted">Hanya boleh angka 1-999</small>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -157,10 +158,11 @@
                         <label class="form-label">RW <span class="text-danger">*</span></label>
                         <input type="number" name="rw" id="rw"
                             class="form-control @error('rw') is-invalid @enderror"
-                            value="{{ old('rw') }}" placeholder="RW" required min="1">
+                            value="{{ old('rw') }}" placeholder="RW" required min="1" max="999" inputmode="numeric" pattern="[0-9]+">
                         @error('rw')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        <small class="form-text text-muted">Hanya boleh angka 1-999</small>
                     </div>
                 </div>
             </div>
@@ -418,6 +420,38 @@
                     this.value = this.value.replace(/[^0-9]/g, '');
                     if (this.value.length > 16) {
                         this.value = this.value.slice(0, 16);
+                    }
+                });
+            }
+
+            // RT and RW validation - only numbers allowed
+            const rtInput = document.querySelector('input[name="rt"]');
+            const rwInput = document.querySelector('input[name="rw"]');
+
+            if (rtInput) {
+                rtInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    if (this.value.length > 3) {
+                        this.value = this.value.slice(0, 3);
+                    }
+                });
+                rtInput.addEventListener('keypress', function(e) {
+                    if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            if (rwInput) {
+                rwInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    if (this.value.length > 3) {
+                        this.value = this.value.slice(0, 3);
+                    }
+                });
+                rwInput.addEventListener('keypress', function(e) {
+                    if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
                     }
                 });
             }

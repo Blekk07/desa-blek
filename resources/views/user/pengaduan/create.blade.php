@@ -120,28 +120,6 @@
                                 @enderror
                             </div>
 
-                            <!-- Kecamatan (Opsional) -->
-                            <div class="col-md-6 mb-3">
-                                <label for="kecamatan" class="form-label">Kecamatan</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="kecamatan" 
-                                       name="kecamatan" 
-                                       value="{{ old('kecamatan') }}"
-                                       placeholder="Contoh: Kecamatan Cipayung">
-                            </div>
-
-                            <!-- Desa/Kelurahan (Opsional) -->
-                            <div class="col-md-6 mb-3">
-                                <label for="desa" class="form-label">Desa/Kelurahan</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="desa" 
-                                       name="desa" 
-                                       value="{{ old('desa') }}"
-                                       placeholder="Contoh: Kelurahan Cipayung Jaya">
-                            </div>
-
                             <!-- Uraian Laporan/Kronologi Kejadian -->
                             <div class="col-md-12 mb-3">
                                 <label for="uraian_kejadian" class="form-label">Uraian Laporan / Kronologi Kejadian <span class="text-danger">*</span></label>

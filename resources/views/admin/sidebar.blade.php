@@ -22,6 +22,12 @@
 
     <ul class="sidebar-menu">
 
+            <!-- Divider -->
+        <li class="sidebar-divider">
+            <span>Menu Admin</span>
+        </li>
+
+
         <!-- Dashboard -->
         <li class="sidebar-item">
             <a href="{{ route('admin.dashboard') }}" class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -29,9 +35,6 @@
                     <i class="ti ti-home"></i>
                 </div>
                 <span class="sidebar-text">Dashboard</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
@@ -42,9 +45,6 @@
                     <i class="ti ti-users"></i>
                 </div>
                 <span class="sidebar-text">Data Penduduk</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
@@ -55,9 +55,6 @@
                     <i class="ti ti-file-text"></i>
                 </div>
                 <span class="sidebar-text">Pengajuan Surat</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
@@ -68,9 +65,16 @@
                     <i class="ti ti-report"></i>
                 </div>
                 <span class="sidebar-text">Laporan Warga</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
+            </a>
+        </li>
+
+        <!-- Manajemen Berita -->
+        <li class="sidebar-item">
+            <a href="{{ route('admin.berita.index') }}" class="sidebar-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                <div class="sidebar-icon-wrapper">
+                    <i class="ti ti-news"></i>
                 </div>
+                <span class="sidebar-text">Manajemen Berita</span>
             </a>
         </li>
 
@@ -81,15 +85,22 @@
                     <i class="ti ti-user-check"></i>
                 </div>
                 <span class="sidebar-text">Manajemen User</span>
-                <div class="sidebar-badge">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
             </a>
         </li>
 
-        <!-- Divider -->
+        <!-- Profil Desa -->
+        <li class="sidebar-item">
+            <a href="{{ route('admin.profile-desa.edit') }}" class="sidebar-link {{ request()->routeIs('admin.profile-desa.*') ? 'active' : '' }}">
+                <div class="sidebar-icon-wrapper">
+                    <i class="ti ti-building-community"></i>
+                </div>
+                <span class="sidebar-text">Profil Desa</span>
+            </a>
+        </li>
+
+            <!-- Divider -->
         <li class="sidebar-divider">
-            <span>Administrasi</span>
+            <span></span>
         </li>
 
         <!-- Logout -->
@@ -101,9 +112,6 @@
                         <i class="ti ti-logout"></i>
                     </div>
                     <span class="sidebar-text">Keluar</span>
-                    <div class="sidebar-badge">
-                        <i class="ti ti-arrow-right"></i>
-                    </div>
                 </button>
             </form>
         </li>
@@ -113,7 +121,7 @@
     <!-- Sidebar Footer -->
     <div class="sidebar-footer mt-auto">
         <div class="app-version">
-            <small class="text-muted">v2.1.0 - Admin</small>
+            <small class="text-muted">Admin Desa</small>
         </div>
     </div>
 </div>

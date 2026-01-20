@@ -25,16 +25,17 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('contact-us') ? 'active' : '' }}" href="/contact-us">Kontak</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->is('reset-password') ? 'active' : '' }}"
-                        href="/forgot-password">Lupa Password</a>
-                </li>
 
                 @if (auth()->check())
                     <li class="nav-item ms-2">
-                        <a class="btn btn-primary d-flex align-items-center" href="/myprofile">
+                        <a class="btn btn-primary d-flex align-items-center position-relative" href="/myprofile">
                             <i class="ti ti-user me-2"></i>
                             <span>{{ auth()->user()->name }}</span>
+                            @if(auth()->user()->hasVerifiedEmail())
+                                <i class="ti ti-mail-check text-white ms-2" title="Email Terverifikasi"></i>
+                            @else
+                                <i class="ti ti-mail-x text-warning ms-2" title="Email Belum Terverifikasi"></i>
+                            @endif
                         </a>
                     </li>
                 @else

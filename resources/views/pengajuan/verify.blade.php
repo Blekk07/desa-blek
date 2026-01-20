@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.landing')
 
 @section('title', 'Verifikasi Pengajuan #' . str_pad($pengajuan->id,5,'0',STR_PAD_LEFT))
 

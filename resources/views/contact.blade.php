@@ -73,7 +73,7 @@
                         </div>
                         <div class="col-10">
                             <div class="fw-semibold small mb-0">Alamat</div>
-                            <div class="text-muted small">Jl. Desa Maju No. 123, Kecamatan Harapan</div>
+                            <div class="text-muted small">Jl. Bangah Jaya Indah</div>
                         </div>
 
                         <div class="col-2 text-center">
@@ -81,7 +81,7 @@
                         </div>
                         <div class="col-10">
                             <div class="fw-semibold small mb-0">Email</div>
-                            <div class="text-muted small"><a href="mailto:desa@desa-maju.go.id">desa@desa-maju.go.id</a></div>
+                            <div class="text-muted small"><a href="mailto:aryobebangah281@gmail.com">aryobebangah281@gmail.com</a></div>
                         </div>
 
                         <div class="col-2 text-center">

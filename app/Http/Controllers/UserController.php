@@ -40,7 +40,7 @@ class UserController extends Controller
         $totalUsers = User::count();
         $adminCount = User::where('role', 'admin')->count();
         $userCount = User::where('role', 'user')->count();
-        $verifiedCount = User::where('is_verified', true)->count();
+        $verifiedCount = User::whereNotNull('email_verified_at')->count();
 
         return view('admin.users.index', compact(
             'users',
@@ -76,7 +76,6 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
             'status' => $validated['status'],
-            'is_verified' => true, // Auto-verify untuk admin create
         ];
 
         // Handle avatar upload
@@ -92,10 +91,13 @@ class UserController extends Controller
             $userData['avatar'] = 'avatar-default.jpg';
         }
 
-        User::create($userData);
+        $user = User::create($userData);
+
+        // Kirim email verifikasi
+        $user->sendEmailVerificationNotification();
 
         return redirect()->route('admin.users.index')
-                        ->with('success', 'User berhasil ditambahkan!');
+                        ->with('success', 'User berhasil ditambahkan! Email verifikasi telah dikirim.');
     }
 
     public function show($id)
@@ -118,10 +120,10 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'nik' => 'required|string|size:16|unique:users,nik,' . $id . '|unique:penduduks,nik',
             'email' => 'required|email|unique:users,email,' . $id,
             'role' => 'required|in:admin,user',
             'status' => 'required|in:active,inactive',
-            'is_verified' => 'sometimes|boolean',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -140,9 +142,6 @@ class UserController extends Controller
             $avatar->move(public_path('assets/images/user'), $avatarName);
             $validated['avatar'] = $avatarName;
         }
-
-        // Handle checkbox boolean
-        $validated['is_verified'] = $request->has('is_verified') ? true : false;
 
         $user->update($validated);
 

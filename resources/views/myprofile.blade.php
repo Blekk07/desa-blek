@@ -61,12 +61,14 @@
                                 <i class="ti ti-edit me-2"></i>Edit Profile
                             </a>
                         </li>
+                        @if($user->provider != 'google')
                         <li class="nav-item" role="presentation">
                             <a class="nav-link" id="profile-tab-3" data-bs-toggle="tab" href="#profile-3" role="tab"
                                 aria-selected="false">
                                 <i class="ti ti-lock me-2"></i>Change Password
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="card-body">
@@ -84,10 +86,10 @@
                                                 </div>
                                                 <h5 class="mb-0 mt-3">{{ $user->name }}</h5>
                                                 <p class="text-muted text-sm mb-1">{{ ucfirst($user->role) }}</p>
-                                                @if($user->is_verified)
-                                                    <span class="badge bg-success"><i class="ti ti-check"></i> Verified</span>
+                                                @if($user->hasVerifiedEmail())
+                                                    <span class="badge bg-success"><i class="ti ti-check"></i> Email Verified</span>
                                                 @else
-                                                    <span class="badge bg-warning"><i class="ti ti-alert-circle"></i> Not Verified</span>
+                                                    <span class="badge bg-warning"><i class="ti ti-alert-circle"></i> Email Not Verified</span>
                                                 @endif
                                                 
                                                 <hr class="my-3">
@@ -257,6 +259,7 @@
                             </form>
                         </div>
 
+                        @if($user->provider != 'google')
                         <!-- Change Password Tab -->
                         <div class="tab-pane" id="profile-3" role="tabpanel">
                             <form action="{{ route('profile.password') }}" method="POST">
@@ -295,6 +298,7 @@
                                 </div>
                             </form>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

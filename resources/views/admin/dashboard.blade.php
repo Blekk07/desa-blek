@@ -106,7 +106,6 @@
             <h5 class="fw-bold mb-2 mb-sm-0 section-title">
                 <i class="ti ti-apps me-2"></i>Menu Administrasi
             </h5>
-            <small class="text-muted section-subtitle">Kelola semua fitur administrasi desa</small>
         </div>
     </div>
     

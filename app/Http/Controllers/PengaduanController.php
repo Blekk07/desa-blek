@@ -31,8 +31,6 @@ class PengaduanController extends Controller
             'kategori' => 'required|string|max:255',
             'tanggal_waktu_kejadian' => 'required|date_format:Y-m-d\TH:i',
             'lokasi_kejadian' => 'required|string|max:255',
-            'kecamatan' => 'nullable|string|max:255',
-            'desa' => 'nullable|string|max:255',
             'uraian_kejadian' => 'required|string',
             'prioritas' => 'nullable|string|max:255',
             'lampiran' => 'nullable|array',
@@ -54,8 +52,6 @@ class PengaduanController extends Controller
             'kategori' => $validated['kategori'],
             'tanggal_waktu_kejadian' => $validated['tanggal_waktu_kejadian'],
             'lokasi_kejadian' => $validated['lokasi_kejadian'],
-            'kecamatan' => $validated['kecamatan'],
-            'desa' => $validated['desa'],
             'uraian_kejadian' => $validated['uraian_kejadian'],
             'deskripsi' => $validated['uraian_kejadian'], // For backward compatibility
             'isi' => $validated['uraian_kejadian'], // For backward compatibility

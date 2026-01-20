@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\PendudukController;
@@ -45,6 +46,21 @@ Route::get('/verify-email', [AuthController::class, 'showVerifyForm'])->name('ve
 Route::post('/send-otp', [AuthController::class, 'sendOtp'])->name('send.otp')->middleware('throttle:otp');
 Route::post('/verify-email', [AuthController::class, 'verify'])->name('verify.otp')->middleware('throttle:otp');
 
+// Email Verification Routes (Laravel Standard)
+Route::get('/email/verify', function () {
+    return view('auth.email-verify');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request) {
+    $request->user()->markEmailAsVerified();
+    return view('auth.email-verified');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function () {
+    auth()->user()->sendEmailVerificationNotification();
+    return back()->with('resent', true);
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 // Guest Routes
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -69,7 +85,7 @@ Route::middleware(['guest'])->group(function () {
 });
 
 // Authenticated Routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', function () {
         $user = auth()->user();
@@ -169,6 +185,10 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/{id}/reset-password', [UserController::class, 'resetPassword'])->name('admin.users.reset-password');
             Route::post('/{id}/status', [UserController::class, 'updateStatus'])->name('admin.users.update-status');
         });
+
+        // Admin Profile Desa
+        Route::get('/profile-desa/edit', [ProfileDesaController::class, 'adminEdit'])->name('admin.profile-desa.edit');
+        Route::put('/profile-desa/update', [ProfileDesaController::class, 'adminUpdate'])->name('admin.profile-desa.update');
 
     });
 

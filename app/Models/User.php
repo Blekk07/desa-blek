@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -23,10 +23,10 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'status',
         'avatar',
         'provider',
         'provider_id',
-        'is_verified',
         'otp_code',
         'otp_expires_at',
     ];
@@ -52,5 +52,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the pengajuan surat for the user.
+     */
+    public function pengajuanSurat()
+    {
+        return $this->hasMany(\App\Models\PengajuanSurat::class);
+    }
+
+    /**
+     * Get the pengaduan for the user.
+     */
+    public function pengaduan()
+    {
+        return $this->hasMany(\App\Models\Pengaduan::class);
+    }
+
+    /**
+     * Send the email verification notification.
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \App\Notifications\VerifyEmailNotification);
     }
 }

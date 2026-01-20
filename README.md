@@ -1,5 +1,7 @@
 # Sistem Informasi Desa - Desa Maju Jaya
 
+Link .env:https://docs.google.com/document/d/1d9yD0V1neFhr2DTU1QmsddVNOcyLheFBl5i05ad3Du8/edit?usp=sharing
+
 Platform digital terintegrasi untuk manajemen data penduduk, pengajuan surat, dan pengaduan masyarakat di tingkat desa.
 
 ## 📋 Daftar Isi
