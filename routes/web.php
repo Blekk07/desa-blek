@@ -162,7 +162,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/pengaduan/{id}/status', [PengaduanController::class, 'adminUpdateStatus'])->name('admin.pengaduan.updateStatus');
 
         // Admin Berita (CRUD + publish)
-        Route::resource('berita', AdminBeritaController::class)->names([
+        Route::resource('berita', AdminBeritaController::class)->parameters([
+            'berita' => 'berita'
+        ])->names([
             'index' => 'admin.berita.index',
             'create' => 'admin.berita.create',
             'store' => 'admin.berita.store',

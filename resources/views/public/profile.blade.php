@@ -10,8 +10,8 @@
     <div class="row align-items-center">
       <div class="col-lg-7">
         <h1 class="display-5 fw-bold mb-2">{{ $profileData['nama_desa'] }}</h1>
-        <p class="lead text-white-50 mb-3">{{ $profileData['kecamatan'] }}, Kabupaten {{ $profileData['kabupaten'] }} • {{ $profileData['provinsi'] }}</p>
-        <p class="text-black-75 mb-4">{{ $profileData['visi_deskripsi'] }}</p>
+        <p class="lead text-dark mb-3">{{ $profileData['kecamatan'] }}, Kabupaten {{ $profileData['kabupaten'] }} • {{ $profileData['provinsi'] }}</p>
+        <p class="text-dark mb-4">{{ $profileData['visi_deskripsi'] }}</p>
         <a href="/berita" class="btn btn-primary me-2">Berita Desa</a>
         <a href="/contact-us" class="btn btn-outline-light">Hubungi Desa</a>
       </div>

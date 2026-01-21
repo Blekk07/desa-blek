@@ -136,4 +136,44 @@ class PengajuanSurat extends Model
             default => 'Unknown'
         };
     }
+
+    // Method untuk mendapatkan field tambahan berdasarkan jenis surat
+    public function getAdditionalFields()
+    {
+        return match($this->jenis_surat) {
+            'Surat Keterangan Usaha' => [
+                'Nama Usaha' => $this->nama_usaha,
+                'Jenis Usaha' => $this->jenis_usaha,
+                'Alamat Usaha' => $this->alamat_usaha,
+            ],
+            'Surat Keterangan Kelahiran' => [
+                'Nama Anak' => $this->nama_anak,
+                'Jenis Kelamin Anak' => $this->jenis_kelamin_anak,
+                'Tempat Lahir Anak' => $this->tempat_lahir_anak,
+                'Tanggal Lahir Anak' => $this->tanggal_lahir_anak ? \Carbon\Carbon::parse($this->tanggal_lahir_anak)->format('d F Y') : null,
+                'Nama Ayah' => $this->nama_ayah,
+                'Nama Ibu' => $this->nama_ibu,
+            ],
+            'Surat Keterangan Kematian' => [
+                'Nama Almarhum' => $this->nama_almarhum,
+                'Tanggal Meninggal' => $this->tanggal_meninggal ? \Carbon\Carbon::parse($this->tanggal_meninggal)->format('d F Y') : null,
+                'Tempat Meninggal' => $this->tempat_meninggal,
+                'Sebab Meninggal' => $this->sebab_meninggal,
+            ],
+            'Surat Keterangan Pindah' => [
+                'Alamat Tujuan' => $this->alamat_tujuan,
+                'Alasan Pindah' => $this->alasan_pindah,
+            ],
+            'Surat Pengantar KTP' => [
+                'Keperluan' => 'Pengurusan Kartu Tanda Penduduk (KTP)',
+            ],
+            'Surat Pengantar KK' => [
+                'Keperluan' => 'Pengurusan Kartu Keluarga (KK)',
+            ],
+            'Surat Lainnya' => [
+                'Jenis Surat (Lainnya)' => $this->jenis_lainnya,
+            ],
+            default => [], // Untuk jenis surat lain yang tidak memerlukan field tambahan
+        };
+    }
 }

@@ -162,7 +162,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
 
             'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
+            'tanggal_lahir' => 'required|date|before:' . now()->subYears(17)->toDateString(),
             'jenis_kelamin' => 'required|in:L,P',
             'agama' => 'required|string',
 
@@ -177,6 +177,8 @@ class AuthController extends Controller
             'status_kependudukan' => 'required|in:Tetap,Tidak Tetap',
 
             'no_telepon' => 'nullable|string|max:15',
+        ], [
+            'tanggal_lahir.before' => 'Anda harus berusia minimal 17 tahun untuk mendaftar.',
         ]);
 
         // Buat user
@@ -317,7 +319,7 @@ class AuthController extends Controller
             'nik' => 'required|string|size:16|unique:users,nik|unique:penduduks,nik',
             'no_kk' => 'nullable|string|size:16',
             'tempat_lahir' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date',
+            'tanggal_lahir' => 'required|date|before:' . now()->subYears(17)->toDateString(),
             'jenis_kelamin' => 'required|in:L,P',
             'agama' => 'required|string',
             'alamat_lengkap' => 'required|string',
@@ -330,6 +332,8 @@ class AuthController extends Controller
             'nama_ayah' => 'nullable|string|max:255',
             'nama_ibu' => 'nullable|string|max:255',
             'no_telepon' => 'nullable|string|max:15',
+        ], [
+            'tanggal_lahir.before' => 'Anda harus berusia minimal 17 tahun untuk mendaftar.',
         ]);
 
         $googleUser = session('google_user');

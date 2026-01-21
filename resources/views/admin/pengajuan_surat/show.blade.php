@@ -126,9 +126,11 @@
 
                     <!-- Tombol Aksi -->
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateStatusModal">
-                            <i class="ti ti-edit"></i> Update Status
-                        </button>
+                        @if($pengajuan->status !== 'selesai')
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateStatusModal">
+                                <i class="ti ti-edit"></i> Update Status
+                            </button>
+                        @endif
                         <form action="{{ route('admin.pengajuan-surat.destroy', $pengajuan->id) }}" 
                               method="POST" style="display:inline;" 
                               onsubmit="return confirm('Yakin ingin menghapus pengajuan ini?')">
@@ -238,13 +240,18 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Status <span class="text-danger">*</span></label>
-                        <select name="status" class="form-select" required>
+                        <select name="status" class="form-select" {{ $pengajuan->status === 'selesai' ? 'disabled' : '' }} required>
                             <option value="">Pilih Status</option>
-                            <option value="pending" {{ $pengajuan->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
-                            <option value="diproses" {{ $pengajuan->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                            @if($pengajuan->status !== 'selesai')
+                                <option value="pending" {{ $pengajuan->status == 'pending' ? 'selected' : '' }}>Menunggu</option>
+                                <option value="diproses" {{ $pengajuan->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                            @endif
                             <option value="selesai" {{ $pengajuan->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
                             <option value="ditolak" {{ $pengajuan->status == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                         </select>
+                        @if($pengajuan->status === 'selesai')
+                            <small class="text-muted">Status sudah final dan tidak dapat diubah kembali.</small>
+                        @endif
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Catatan untuk Pemohon</label>
@@ -255,7 +262,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" {{ $pengajuan->status === 'selesai' ? 'disabled' : '' }}>
                         <i class="ti ti-check"></i> Update Status
                     </button>
                 </div>
